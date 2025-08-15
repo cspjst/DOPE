@@ -25,6 +25,6 @@ The motivation is not utility in the modern sense, but understanding. DOPE repre
 
 Implementing DOPE in C99 was an exercise in minimalism. Could I simulate the unique experience of programming on an LGP-30 with its drum memory and lack of hardware floating-point support?
 
-The answer, embodied in the code in this repository, was a surprisingly functional, if extremely quirky, recreation. It is not a practical tool, but it's a tangible way to engage with a pivotal moment in programming history.
+The answer, embodied in the code in this repository, was a surprisingly functional, if extremely quirky, re-creation. It is not a practical tool, but it's a tangible way to engage with a pivotal moment in programming history.
 
 ## DOPE Instructions 
