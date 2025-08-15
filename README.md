@@ -1,5 +1,5 @@
 # Dartmouth Oversimplified Programming Experiment (DOPE)
-## A Recreation in C
+## A Re-creation in C
 Exploring the spirit and implementation of Dartmouth's precursor to BASIC as an interpreter written in C.
 
 ## Synopsis
