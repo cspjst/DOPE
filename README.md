@@ -19,12 +19,12 @@ I am grateful to the Rauner Special Collections Library, for locating the Thomas
 
 Recreating DOPE, even in a simplified form, isn't about nostalgia. It's about understanding the foundational ideas of making computing accessible and the constraints under which early pioneers worked. It forces a confrontation with the simplicity that was possible when the goal was clarity over capability.
 
-Why implement a language that was deemed "too primitive to be useful" by its own creator, surviving only a single semester?
+The motivation is not utility in the modern sense, but understanding. DOPE represents a pure distillation of Kemeny's goal: to make programming learnable in a few hours by non-specialists. Its constraints – the LGP-30's limited memory, the lack of advanced features, the single-character commands – shaped its design in a way that I found fascinating to dissect. 
 
-The motivation is not utility in the modern sense, but understanding. DOPE represents a pure distillation of Kemeny's goal: to make programming learnable in a few hours by non-specialists. Its constraints – the LGP-30's limited memory, the lack of advanced features, the single-character commands – shaped its design in a way that I found fascinating to dissect.
+## Digital Arechology
 
-Implementing DOPE in C99 was an exercise in minimalism. Could I simulate the unique experience of programming on an LGP-30 with its drum memory and lack of hardware floating-point support?
+Digital archaeology — not just reconstructing a language, but recovering intent, context, and pedagogical spirit from fragile, fragmented sources. Reading through the copies of the original teaching notes for this long forgotten but seminal precursor to BASIC I had to imagine how Professor Kemeny taught those freshmen for that single semester in 1962. 
 
-The answer, embodied in the code in this repository, was a surprisingly functional, if extremely quirky, re-creation. It is not a practical tool, but it's a tangible way to engage with a pivotal moment in programming history.
+We seldom use flowcharts these days, and even less often to painstakingly construct an algorithm before converting each step to code and then running it. Our experience is more free-form, interacting in real time with our development environments. With Large Language Model(LLM) assistants baked into our editors, code completion debuggers and immediate compile and trial using Test Driven Development(TDD), our pace and producitivity are a world away from John Kemeny, Sydney Marshall and their freshman class of '62.
 
 ## DOPE Instructions 
