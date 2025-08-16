@@ -21,10 +21,11 @@ Recreating DOPE, even in a simplified form, isn't about nostalgia. It's about un
 
 The motivation is not utility in the modern sense, but understanding. DOPE represents a pure distillation of Kemeny's goal: to make programming learnable in a few hours by non-specialists. Its constraints – the LGP-30's limited memory, the lack of advanced features, the single-character commands – shaped its design in a way that I found fascinating to dissect. 
 
-## Digital Arechology
+## Archeology of our Digitial Past
 
-Digital archaeology — not just reconstructing a language, but recovering intent, context, and pedagogical spirit from fragile, fragmented sources. Reading through the copies of the original teaching notes for this long forgotten but seminal precursor to BASIC I had to imagine how Professor Kemeny taught those freshmen for that single semester in 1962. 
+So, emulating DOPE is not just reconstructing a language, but recovering intent, context, and pedagogical spirit from the fragile, fragmented orginal sources that the Rauner Special Collections Library had preserved. Reading through the copies of those original teaching notes for this long forgotten but seminal precursor to BASIC, I had to imagine how Professor Kemeny taught those freshmen for that single semester in 1962. 
 
-We seldom use flowcharts these days, and even less often to painstakingly construct an algorithm before converting each step to code and then running it. Our experience is more free-form, interacting in real time with our development environments. With Large Language Model(LLM) assistants baked into our editors, code completion debuggers and immediate compile and trial using Test Driven Development(TDD), our pace and producitivity are a world away from John Kemeny, Sydney Marshall and their freshman class of '62.
+It must have taken days to produce a working program of a few lines and feed it the data to work on. We seldom use flowcharts these days, and even less often to painstakingly construct an algorithm before converting each step to code and then running it. We do not have to prepare separate hand written sheets for the data inputs nor wait for a typewriter to clatter out the repsonses or, worse still, an error message! Our developer experience now is more free-form, interacting in real time with our development environments. With Large Language Model(LLM) assistants baked into our editors, code completion, debuggers and immediate compile and trial using Test Driven Development(TDD), our pace and producitivity are a world away from John Kemeny, Sydney Marshall and their freshman class of '62.
 
 ## DOPE Instructions 
+
