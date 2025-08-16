@@ -383,7 +383,7 @@ Programmer: __________   Problem: __________   Date: __________
 - Fields 1–5 hold operands: variables, constants, or line numbers.
 - This sheet holds up to 19 instructions + `S` but the maximum permitted length was 99 instructions.
 
-#### DOPE Data Sheet
+#### 2. DOPE Data Sheet
 
 Used to prepare input values and output labels. Data is read sequentially during execution.
 
