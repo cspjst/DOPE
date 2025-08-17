@@ -4,7 +4,7 @@
 
 int main() {
     //dope_sheet_t* sheet = dope_new_sheet();
-    dope_data_sheet_t* data = dope_new_data_sheet();
+    dope_data_sheet_t* data = dope_new_data_sheet(10);
 
     //dope_input_sheet(sheet, stdin);
     //dope_print_sheet(sheet);

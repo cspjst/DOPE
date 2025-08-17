@@ -5,11 +5,26 @@
 #include <ctype.h>
 #include <string.h>
 
-dope_data_sheet_t* dope_new_data_sheet() {
-    return (dope_data_sheet_t*)calloc(1, sizeof(dope_data_sheet_t));
+dope_data_sheet_t* dope_new_data_sheet(int line_count) {
+    dope_data_sheet_t* sheet = malloc(sizeof(dope_data_sheet_t));
+    if (!sheet) return NULL;
+
+    sheet->lines = calloc(line_count, sizeof(dope_data_line_t));
+    if (!sheet->lines) {
+        free(sheet);
+        return NULL;
+    }
+
+    sheet->capacity = line_count;
+    sheet->count = 0;
+    return sheet;
 }
-void dope_free_data_sheet(dope_data_sheet_t* data) {
-    free(data);
+
+void dope_free_data_sheet(dope_data_sheet_t* sheet) {
+    if (sheet) {
+        free(sheet->lines);
+        free(sheet);
+    }
 }
 
 void dope_trim_field(dope_data_field_t* field) {
@@ -39,11 +54,9 @@ void dope_print_data_line(dope_data_line_t* line) {
 }
 
 void dope_print_data_sheet(dope_data_sheet_t* data) {
-    for(int i = 0; i < DOPE_PROGRAM_LINES_MAX; ++i) {
-        if((*data)[i].run == 0) {  // Stop on first empty line
-            break;
-        }
-        dope_print_data_line(&(*data)[i]);  // Pass address of the element
+    for(int i = 0; i < data->count; ++i) {
+        printf("%i ", i);
+        dope_print_data_line(&(*data).lines[i]);  // Pass address of the element
     }
 }
 
@@ -85,13 +98,11 @@ void dope_input_data_line(dope_data_line_t* line, FILE* istream) {
 }
 
 void dope_input_data_sheet(dope_data_sheet_t* data, FILE* istream) {
-    for(int i = 0; i < DOPE_PROGRAM_LINES_MAX; ++i) {
-        dope_input_data_line(&(*data)[i], istream);
-        if (strcmp((*data)[i].fields[1], "FINISH") == 0) {
-            i++;  // Keep FINISH line
-            break;
-        }
-        if ((*data)[i].run == 0) {
+    for (size_t i = 0; i < data->capacity; ++i) {
+        dope_input_data_line(&data->lines[i], istream);
+        data->count++;
+        if(data->count > data->capacity) {}
+        if (strcmp(data->lines[i].fields[1], "FINISH") == 0 || data->lines[i].run == 0) {
             break;
         }
     }

@@ -8,9 +8,9 @@ typedef dope_line_t dope_sheet_t[DOPE_PROGRAM_LINES_MAX];
 
 dope_sheet_t* dope_new_sheet();
 
-void dope_free_sheet(dope_sheet_t* program);
+void dope_free_sheet(dope_sheet_t* sheet);
 
-void dope_print_sheet(dope_sheet_t* program);
+void dope_print_sheet(dope_sheet_t* sheet);
 
 void dope_trim_line(dope_line_t* line);
 

@@ -11,9 +11,13 @@ typedef struct {
     dope_data_field_t fields[DOPE_DATA_SHEET_FIELDS - 1];
 } dope_data_line_t;
 
-typedef dope_data_line_t dope_data_sheet_t[DOPE_PROGRAM_LINES_MAX];
+typedef struct {
+    dope_data_line_t* lines;
+    size_t capacity;
+    size_t count;
+} dope_data_sheet_t;
 
-dope_data_sheet_t* dope_new_data_sheet();
+dope_data_sheet_t* dope_new_data_sheet(int line_count);
 
 void dope_free_data_sheet(dope_data_sheet_t* data);
 
