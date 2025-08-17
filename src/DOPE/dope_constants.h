@@ -7,6 +7,9 @@
 #define DOPE_LINE_SIZE              40
 #define DOPE_INSTRUCTION_SIZE       4
 #define DOPE_INSTRUCTION_COUNT      19
+#define DOPE_FIELD_SIZE             16
+#define DOPE_DATA_SHEET_FIELDS      4
+
 
 static const char* DOPE_INSTRUCTIONS[] = {
     "+", "-", ".", "/", ";", "SQR", "EXP", "LOG", "SIN",

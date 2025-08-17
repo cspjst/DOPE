@@ -5,8 +5,6 @@
 
 typedef char dope_line_t[DOPE_LINE_SIZE];
 
-typedef dope_line_t dope_program_t[DOPE_PROGRAM_LINES_MAX];
-
-typedef char dope_instruction_t[DOPE_INSTRUCTION_SIZE];
+typedef char dope_data_field_t[DOPE_FIELD_SIZE];
 
 #endif
