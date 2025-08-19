@@ -1,14 +1,18 @@
 #include "dope_program.h"
+#include "dope_constants.h"
+#include <string.h>
 
 dope_program_t* dope_new_program(size_t line_count) {
-    dope_program_t* program = malloc(sizeof(dope_data_sheet_t));
+
+    //BROKEN use fields
+    dope_program_t* program = malloc(sizeof(dope_program_t));
     if (!program) {
         return NULL;
     }
 
-    program->tokens = calloc(line_count, sizeof(dope_token_t));
-    if (!program->tokens) {
-        free(tokens);
+    program->instructions = calloc(line_count, sizeof(dope_instruction_t));
+    if (!program->instructions) {
+        free(program);
         return NULL;
     }
 
@@ -19,62 +23,89 @@ dope_program_t* dope_new_program(size_t line_count) {
 
 void dope_free_program(dope_program_t* program) {
     if (program) {
-        free(program->tokens);
+        free(program->instructions);
         free(program);
     }
 }
 
-void dope_input_token(dope_token_t* token, FILE* istream) {
-    dope_line_t buffer;
-    char* tokens[DOPE_INSTRUCTION_FIELDS + 1];  // array of strings for strtok
-    int token_count = 0;
-    token->instr = 0; 
-    if (fgets(buffer, sizeof(buffer), istream) == NULL) { 
-        token->line = DOPE_ERR_NO_INPUT;
-        return;
-    } 
-    int buflen = strlen(buffer);
-    if (buflen == DOPE_LINE_SIZE - 1 && buffer[buflen - 1] != '\n') {  // Check for truncation
-        int ch;
-        while ((ch = fgetc(istream)) != '\n' && ch != EOF); // Line too long — consume rest of line
-        token->line = DOPE_ERR_LINE_TOO_LONG;
-        return;
+bool dope_is_truncated(dope_line_t* line) {
+   if (!line) {
+       return false;
+   }
+   size_t len = strlen(*line);
+   // truncated if...
+   return ((*line)[len - 1] != '\n') &&     // true no newline
+          (len == DOPE_LINE_SIZE - 1);      // true buffer full
+}
+
+void dope_consume_remaining(FILE* istream) {
+    int ch;
+    while ((ch = fgetc(istream)) != '\n' && ch != EOF);
+}
+
+// line is ...\n\0 on success or ...\0 on truncation or \0 on fail
+size_t dope_read_line(dope_line_t* line, FILE* istream) {
+    if (!line || !istream) {
+        (*line)[0] = '\0';  // "" on failure
+        return 0;
     }
-    if (buflen > 0 && buffer[buflen - 1] == '\n') {  // Strip fgets newline
-        buffer[buflen - 1] = '\0';
-        buflen--;
+    if (!fgets(*line, DOPE_LINE_SIZE, istream)) {
+        (*line)[0] = '\0';  // read fail or EOF
+        return 0;
     }
-    char* tok = strtok(buffer, " \t\r"); // tokenize by white space
-    while (tok != NULL && token_count < DOPE_INSTRUCTION_FIELDS + 1) {
-        tokens[token_count++] = tok;
+    return strlen(*line);
+}
+
+size_t dope_instruction_tokenize(dope_line_t* line, char* tokens[]) {
+    if (!line || !tokens) {
+        return 0;
+    }
+    size_t count = 0;
+    char* tok = strtok(*line, " \t\r");
+    while (tok != NULL && count < DOPE_INSTRUCTION_PARTS) {
+        tokens[count++] = tok;
         tok = strtok(NULL, " \t\r");
     }
-    if (token_count == 0) {
-        token->line = DOPE_ERR_NO_INSTR;
-        return;
+    return count;
+}
+
+int dope_lookup_opcode(const char* mnemonic) { // just a simple linear search
+    if (!mnemonic || !*mnemonic) {
+        return 0;
     }
-    // linear search for instruction 
-    for (int i = 0; i < 19; i++) {
-        if (strcmp(tokens[0], DOPE_INSTRUCTIONS[i]) == 0) {
-            uint8_t expected = DOPE_FEILDS[i];
-            uint8_t available = token_count - 1;
-            if (available < expected) {
-                token->instr = 0;
-                token->line = DOPE_ERR_TOO_FEW_ARGS;
-                return;
-            }
-            token->instr = (uint8_t)(i + 1);  // Success 
-            for (int j = 0; j < expected && j < DOPE_INSTRUCTION_FIELDS; j++) { // Copy operands
-                int copy_len = (int)strlen(tokens[j + 1]);
-                if (copy_len >= DOPE_FIELD_SIZE) {
-                    copy_len = DOPE_FIELD_SIZE - 1;
-                }
-                memcpy(token->fields[j], tokens[j + 1], copy_len);
-                token->fields[j][copy_len] = '\0';
-            }
-            return;
+    for(int i = 0; i < DOPE_INSTRUCTION_COUNT; ++i) { // DOPE only has 19 opcodes
+        if (strcmp(mnemonic, DOPE_INSTRUCTIONS[i]) == 0) {
+            return i + 1;
         }
     }
-    token->instr = 0;
-    token->line = DOPE_ERR_UNKNOWN_INSTR;
+    return 0;
+}
+
+// @note expects instruction->number to be pre-populated
+void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
+    dope_line_t line;
+    char* tokens[DOPE_INSTRUCTION_PARTS];  // array of strings for strtok
+    // 1. read the line
+    size_t length = dope_read_line(&line, istream);
+    if(dope_is_truncated(&line)) {
+        instruction->opcode = DOPE_ERR;
+        instruction->number = DOPE_ERR_LINE_TOO_LONG;
+        dope_consume_remaining(istream);
+        return;
+    }
+    // 2. trim the line
+    line[strcspn(line, "\n")] = '\0';
+    // 3. tokenize the line
+    size_t token_count = dope_instruction_tokenize(&line, tokens);
+    if (token_count == 0) {
+        instruction->opcode = DOPE_ERR;
+        instruction->number = DOPE_ERR_NO_INSTR;
+        return;
+    }
+    // 4. look up the opcode
+    instruction->opcode = dope_lookup_opcode(tokens[0]);
+    if(instruction->opcode == DOPE_ERR) {
+        instruction->number = DOPE_ERR_UNKNOWN_INSTR;
+        return;
+    }
 }

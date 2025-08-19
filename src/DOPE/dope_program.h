@@ -4,8 +4,11 @@
 #include "dope_constants.h"
 #include "dope_types.h"
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 
-static const char* DOPE_INSTRUCTIONS[] = {
+static const char* const DOPE_INSTRUCTIONS[] = {
     "+", "-", ".", "/", ";", "SQR", "EXP", "LOG", "SIN",
     "C", "T", "A", "P", "N", "J", "Z", "E", "F", "S"
 };
@@ -16,7 +19,7 @@ static const uint8_t DOPE_FEILDS[] = {
 };
 
 typedef enum {
-    DOPE_ERR_NONE = 0,
+    DOPE_ERR = 0,
     DOPE_ERR_NO_INPUT,        // EOF
     DOPE_ERR_NO_INSTR,        // empty line
     DOPE_ERR_UNKNOWN_INSTR,   // invalid instruction
@@ -25,14 +28,14 @@ typedef enum {
 } dope_error_t;
 
 typedef struct {
-    int line;
-    int instr;
-    dope_data_field_t fields[DOPE_INSTRUCTION_FIELDS]; // 5
-} dope_token_t;
+    uint8_t number;       // source line number or error code
+    uint8_t opcode;     // 1–19 or 0 on error
+    dope_operand_t fields[DOPE_INSTRUCTION_PARTS];
+} dope_instruction_t;
 
 typedef struct {
-    int ip;
-    dope_token_t* tokens;
+    int ip;             // instruction pointer
+    dope_instruction_t* instructions;
     size_t size;
     size_t capacity;
 } dope_program_t;
@@ -41,8 +44,16 @@ dope_program_t* dope_new_program(size_t line_count);
 
 void dope_free_program(dope_program_t* program);
 
-void dope_input_token(dope_token_t* token, FILE* istream);
+bool dope_is_truncated(dope_line_t* line);
 
-void dope_input_program(dope_program_t * program); 
+void dope_consume_remaining(FILE* istream);
+
+size_t dope_read_line(dope_line_t* line, FILE* istream);
+
+size_t dope_instruction_tokenize(dope_line_t* line, char* tokens[]);
+
+int dope_lookup_opcode(const char* mnemonic);
+
+void dope_input_instruction(dope_instruction_t* instruction, FILE* istream);
 
 #endif
