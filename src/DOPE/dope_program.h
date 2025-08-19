@@ -16,14 +16,14 @@ static const uint8_t DOPE_FEILDS[] = {
 };
 
 typedef struct {
-    uint8_t line;
-    uint8_t instr;
+    int line;
+    int instr;
     dope_data_field_t fields[DOPE_INSTRUCTION_FIELDS]; // 5
 } dope_token_t;
 
 typedef struct {
     int ip;
-    dope_token_t tokens[DOPE_PROGRAM_LINES_MAX];
+    dope_token_t* tokens;
     size_t size;
     size_t capacity;
 } dope_program_t;
@@ -32,5 +32,8 @@ dope_program_t* dope_new_program(size_t line_count);
 
 void dope_free_program(dope_program_t* program);
 
+void dope_input_token(dope_token_t* token, FILE* istream);
+
+void dope_input_program(dope_program_t * program); 
 
 #endif
