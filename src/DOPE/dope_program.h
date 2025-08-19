@@ -15,6 +15,15 @@ static const uint8_t DOPE_FEILDS[] = {
     5, 1, 0, 1, 0, 1, 3, 0, 0, 0
 };
 
+typedef enum {
+    DOPE_ERR_NONE = 0,
+    DOPE_ERR_NO_INPUT,        // EOF
+    DOPE_ERR_NO_INSTR,        // empty line
+    DOPE_ERR_UNKNOWN_INSTR,   // invalid instruction
+    DOPE_ERR_TOO_FEW_ARGS,    // not enough operands
+    DOPE_ERR_LINE_TOO_LONG    // input line too long
+} dope_error_t;
+
 typedef struct {
     int line;
     int instr;
