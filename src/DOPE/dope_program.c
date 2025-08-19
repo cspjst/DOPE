@@ -18,5 +18,8 @@ dope_program_t* dope_new_program(size_t line_count) {
 }
 
 void dope_free_program(dope_program_t* program) {
-
+    if (program) {
+        free(program->tokens);
+        free(program);
+    }
 }
