@@ -19,18 +19,20 @@ static const uint8_t DOPE_FEILDS[] = {
 };
 
 typedef enum {
-    DOPE_ERR = 0,
+    DOPE_ERR_SUCCESS = 0,
     DOPE_ERR_NO_INPUT,        // EOF
     DOPE_ERR_NO_INSTR,        // empty line
     DOPE_ERR_UNKNOWN_INSTR,   // invalid instruction
     DOPE_ERR_TOO_FEW_ARGS,    // not enough operands
+    DOPE_ERR_TOO_MANY_ARGS,   // too many operands
     DOPE_ERR_LINE_TOO_LONG    // input line too long
 } dope_error_t;
 
 typedef struct {
-    uint8_t number;       // source line number or error code
-    uint8_t opcode;     // 1–19 or 0 on error
-    dope_operand_t fields[DOPE_INSTRUCTION_PARTS];
+    uint8_t line_number;           
+    uint8_t errno;
+    uint8_t opcode;           // 1–19 or 0 on error
+    dope_field_t fields[DOPE_INSTRUCTION_PARTS];     // 5
 } dope_instruction_t;
 
 typedef struct {
