@@ -3,8 +3,6 @@
 #include <string.h>
 
 dope_program_t* dope_new_program(size_t line_count) {
-
-    //BROKEN use fields
     dope_program_t* program = malloc(sizeof(dope_program_t));
     if (!program) {
         return NULL;
@@ -84,28 +82,39 @@ int dope_lookup_opcode(const char* mnemonic) { // just a simple linear search
 // @note expects instruction->number to be pre-populated
 void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
     dope_line_t line;
-    char* tokens[DOPE_INSTRUCTION_PARTS];  // array of strings for strtok
     // 1. read the line
     size_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
-        instruction->opcode = DOPE_ERR;
-        instruction->number = DOPE_ERR_LINE_TOO_LONG;
+        instruction->opcode = 0;
+        instruction->errno = DOPE_ERR_LINE_TOO_LONG;
         dope_consume_remaining(istream);
         return;
     }
     // 2. trim the line
     line[strcspn(line, "\n")] = '\0';
     // 3. tokenize the line
-    size_t token_count = dope_instruction_tokenize(&line, tokens);
+    size_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
-        instruction->opcode = DOPE_ERR;
-        instruction->number = DOPE_ERR_NO_INSTR;
+        instruction->opcode = 0;
+        instruction->errno = DOPE_ERR_NO_INSTR;
         return;
     }
     // 4. look up the opcode
     instruction->opcode = dope_lookup_opcode(tokens[0]);
-    if(instruction->opcode == DOPE_ERR) {
-        instruction->number = DOPE_ERR_UNKNOWN_INSTR;
+    if(instruction->opcode == 0) {
+        instruction->errno = DOPE_ERR_UNKNOWN_INSTR;
         return;
     }
+    // 5. check number of operands 
+    if(token_count - 1 < DOPE_FIELDS[instruction->opcode] {
+        instruction->opcode = 0;
+        instruction->errno = DOPE_ERR_TOO_FEW_ARGS;
+        return;
+    }
+    if(token_count - 1 > DOPE_FIELDS[instruction->opcode] {
+        instruction->opcode = 0;
+        instruction->errno = DOPE_ERR_TOO_MANY_ARGS;
+        return;
+    }
+    // 6. recognized instruction and correct number of operands 
 }
