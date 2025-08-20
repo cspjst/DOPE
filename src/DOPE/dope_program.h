@@ -4,19 +4,10 @@
 #include "dope_constants.h"
 #include "dope_types.h"
 #include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <stdbool.h>
 
-static const char* const DOPE_INSTRUCTIONS[] = {
-    "+", "-", ".", "/", ";", "SQR", "EXP", "LOG", "SIN",
-    "C", "T", "A", "P", "N", "J", "Z", "E", "F", "S"
-};
-
-static const uint8_t DOPE_FEILDS[] = {
-    3, 3, 3, 3, 2, 2, 2, 2, 2,
-    5, 1, 0, 1, 0, 1, 3, 0, 0, 0
-};
+extern const char* const DOPE_INSTRUCTIONS[];
+extern const uint8_t DOPE_OPERAND_COUNT[];
 
 typedef enum {
     DOPE_ERR_SUCCESS = 0,
@@ -30,7 +21,7 @@ typedef enum {
 
 typedef struct {
     uint8_t line_number;           
-    uint8_t errno;
+    uint8_t error_code;
     uint8_t opcode;           // 1–19 or 0 on error
     dope_field_t fields[DOPE_INSTRUCTION_PARTS];     // 5
 } dope_instruction_t;
