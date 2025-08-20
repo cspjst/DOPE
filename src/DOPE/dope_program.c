@@ -1,6 +1,18 @@
 #include "dope_program.h"
 #include "dope_constants.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+const char* const DOPE_INSTRUCTIONS[] = {
+    "+", "-", ".", "/", ";", "SQR", "EXP", "LOG", "SIN",
+    "C", "T", "A", "P", "N", "J", "Z", "E", "F", "S"
+};
+
+const uint8_t DOPE_OPERAND_COUNT[] = {
+    3, 3, 3, 3, 2, 2, 2, 2, 2,
+    5, 1, 0, 1, 0, 1, 3, 0, 0, 0
+};
 
 dope_program_t* dope_new_program(size_t line_count) {
     dope_program_t* program = malloc(sizeof(dope_program_t));
@@ -86,7 +98,7 @@ void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
     size_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
         instruction->opcode = 0;
-        instruction->errno = DOPE_ERR_LINE_TOO_LONG;
+        instruction-error_code = DOPE_ERR_LINE_TOO_LONG;
         dope_consume_remaining(istream);
         return;
     }
@@ -96,24 +108,24 @@ void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
     size_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
         instruction->opcode = 0;
-        instruction->errno = DOPE_ERR_NO_INSTR;
+        instruction-error_code = DOPE_ERR_NO_INSTR;
         return;
     }
     // 4. look up the opcode
-    instruction->opcode = dope_lookup_opcode(tokens[0]);
+    instruction->opcode = dope_lookup_opcode(instruction->fields[0]);
     if(instruction->opcode == 0) {
-        instruction->errno = DOPE_ERR_UNKNOWN_INSTR;
+        instruction-error_code = DOPE_ERR_UNKNOWN_INSTR;
         return;
     }
     // 5. check number of operands 
-    if(token_count - 1 < DOPE_FIELDS[instruction->opcode] {
+    if(token_count - 1 < DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
         instruction->opcode = 0;
-        instruction->errno = DOPE_ERR_TOO_FEW_ARGS;
+        instruction-error_code = DOPE_ERR_TOO_FEW_ARGS;
         return;
     }
-    if(token_count - 1 > DOPE_FIELDS[instruction->opcode] {
+    if(token_count - 1 > DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
         instruction->opcode = 0;
-        instruction->errno = DOPE_ERR_TOO_MANY_ARGS;
+        instruction->error_code = DOPE_ERR_TOO_MANY_ARGS;
         return;
     }
     // 6. recognized instruction and correct number of operands 
