@@ -5,6 +5,6 @@
 
 typedef char dope_line_t[DOPE_LINE_SIZE];
 
-typedef char dope_operand_t[DOPE_OPERAND_SIZE];
+typedef char dope_field_t[DOPE_FIELD_SIZE];
 
 #endif
