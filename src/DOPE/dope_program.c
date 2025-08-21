@@ -130,3 +130,22 @@ void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
     }
     // 6. recognized instruction and correct number of operands 
 }
+
+void dope_print_instruction(dope_instruction_t* instruction) {
+    printf("%i %s %s %s %s %s\n", 
+        instruction->fields[0],
+        instruction->fields[1],
+        instruction->fields[2],
+        instruction->fields[3],
+        instruction->fields[4]
+    );
+    if(instruction->opcode == 0) {
+        printf("ERROR %s\n", dope_error_message(instruction->error_code));
+    }
+}
+
+void dope_print_program(dope_program_t* program) {
+   for(int i = 0; i < program->size; i++) {
+        dope_print_instruction(program[i]);
+    }
+}
