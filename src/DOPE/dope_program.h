@@ -49,6 +49,8 @@ int dope_lookup_opcode(const char* mnemonic);
 
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream);
 
+void dope_print_line(dope_program_t* program, int line);
+
 void dope_print_program(dope_progam_t* program);
 
 #endif
