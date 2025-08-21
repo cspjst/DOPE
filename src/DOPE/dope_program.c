@@ -131,6 +131,10 @@ void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
     // 6. recognized instruction and correct number of operands 
 }
 
+void dope_input_program(dope_program_t* program, FILE* stream) {
+
+}
+
 void dope_print_instruction(dope_instruction_t* instruction) {
     printf("%i %s %s %s %s %s\n", 
         instruction->fields[0],
