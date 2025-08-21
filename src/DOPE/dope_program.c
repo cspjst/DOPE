@@ -1,5 +1,6 @@
 #include "dope_program.h"
 #include "dope_constants.h"
+#include "dope_types.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,7 +67,7 @@ size_t dope_read_line(dope_line_t* line, FILE* istream) {
     return strlen(*line);
 }
 
-size_t dope_instruction_tokenize(dope_line_t* line, char* tokens[]) {
+size_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]) {
     if (!line || !tokens) {
         return 0;
     }
@@ -98,7 +99,7 @@ void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
     size_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
         instruction->opcode = 0;
-        instruction-error_code = DOPE_ERR_LINE_TOO_LONG;
+        instruction->error_code = DOPE_ERR_LINE_TOO_LONG;
         dope_consume_remaining(istream);
         return;
     }
@@ -108,19 +109,19 @@ void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
     size_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
         instruction->opcode = 0;
-        instruction-error_code = DOPE_ERR_NO_INSTR;
+        instruction->error_code = DOPE_ERR_NO_INSTR;
         return;
     }
     // 4. look up the opcode
     instruction->opcode = dope_lookup_opcode(instruction->fields[0]);
     if(instruction->opcode == 0) {
-        instruction-error_code = DOPE_ERR_UNKNOWN_INSTR;
+        instruction->error_code = DOPE_ERR_UNKNOWN_INSTR;
         return;
     }
-    // 5. check number of operands 
+    // 5. check number of operands
     if(token_count - 1 < DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
         instruction->opcode = 0;
-        instruction-error_code = DOPE_ERR_TOO_FEW_ARGS;
+        instruction->error_code = DOPE_ERR_TOO_FEW_ARGS;
         return;
     }
     if(token_count - 1 > DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
@@ -128,7 +129,7 @@ void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
         instruction->error_code = DOPE_ERR_TOO_MANY_ARGS;
         return;
     }
-    // 6. recognized instruction and correct number of operands 
+    // 6. recognized instruction and correct number of operands
 }
 
 void dope_input_program(dope_program_t* program, FILE* stream) {
@@ -136,7 +137,8 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
 }
 
 void dope_print_instruction(dope_instruction_t* instruction) {
-    printf("%i %s %s %s %s %s\n", 
+    printf("%i %s %s %s %s %s\n",
+        instruction->line_number,
         instruction->fields[0],
         instruction->fields[1],
         instruction->fields[2],
@@ -150,6 +152,6 @@ void dope_print_instruction(dope_instruction_t* instruction) {
 
 void dope_print_program(dope_program_t* program) {
    for(int i = 0; i < program->size; i++) {
-        dope_print_instruction(program[i]);
+        dope_print_instruction(&program->instructions[i]);
     }
 }

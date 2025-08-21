@@ -15,6 +15,6 @@ typedef enum {
     DOPE_ERR_LINE_TOO_LONG    // input line too long
 } dope_error_t;
 
-void dope_error_message(uint8_t error_code);
+const char* dope_error_message(uint8_t error_code);
 
 #endif

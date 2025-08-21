@@ -4,6 +4,7 @@
 #include "dope_constants.h"
 #include "dope_types.h"
 #include "dope_errors.h"
+#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -11,10 +12,10 @@ extern const char* const DOPE_INSTRUCTIONS[];
 extern const uint8_t DOPE_OPERAND_COUNT[];
 
 typedef struct {
-    uint8_t line_number;           
+    uint8_t line_number;
     uint8_t error_code;
     uint8_t opcode;           // 1–19 or 0 on error
-    dope_field_t fields[DOPE_INSTRUCTION_PARTS];     // 5
+    dope_field_t fields[DOPE_INSTRUCTION_PARTS];     // [6][10]
 } dope_instruction_t;
 
 typedef struct {
@@ -34,7 +35,7 @@ void dope_consume_remaining(FILE* istream);
 
 size_t dope_read_line(dope_line_t* line, FILE* istream);
 
-size_t dope_instruction_tokenize(dope_line_t* line, char* tokens[]);
+size_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]);
 
 int dope_lookup_opcode(const char* mnemonic);
 
@@ -44,6 +45,6 @@ void dope_input_program(dope_program_t* program, FILE* stream);
 
 void dope_print_instruction(dope_instruction_t* instruction);
 
-void dope_print_program(dope_progam_t* program);
+void dope_print_program(dope_program_t* program);
 
 #endif
