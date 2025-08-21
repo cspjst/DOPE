@@ -3,6 +3,7 @@
 
 #include "dope_constants.h"
 #include "dope_types.h"
+#include "dope_errors.h"
 #include <stdint.h>
 #include <stdbool.h>
 
