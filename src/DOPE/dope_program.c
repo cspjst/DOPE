@@ -67,15 +67,27 @@ size_t dope_read_line(dope_line_t* line, FILE* istream) {
     return strlen(*line);
 }
 
-size_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]) {
+size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record_t tokens) {
     if (!line || !tokens) {
         return 0;
     }
     size_t count = 0;
+    // 1. Begin tokenization: extract first token using strtok
+    //    strtok modifies *line, replacing delimiters with '\0'
     char* tok = strtok(*line, " \t\r");
+    // 2. Loop: while tokens exist and space remains
     while (tok != NULL && count < DOPE_INSTRUCTION_PARTS) {
-        tokens[count++] = tok;
-        tok = strtok(NULL, " \t\r");
+        // 3. Measure token length and clamp to field size
+        size_t len = strlen(tok);
+        if (len >= DOPE_OPERAND_SIZE) {
+            len = DOPE_OPERAND_SIZE - 1;  // Leave room for '\0'
+        }
+        // 4. Copy token safely into current field
+        memcpy(tokens[count], tok, len);
+        tokens[count][len] = '\0';  // Ensure null termination
+        // 5. Advance to next token and field
+        count++;
+        tok = strtok(NULL, " \t\r");  // Continue from where previous left off
     }
     return count;
 }
