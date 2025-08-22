@@ -11,15 +11,17 @@
 extern const char* const DOPE_INSTRUCTIONS[];
 extern const uint8_t DOPE_OPERAND_COUNT[];
 
+typedef dope_field_t[DOPE_INSTRUCTION_PARTS] dope_instruction_record_t;
+
 typedef struct {
     uint8_t line_number;
     uint8_t error_code;
-    uint8_t opcode;           // 1–19 or 0 on error
-    dope_field_t fields[DOPE_INSTRUCTION_PARTS];     // [6][10]
+    uint8_t opcode;             // 1–19 or 0 on error
+    dope_instruction_record_t fields;
 } dope_instruction_t;
 
 typedef struct {
-    int ip;             // instruction pointer
+    int ip;                     // instruction pointer
     dope_instruction_t* instructions;
     size_t size;
     size_t capacity;
