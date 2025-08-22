@@ -59,3 +59,158 @@ Most programs have small variable data. That is, some quantities may change from
 
 Consider the following example:
 
+Page 5. 
+
+This program will first get a value of N from the data-tape, then it computes 2^N and prints the answer. Finally, it asks for a new value of N and repeats the procedure, until the data-tape is exhausted.
+
+Illustration.
+
+Let us construct one larger example. Suppose that we have a vector (or simply a set of numbers) A_I for I = 1, 2, …, N. We wish to find the component A_I for which sin(A_I) is a maximum. In the following program both the index of such a component and the maximum value are printed:
+
+Page 6.
+
+### DOPE Instructions and Flow Diagram Equivalents
+
+| DOPE Instr. | Fields         | Flow Diagram Equivalent                          |
+| :---------- | :------------- | :----------------------------------------------- |
+| `+`         | `A B C`        | `[ A + B → C ]`                                  |
+| `-`         | `A B C`        | `[ A - B → C ]`                                  |
+| `·`         | `A B C`        | `[ A · B → C ]`                                  |
+| `/`         | `A B C`        | `[ A / B → C ]`                                  |
+| `;`         | `A B`          | `[ A → B ]`                                      |
+| `SQR`       | `A B`          | `[ √A → B ]`                                     |
+| `EXP`       | `A B`          | `[ e^A → B ]`                                    |
+| `LOG`       | `A B`          | `[ log(A) → B ]` (Natural log)                   |
+| `SIN`       | `A B`          | `[ sin(A) → B ]`                                 |
+| `C`         | `A B L₁ L₂ L₃` | `Compare A with B` → Branches to `L₁`, `L₂`, `L₃` |
+| `T`         | `L`            | `[ → L ]` (Unconditional transfer)               |
+| `A`         |                | `[Print label]`                                  |
+| `P`         | `A`            | `[Print: A]`                                     |
+| `N`         |                | `[Printer: Start new line]`                      |
+| `I`         | `A`            | `[Input: A]`                                     |
+| `Z`         | `A B C`        | `For A = B to C` (Loop initialization)           |
+| `B`         |                | End loop (Reenter or exit if done)               |
+| `S`         |                | `Stop!` (Final step for single data set)         |
+| `O`         |                | `Start computing.` (Must be at end of program)   |
+
+Page 7.
+
+Notes on DOPE instructions.
+In place of A, B, and C in any instruction one may use any variable. For the purposes of DOPE a variable is a letter or a letter followed by a single digit. For example: A, X, Z5, Q0, M, T7 are variables. There is an exception: Do not use the letters L or O since these are indistinguishable from the numbers 1 and 0 on a typewriter.
+
+One may also replace A, B, and C by a constant. A constant has 3, 4, or 5 characters. Each character is either a digit, or a decimal point, or a minus sign. For example: 1, 0, 3.56, -12.3, 001, -.001 are constants. Since a constant must have at least 3 characters, one writes 13.0 instead of 13. If the programmer wishes to use a more complicated constant, he should write a variable into his program, and then input its value as data.
+
+In place of L, L1, L2, L3 in an instruction one must give the number of an instruction. This is the reason why all instructions are numbered. Instructions are numbered from 1 to 99, and hence one places a one- or two-digit number in place of L. Thus, for example, the instruction T 17 directs the machine to take instruction number 17 next. The instruction C XZ Y 11 5 11 has the effect that if XZ < Y or XZ > Y then instruction 11 is taken next, if XZ = Y then instruction 5 is next. These instructions take the place of some of the arrows in a flow-diagram. There is no need to insert all arrows into the DOPE program, since the machine will take the next instruction in order, unless told otherwise.
+
+There are 4 16-component vectors available in DOPE, denoted by E, F, G, and H, followed by brackets. Thus E[5] denotes the fifth component of E, more usually written as E₅. (The flexo-writer cannot type subscripts, hence brackets are used.) One may also write F[I] to indicate the Ith component of F, as long as the program determines the value of I to be between 1 and 16. Expressions like E[5] or F[I] may also be used in place of variables.
+
+Page 8. 
+
+Inputting of data is necessary either when the value of a variable changes from one run of the program to another, or when one wishes to use a constant that is more complex than is permitted in DOPE for constants inside the body of the program. The data for a run of the problem is read in immediately after the program, and each piece of data must be called for by an I instruction. Each number inputted into the program as data has a magnitude and an exponent. The magnitude has a sign followed either by up to six digits, or up to five digits plus a decimal point. The exponent has a sign followed by 2 digits. The exponent indicates a power of 10, and must lie between -36 and +36. For example:
+
++12.36 +02 is +12.36 × 10² or 1236
+
+-1.29 +20 is -1.29 × 10²⁰
+
++123456 -10 is +123456 × 10⁻¹⁰ or 0.0000123456
+
++297 +00 is 297
+
+Answers are printed by the flexowriter in the same format. Four numbers are printed per line. But the programmer may start a new line at any time by inserting an N instruction.
+
+The programmer may, if he wishes, insert labels in the output. He simply puts an A instruction in a suitable place in the program, and writes a (short) label in the corresponding spot on the data sheet. When the program reaches the A, the label will be printed. If both I and A instructions occur in the program, care must be taken that the data and labels occur in the correct order. For example, if the instructions
+
+```
+I N
+A
+I M
+```
+
+occur in that order, then the data sheet should contain the data for N, followed by the label, and then the data for M. If there is more than one run, these three items must occur on the data sheet for each run. For example, if N = 10 and M = .023 for the first run, while N = 20 and M = -.345 for the second, the data-sheet may look as follows:
+
+Page 9.
+
+| Run no. | Variable       | Magnitude (or label) | Exponent |
+| :------ | :------------- | :------------------- | :------- |
+| 1       | N              | +10                  | +00      |
+|         | Label          | First answer         |          |
+|         | M              | +23                  | -03      |
+| 2       | N              | +20                  | +00      |
+|         | Label          | Second answer        |          |
+|         | M              | -345                 | +00      |
+|         |                | FINISH               |          |
+
+_Note: The flexowriter does not distinguish between capital and small letters. It is best to write programs entirely in capitals, for clear legibility. However, the typed program will be in small letters._
+
+
+EXAMPLE 1. Square-root of integers up to 100.
+
+| Instr. No. | Instr. | FIELDS |
+|---|---|---|
+| 1    | A    |    |
+| 2    | Z    | A 1.0 100 |
+| 3    | SQR  | A  B    |
+| 4    | P    | A    |
+| 5    | P    | B    |
+| 6    | N    |    |
+| 7    | B    |    |
+| 8    | O    |    |
+| 9    | S    |    |
+
+| Run No. | Variable | Magnitude or label | Exp. |
+|---|---|---|---|
+| 1    | Label   | Square root table |    |
+
+Page 10. 
+
+| Instr. No. | Instr. | Field 1 | Field 2 | Field 3 | Field 4 | Field 5 |
+| :--------- | :----- | :------ | :------ | :------ | :------ | :------ |
+| 1          | I      | N       |         |         |         |         |
+| 2          | Z      | I       | 1.0     | N       |         |         |
+| 3          | I      | A[I]    |         |         |         |         |
+| 4          | ;      | 1.0     | Y       |         |         |         |
+| 5          | SIN    | A[I]    | Z       |         |         |         |
+| 6          | C      | Z       | Y       | 10      | 12      | 12      |
+| 7          | ;      | I       | X       |         |         |         |
+| 8          | ;      | Z       | Y       |         |         |         |
+| 9          | B      |         |         |         |         |         |
+| 10         | P      | X       |         |         |         |         |
+| 11         | P      | Y       |         |         |         |         |
+| Last       | S      |         |         |         |         |         |
+
+Page 11.
+
+EXAMPLE 3. ∫₀¹ e⁻ˣ² dx; N intervals, (trapezoid rule).
+
+Program sheet:
+
+| Instr. No. | Instr. | Field 1 | Field 2 | Field 3 |
+| :--------- | :----- | :------ | :------ | :------ |
+| 1          | A      |         |         |         |
+| 2          | I      | N       |         |         |
+| 3          | /      | 1.0     | N       | D       |
+| 4          | ;      | 0.0     | X       |         |
+| 5          | ;      | 0.5     | S       |         |
+| 6          | Z      | I       | 1.0     | N       |
+| 7          | +      | X       | D       | X       |
+| 8          | ·      | X       | X       | Y       |
+| 9          | ·      | -1.0    | Y       | Y       |
+| 10         | EXP    | Y       | Y       |         |
+| 11         | +      | S       | Y       | S       |
+| 12         | B      |         |         |         |
+| 13         | ·      | S       | D       | S       |
+| 14         | P      | S       |         |         |
+| 15         | T      | 1       |         |         |
+
+Data sheet:
+
+| Run No. | Variable | Magnitude or label | Exp.  |
+| :------ | :------- | :----------------- | :---- |
+| 1       | Label    | Problem 1          |       |
+|         | N        | +10                | +00   |
+|         | Label    | Problem 2          |       |
+|         | N        | +100               | +00   |
+|         |          | FINISH             |       |
+
+Page 12.
+
