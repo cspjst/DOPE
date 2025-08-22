@@ -79,8 +79,8 @@ size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record_t to
     while (tok != NULL && count < DOPE_INSTRUCTION_PARTS) {
         // 3. Measure token length and clamp to field size
         size_t len = strlen(tok);
-        if (len >= DOPE_OPERAND_SIZE) {
-            len = DOPE_OPERAND_SIZE - 1;  // Leave room for '\0'
+        if (len >= DOPE_FIELD_SIZE) {
+            len = DOPE_FIELD_SIZE - 1;  // Leave room for '\0'
         }
         // 4. Copy token safely into current field
         memcpy(tokens[count], tok, len);
@@ -105,7 +105,7 @@ int dope_lookup_opcode(const char* mnemonic) { // just a simple linear search
 }
 
 // @note expects instruction->number to be pre-populated
-void dope_input_token(dope_instruction_t* instruction, FILE* istream) {
+void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     dope_line_t line;
     // 1. read the line
     size_t length = dope_read_line(&line, istream);

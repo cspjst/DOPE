@@ -11,7 +11,7 @@
 extern const char* const DOPE_INSTRUCTIONS[];
 extern const uint8_t DOPE_OPERAND_COUNT[];
 
-typedef dope_field_t[DOPE_INSTRUCTION_PARTS] dope_instruction_record_t;
+typedef dope_field_t dope_instruction_record_t[DOPE_INSTRUCTION_PARTS];
 
 typedef struct {
     uint8_t line_number;
