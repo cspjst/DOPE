@@ -214,3 +214,111 @@ Data sheet:
 
 Page 12.
 
+Corrections:
+A subscripted variable must have a variable as its subscript. That is, E[A] is legitimate and E[A5] is legitimate, but E[5] is not.
+
+A subscripted variable must not occur inside a Z instruction. That is
+
+```Z I E[A] 100```
+
+is not allowed.
+
+The C instruction is incorrectly listed on page 6. The correct order of the branch labels is:
+```
+Compare A with B
+  ↓    ↓    ↓
+ L₁   L₂   L₃
+A>B  A=B  A<B
+```
++ L₁ is the branch for A > B
++ L₂ is the branch for A = B
++ L₃ is the branch for A < B
+
+Page 13.
+
+2. Dope data sheet.
+Do not type number of run or name of variable. For a label,
+type label as written (spaces allowed, but no stop code within label).
+Put one stop code at the end of the label. For data you must type
+two numbers of up to 5 characters each, followed by stop-codes. If
+the magnitude has no more than 5 characters, then make it the first
+item followed by a stop-code, and then type the exponent followed by
+a stop code:
+
+5.297 +10 is typed as 5.297'+10'
+
+.5 -08 is typed as .5'-08'
+
+Note that the exponent must have three characters consisting of sign
+and two digits. There is one convenient exception, +00 may be omitted. Thus
+
+5.23 +00 is typed as 5.23'+00'
+
+or as 5.23'
+
+If the magnitude consists of more than 5 characters (a maximum of
+7 is allowed), then put a stop-code after the fifth, and type the
+remaining one or two characters, immediately followed by the exponent
+and a second stop-code. E.g.,
+
+5.2356 +11 is typed as 5.23'56+11'
+
+-111111 -11 is typed as -111111-11'
+
+1256 +25 is typed as 12'56+25'
+
+Note: To avoid round-off errors, while .00005 may be inputted as is
+or as 5-05, the latter will be much more accurate. Therefore,
+type: 5'-05'. The data-sheet must end with finish'. However, this
+must be entered as a number, not a title. So if the first item on
+the sheet is a label, type: 'finish'. If there happen to be n
+labels in a row, type n stop-codes, followed by finish'.
+
+Typing instructions for DOPE:
+
+1. Dope Sheet.
+Do not type instruction number. Type only instruction followed by 0 to 5 fields, each followed by '. For example, Example 1 on page 9 would appear as:
+```
+a'
+z'a'1.0'100'
+sqr'a'b'
+p'a'
+p'b'
+n'
+b'
+o'
+s'
+```
+Do not leave any spaces. Type one instruction per line. Remember to type s' at the end of the program. The data should follow the program immediately on the same tape.
+
+Page 14.
+
+Instructions for using DOPE compiler.
+The compiler is available on a single large paper tape labeled "DOPE COMPILER". This is a HEX tape, to be read in on the photo-reader, using 10.4.
+
+Put 6-bit input down.
+
+Load DOPE program with data into the typewriter tape-reader.
+
+Depress "one operation", "clear counter", "normal", "start", just as if calling for 10.4. These steps will at any time cause the machine to compile a DOPE program. [The usual instruction in 0000 has been changed to u0300, to allow for immediate transfer to the DOPE compiler.]
+
+The program will compile. If Brake-point 32 is DOWN, then the program is immediately executed, using the data on the data-tape. If the brake-point is UP, it stops after compiling. Push start when ready to run. (For example, the latter procedure allows manual inputting of data.)
+
+To restart a compiled program, push the four buttons, then type s and push start. To compile a new program, just put it in the typewriter tape-reader and push the 4 buttons.
+
+Error stops occur on:
+
++ Floating point exponent overflow (prints +, and stops)
++ Negative squareroot
++ More characters than allowed on data (types e)
++ Illegitimate command
++ Negative logarithm (prints log)
++ If you forgot to put down 6-bit input!
+
+At the end of using DOPE, put up 6-bit input. To restore 10.4:
+1. Switch to manual input,
+2. Type e0000,
+3. Push "Fill instruction",
+4. Type k017i,
+5. Push "One operation", and "execute instruction".
+Test it by pushing the 4 buttons as usual.
