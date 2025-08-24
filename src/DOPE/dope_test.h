@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "dope_errors.h"
 #include "dope_program.h"
 
 // Nullius in verba testa omnia
@@ -248,13 +249,14 @@ void test_dope_input_instruction() {
     fprintf(f, "SQR X Y\n");                     // valid
     fprintf(f, "this_line_is_way_too_long_exceeding_DOPE_LINE_SIZE\n");  // truncated
     fprintf(f, "+ A B C\n");                     // valid, 3 operands
-    fprintf(f, "J Z 15\n");                      // valid
+    fprintf(f, "J Z \n");                        // valid, 1 operand white space accounted for
+    fprintf(f, "J Z 15\n");                      // invalid, too many operands
     fprintf(f, "FOO\n");                         // unknown instruction
     fprintf(f, "\n");                            // empty line
-    fprintf(f, "C\n");                           // valid, no operands
+    fprintf(f, "E\n");                           // valid, no operands
     fprintf(f, "P X\n");                         // valid, 1 operand
     fprintf(f, "P\n");                           // too few args
-    fprintf(f, "Z X Y Z\n");                     // too many args (Z takes 3, this is 3? check DOPE_FEILDS)
+    fprintf(f, "Z X Y Z A\n");                   // too many args (Z takes 3, this is 3? check DOPE_FEILDS)
     fclose(f);
 
     f = fopen("test_input.txt", "r");
@@ -262,91 +264,114 @@ void test_dope_input_instruction() {
 
     dope_instruction_t inst;
 
-    inst.line_number = 1;
-    inst.opcode = 0;
-    inst.error_code = 0;
-    inst.fields[0][0] = '\0';
-    inst.fields[1][0] = '\0';
-    inst.fields[2][0] = '\0';
-    inst.fields[3][0] = '\0';
-    inst.fields[4][0] = '\0';
-
-    // Test 1: Valid instruction
+    printf("Test 1: Valid instruction\t");
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 6);  // SQR
+    assert(inst.opcode == DOPE_OP_SQR);
     assert(inst.error_code == DOPE_ERR_SUCCESS);
     assert(strcmp(inst.fields[0], "SQR") == 0);
     assert(strcmp(inst.fields[1], "X") == 0);
     assert(strcmp(inst.fields[2], "Y") == 0);
 
-    // Test 2: Truncated line
+    printf("Test 2: Truncated line\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 0);
+    assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_LINE_TOO_LONG);
 
-    // Test 3: Next line after truncation → should be clean
+    printf("Test 3: Next line after truncation should be clean\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 1);  // "+" is opcode 1
+    assert(inst.opcode == DOPE_OP_ADD);
     assert(strcmp(inst.fields[0], "+") == 0);
     assert(strcmp(inst.fields[1], "A") == 0);
 
-    // Test 4: Another valid
+    printf("Test 4: Another valid\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 15);  // J
+    assert(inst.opcode == DOPE_OP_J);
     assert(strcmp(inst.fields[0], "J") == 0);
 
-    // Test 5: Unknown instruction
+    printf("Test 4.1: too many opernads\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 0);
+    assert(inst.opcode == DOPE_OP_INVALID);
+    assert(inst.error_code == DOPE_ERR_TOO_MANY_ARGS);
+
+    printf("Test 5: Unknown instruction\t");
+    dope_clear_instruction(&inst);
+    inst.line_number++;
+    dope_input_instruction(&inst, f);
+    dope_print_instruction(&inst);
+    assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_UNKNOWN_INSTR);
     assert(strcmp(inst.fields[0], "FOO") == 0);  // preserved for error reporting
 
-    // Test 6: Empty line
+    printf("Test 6: Empty line\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 0);
+    assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_NO_INSTR);
 
-    // Test 7: Valid: C (opcode 10, 0 operands)
+    printf("Test 7: Valid: E (opcode 17, 0 operands)\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 10);
+    assert(inst.opcode == DOPE_OP_E);
     assert(inst.error_code == DOPE_ERR_SUCCESS);
 
-    // Test 8: Valid: P (opcode 13, 1 operand)
+    printf("Test 8: Valid: P (opcode 13, 1 operand)\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 13);
+    assert(inst.opcode == DOPE_OP_P);
     assert(strcmp(inst.fields[1], "X") == 0);
 
-    // Test 9: Too few args: P requires 1, got 0
+    printf("Test 9: Too few args: P requires 1, got 0\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 0);
+    assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_TOO_FEW_ARGS);
     assert(strcmp(inst.fields[0], "P") == 0);
 
-    // Test 10: Z takes 3 operands, so "Z X Y Z" is 4 → too many
+    printf("Test 10: Z takes 3 operands, so \"Z X Y Z A\" is 4 too many\t");
+    dope_clear_instruction(&inst);
     inst.line_number++;
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == 0);
+    assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_TOO_MANY_ARGS);
     assert(strcmp(inst.fields[0], "Z") == 0);
 
     fclose(f);
     printf("test_dope_input_instruction: all tests passed\n");
+}
+
+void test_dope_input_program() {
+    FILE* f = fopen("test_input.txt", "r");
+    assert(f != NULL);
+
+    dope_program_t* prog = dope_new_program(11);
+
+    dope_input_program(prog, f);
+    dope_print_program(prog);
+
+    fclose(f);
+    dope_free_program(prog);
+
+    printf("test_dope_input_program: all tests passed\n");
 }

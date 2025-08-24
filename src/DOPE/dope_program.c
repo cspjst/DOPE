@@ -104,13 +104,19 @@ int dope_lookup_opcode(const char* mnemonic) { // just a simple linear search
     return 0;
 }
 
+void dope_clear_instruction(dope_instruction_t* instruction) {
+    memset(instruction, 0, sizeof(dope_instruction_t));
+}
+
 // @note expects instruction->number to be pre-populated
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
-    dope_line_t line;
+    // 0. clear the instruction fields
+    memset(instruction->fields, 0, sizeof(dope_instruction_record_t));
     // 1. read the line
+    dope_line_t line;
     size_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
-        instruction->opcode = 0;
+        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_LINE_TOO_LONG;
         dope_consume_remaining(istream);
         return;
@@ -120,7 +126,7 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     // 3. tokenize the line
     size_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
-        instruction->opcode = 0;
+        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_NO_INSTR;
         return;
     }
@@ -132,12 +138,12 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     }
     // 5. check number of operands
     if(token_count - 1 < DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
-        instruction->opcode = 0;
+        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_TOO_FEW_ARGS;
         return;
     }
     if(token_count - 1 > DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
-        instruction->opcode = 0;
+        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_TOO_MANY_ARGS;
         return;
     }
@@ -145,7 +151,44 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
 }
 
 void dope_input_program(dope_program_t* program, FILE* stream) {
+    if (!program || !stream) {
+        return;
+    }
+    program->size = 0;
+    uint8_t line_number = 1;
+    dope_instruction_t instruction;
 
+    while (program->size < program->capacity) {
+        // 1. Set line number before parse
+        instruction.line_number = line_number;
+        // 2. Parse next instruction
+        dope_input_instruction(&instruction, stream);
+        // 2.1 EOF: stop cleanly
+        if (instruction.opcode == DOPE_OP_INVALID && instruction.error_code == DOPE_ERR_NO_INPUT) {
+            printf("Line %d: %s", line_number, dope_error_message(instruction.error_code));
+            break;
+        }
+        // 3. Store instruction (valid or invalid)
+        program->instructions[program->size] = instruction;
+        program->size++;
+        // 4. Print error if invalid
+        if (instruction.opcode == DOPE_OP_INVALID) {
+            printf("Line %d: %s", line_number, dope_error_message(instruction.error_code));
+            // 4.1 For certain errors, include context
+            if (instruction.error_code == DOPE_ERR_UNKNOWN_INSTR ||
+                instruction.error_code == DOPE_ERR_TOO_FEW_ARGS ||
+                instruction.error_code == DOPE_ERR_TOO_MANY_ARGS) {
+                printf(" '%s'", instruction.fields[0]);
+            }
+            printf("\n");
+        }
+        // 5. Stop on 'S' instruction (opcode 19)
+        if (instruction.opcode == DOPE_OP_S) {  // 'S' = Stop
+            break;
+        }
+        // 6. Next line
+        line_number++;
+    }
 }
 
 void dope_print_instruction(dope_instruction_t* instruction) {

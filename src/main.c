@@ -14,7 +14,9 @@ int main() {
     //test_dope_read_line();
     //test_dope_instruction_tokenize();
     //test_dope_lookup_opcode();
-    test_dope_input_instruction();
+    //test_dope_input_instruction();
+
+    test_dope_input_program();
 
     return 0;
 }
