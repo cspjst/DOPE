@@ -1,13 +1,13 @@
-#include "DOPE/dope_program.h"
+//#include "DOPE/dope_program_tape.h"
 #include "DOPE/dope_test.h"
 //#include "DOPE/dope_types.h"
 //#include <stdio.h>
 
 int main() {
 
-    dope_program_t* prog = dope_new_program(10);
+    //dope_program_tape_t* prog = dope_new_program_tape(10);
 
-    dope_free_program(prog);
+    //dope_free_program_tape(prog);
 
     //test_dope_is_truncated();
     //test_dope_consume_remaining_manual(stdin);

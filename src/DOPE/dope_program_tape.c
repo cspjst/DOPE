@@ -1,4 +1,4 @@
-#include "dope_program.h"
+#include "dope_program_tape.h"
 #include "dope_constants.h"
 #include "dope_types.h"
 #include <string.h>
@@ -15,8 +15,8 @@ const uint8_t DOPE_OPERAND_COUNT[] = {
     5, 1, 0, 1, 0, 1, 3, 0, 0, 0
 };
 
-dope_program_t* dope_new_program(size_t line_count) {
-    dope_program_t* program = malloc(sizeof(dope_program_t));
+dope_program_tape_t* dope_new_program_tape(size_t line_count) {
+    dope_program_tape_t* program = malloc(sizeof(dope_program_tape_t));
     if (!program) {
         return NULL;
     }
@@ -32,7 +32,7 @@ dope_program_t* dope_new_program(size_t line_count) {
     return program;
 }
 
-void dope_free_program(dope_program_t* program) {
+void dope_free_program_tape(dope_program_tape_t* program) {
     if (program) {
         free(program->instructions);
         free(program);
@@ -150,7 +150,7 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     // 6. recognized instruction and correct number of operands
 }
 
-void dope_input_program(dope_program_t* program, FILE* stream) {
+void dope_input_program(dope_program_tape_t* program, FILE* stream) {
     if (!program || !stream) {
         return;
     }
@@ -205,7 +205,7 @@ void dope_print_instruction(dope_instruction_t* instruction) {
     }
 }
 
-void dope_print_program(dope_program_t* program) {
+void dope_print_program(dope_program_tape_t* program) {
    for(int i = 0; i < program->size; i++) {
         dope_print_instruction(&program->instructions[i]);
     }

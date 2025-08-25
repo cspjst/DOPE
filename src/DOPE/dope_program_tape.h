@@ -76,7 +76,7 @@ typedef struct {
     dope_instruction_t* instructions; /**< Owned array of instructions */
     size_t size;                   /**< Number of valid instructions */
     size_t capacity;               /**< Allocated instruction count */
-} dope_program_t;
+} dope_program_tape_t;
 
 /**
  * @brief Create a new program buffer.
@@ -84,13 +84,13 @@ typedef struct {
  * @return Pointer to new program, or NULL on allocation failure
  * @note Caller must free with dope_free_program()
  */
-dope_program_t* dope_new_program(size_t line_count);
+dope_program_tape_t* dope_new_program_tape(size_t line_count);
 
 /**
  * @brief Free program and its instruction array.
  * @param program Pointer to program (may be NULL)
  */
-void dope_free_program(dope_program_t* program);
+void dope_free_program_tape(dope_program_tape_t* program);
 
 /**
  * @brief Check if a line was truncated during input.
@@ -173,7 +173,7 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream);
  * Validates each instruction and reports errors via printf.
  * Stops immediately after storing 'S'.
  */
-void dope_input_program(dope_program_t* program, FILE* stream);
+void dope_input_program(dope_program_tape_t* program, FILE* stream);
 
 /**
  * @brief Print a single instruction in human-readable form.
@@ -185,6 +185,6 @@ void dope_print_instruction(dope_instruction_t* instruction);
  * @brief Print all instructions in a program.
  * @param program Pointer to program
  */
-void dope_print_program(dope_program_t* program);
+void dope_print_program(dope_program_tape_t* program);
 
 #endif /* DOPE_PROGRAM_H */
