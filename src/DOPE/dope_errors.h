@@ -12,9 +12,12 @@ typedef enum {
     DOPE_ERR_UNKNOWN_INSTR,   // invalid instruction
     DOPE_ERR_TOO_FEW_ARGS,    // not enough operands
     DOPE_ERR_TOO_MANY_ARGS,   // too many operands
-    DOPE_ERR_LINE_TOO_LONG    // input line too long
+    DOPE_ERR_LINE_TOO_LONG,   // input line too long
+    DOPE_ERR_FINISH           // absent or malformed
 } dope_error_t;
 
 const char* dope_error_message(uint8_t error_code);
+
+void dope_panic(uint8_t line, dope_error_t e, char* info);
 
 #endif

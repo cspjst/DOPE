@@ -1,5 +1,6 @@
 #include "dope_program.h"
 #include "dope_constants.h"
+#include "dope_errors.h"
 #include "dope_types.h"
 #include <string.h>
 #include <stdio.h>
@@ -166,7 +167,8 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
         dope_input_instruction(&instruction, stream);
         // 2.1 EOF: stop cleanly
         if (instruction.opcode == DOPE_OP_INVALID && instruction.error_code == DOPE_ERR_NO_INPUT) {
-            printf("Line %d: %s", line_number, dope_error_message(instruction.error_code));
+            //printf("Line %d: %s", line_number, dope_error_message(instruction.error_code));
+            dope_panic(line_number, instruction.error_code, "");
             break;
         }
         // 3. Store instruction (valid or invalid)
@@ -174,14 +176,15 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
         program->size++;
         // 4. Print error if invalid
         if (instruction.opcode == DOPE_OP_INVALID) {
-            printf("Line %d: %s", line_number, dope_error_message(instruction.error_code));
             // 4.1 For certain errors, include context
             if (instruction.error_code == DOPE_ERR_UNKNOWN_INSTR ||
                 instruction.error_code == DOPE_ERR_TOO_FEW_ARGS ||
                 instruction.error_code == DOPE_ERR_TOO_MANY_ARGS) {
-                printf(" '%s'", instruction.fields[0]);
+                dope_panic(line_number, instruction.error_code, instruction.fields[0]);
             }
-            printf("\n");
+            else {
+                dope_panic(line_number, instruction.error_code, "");
+            }
         }
         // 5. Stop on 'S' instruction (opcode 19)
         if (instruction.opcode == DOPE_OP_S) {  // 'S' = Stop
