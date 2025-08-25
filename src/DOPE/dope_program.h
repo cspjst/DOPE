@@ -93,37 +93,6 @@ dope_program_t* dope_new_program(uint8_t line_count);
 void dope_free_program(dope_program_t* program);
 
 /**
- * @brief Check if a line was truncated during input.
- * @param line Pointer to line buffer
- * @return true if buffer full and no newline, false otherwise
- * @details
- * Used to detect lines longer than DOPE_LINE_SIZE. Relies on
- * fgets not including \n when buffer fills.
- */
-bool dope_is_truncated(dope_line_t* line);
-
-/**
- * @brief Consume remaining characters in current logical line.
- * @param istream Input stream
- * @details
- * Reads and discards input until '\n' or EOF. Call after
- * dope_is_truncated() returns true to keep stream synchronized.
- */
-void dope_consume_remaining(FILE* istream);
-
-/**
- * @brief Read a line from stream into buffer.
- * @param line Target buffer
- * @param istream Input stream
- * @return Length of line after stripping \r\n, or 0 on EOF/error
- * @details
- * Uses fgets, then removes trailing \r and \n. Returns raw length
- * before any further processing. May return full buffer length
- * without \n if line was truncated.
- */
-uint8_t dope_read_line(dope_line_t* line, FILE* istream);
-
-/**
  * @brief Tokenize a line into fixed-size fields.
  * @param line Input line (modified in place)
  * @param tokens Output array of string fields
@@ -132,7 +101,7 @@ uint8_t dope_read_line(dope_line_t* line, FILE* istream);
  * Uses strtok to split on whitespace. Each token is copied
  * safely into tokens[i] with null termination.
  */
-uint8_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]);
+dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]);
 
 /**
  * @brief Look up opcode by mnemonic string.
@@ -142,7 +111,7 @@ uint8_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]);
  * Performs linear search of DOPE_INSTRUCTIONS. Returns 0 for
  * NULL, empty, or unknown mnemonics.
  */
-int dope_lookup_opcode(const char* mnemonic);
+dope_size_t dope_lookup_opcode(const char* mnemonic);
 
 /**
  * @brief Clear instruction fields (token storage only).

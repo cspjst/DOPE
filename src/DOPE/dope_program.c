@@ -2,6 +2,7 @@
 #include "dope_constants.h"
 #include "dope_errors.h"
 #include "dope_types.h"
+#include "dope_utility.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,35 +42,7 @@ void dope_free_program(dope_program_t* program) {
     }
 }
 
-bool dope_is_truncated(dope_line_t* line) {
-   if (!line) {
-       return false;
-   }
-   uint8_t len = strlen(*line);
-   // truncated if...
-   return ((*line)[len - 1] != '\n') &&     // true no newline
-          (len == DOPE_LINE_SIZE - 1);      // true buffer full
-}
-
-void dope_consume_remaining(FILE* istream) {
-    int ch;
-    while ((ch = fgetc(istream)) != '\n' && ch != EOF);
-}
-
-// line is ...\n\0 on success or ...\0 on truncation or \0 on fail
-uint8_t dope_read_line(dope_line_t* line, FILE* istream) {
-    if (!line || !istream) {
-        (*line)[0] = '\0';  // "" on failure
-        return 0;
-    }
-    if (!fgets(*line, DOPE_LINE_SIZE, istream)) {
-        (*line)[0] = '\0';  // read fail or EOF
-        return 0;
-    }
-    return strlen(*line);
-}
-
-uint8_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record_t tokens) {
+dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record_t tokens) {
     if (!line || !tokens) {
         return 0;
     }
@@ -94,7 +67,7 @@ uint8_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record_t t
     return count;
 }
 
-int dope_lookup_opcode(const char* mnemonic) { // just a simple linear search
+dope_size_t dope_lookup_opcode(const char* mnemonic) { // just a simple linear search
     if (!mnemonic || !*mnemonic) {
         return 0;
     }

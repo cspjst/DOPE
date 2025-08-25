@@ -41,17 +41,23 @@ uint8_t dope_input_data_field(dope_data_field_t* data_field, FILE* istream) {
 void dope_input_data_block(dope_data_block_t* data_block, FILE* istream) {
     while(
         data_block->size < data_block->capacity
-        && dope_input_data_field(&data_block->fields[data_block->size++], istream) != 0
-    ) {}
-    //if(data_block->size == 0)
-    if(strcmp("FINISH", &data_block->fields[data_block->size - 1]) != 0) {
-        printf("Line %d: %s", data_block->size, dope_error_message(DOPE_ERR_FINISH));
+        && dope_input_data_field(&data_block->fields[data_block->size], istream) != 0
+    ) {
+
+        data_block->size++;
+    }
+    if(data_block->size == 0) {
+        dope_panic(data_block->size, DOPE_ERR_NO_INPUT, "");
+        return;
+    }
+    if(strcmp("FINISH", (char*)&data_block->fields[data_block->size - 1]) != 0) {
+        dope_panic(data_block->size, DOPE_ERR_FINISH, "");
         return;
     }
 }
 
 void dope_print_data_block(dope_data_block_t* data_block) {
     for(int i = 0; i < data_block->size; ++i) {
-        printf("%s\n", &data_block->fields[i]);
+        printf("%s\n", (char*)&data_block->fields[i]);
     }
 }

@@ -2,6 +2,9 @@
 #define DOPE_TYPES_H
 
 #include "dope_constants.h"
+#include <stdint.h>
+
+typedef uint8_t dope_size_t;
 
 typedef char dope_line_t[DOPE_LINE_SIZE];
 
