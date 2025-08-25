@@ -29,6 +29,7 @@ dope_program_t* dope_new_program(uint8_t line_count) {
 
     program->capacity = line_count;
     program->size = 0;
+    program->ip = 0;
     return program;
 }
 
