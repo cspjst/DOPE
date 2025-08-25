@@ -1,4 +1,4 @@
-#include "dope_program_tape.h"
+#include "dope_program.h"
 #include "dope_constants.h"
 #include "dope_types.h"
 #include <string.h>
@@ -15,8 +15,8 @@ const uint8_t DOPE_OPERAND_COUNT[] = {
     5, 1, 0, 1, 0, 1, 3, 0, 0, 0
 };
 
-dope_program_tape_t* dope_new_program_tape(size_t line_count) {
-    dope_program_tape_t* program = malloc(sizeof(dope_program_tape_t));
+dope_program_t* dope_new_program(uint8_t line_count) {
+    dope_program_t* program = malloc(sizeof(dope_program_t));
     if (!program) {
         return NULL;
     }
@@ -32,7 +32,7 @@ dope_program_tape_t* dope_new_program_tape(size_t line_count) {
     return program;
 }
 
-void dope_free_program_tape(dope_program_tape_t* program) {
+void dope_free_program(dope_program_t* program) {
     if (program) {
         free(program->instructions);
         free(program);
@@ -43,7 +43,7 @@ bool dope_is_truncated(dope_line_t* line) {
    if (!line) {
        return false;
    }
-   size_t len = strlen(*line);
+   uint8_t len = strlen(*line);
    // truncated if...
    return ((*line)[len - 1] != '\n') &&     // true no newline
           (len == DOPE_LINE_SIZE - 1);      // true buffer full
@@ -55,7 +55,7 @@ void dope_consume_remaining(FILE* istream) {
 }
 
 // line is ...\n\0 on success or ...\0 on truncation or \0 on fail
-size_t dope_read_line(dope_line_t* line, FILE* istream) {
+uint8_t dope_read_line(dope_line_t* line, FILE* istream) {
     if (!line || !istream) {
         (*line)[0] = '\0';  // "" on failure
         return 0;
@@ -67,18 +67,18 @@ size_t dope_read_line(dope_line_t* line, FILE* istream) {
     return strlen(*line);
 }
 
-size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record_t tokens) {
+uint8_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record_t tokens) {
     if (!line || !tokens) {
         return 0;
     }
-    size_t count = 0;
+    uint8_t count = 0;
     // 1. Begin tokenization: extract first token using strtok
     //    strtok modifies *line, replacing delimiters with '\0'
     char* tok = strtok(*line, " \t\r");
     // 2. Loop: while tokens exist and space remains
     while (tok != NULL && count < DOPE_INSTRUCTION_PARTS) {
         // 3. Measure token length and clamp to field size
-        size_t len = strlen(tok);
+        uint8_t len = strlen(tok);
         if (len >= DOPE_FIELD_SIZE) {
             len = DOPE_FIELD_SIZE - 1;  // Leave room for '\0'
         }
@@ -114,7 +114,7 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     memset(instruction->fields, 0, sizeof(dope_instruction_record_t));
     // 1. read the line
     dope_line_t line;
-    size_t length = dope_read_line(&line, istream);
+    uint8_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
         instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_LINE_TOO_LONG;
@@ -124,7 +124,7 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     // 2. trim the line
     line[strcspn(line, "\n")] = '\0';
     // 3. tokenize the line
-    size_t token_count = dope_instruction_tokenize(&line, instruction->fields);
+    uint8_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
         instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_NO_INSTR;
@@ -150,7 +150,7 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     // 6. recognized instruction and correct number of operands
 }
 
-void dope_input_program(dope_program_tape_t* program, FILE* stream) {
+void dope_input_program(dope_program_t* program, FILE* stream) {
     if (!program || !stream) {
         return;
     }
@@ -205,7 +205,7 @@ void dope_print_instruction(dope_instruction_t* instruction) {
     }
 }
 
-void dope_print_program(dope_program_tape_t* program) {
+void dope_print_program(dope_program_t* program) {
    for(int i = 0; i < program->size; i++) {
         dope_print_instruction(&program->instructions[i]);
     }

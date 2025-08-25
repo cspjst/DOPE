@@ -8,6 +8,8 @@
 #define DOPE_OPERANDS_MAX           5  /**< Max number of operands an instruction can take */
 #define DOPE_INSTRUCTION_COUNT     19  /**< Total number of valid opcodes in DOPE language */
 
+#define DOPE_DATA_FIELD_SIZE       20
+
 typedef enum {
     DOPE_OP_INVALID = 0,
 

@@ -72,11 +72,11 @@ typedef struct {
  * The input phase stops when an 'S' instruction is encountered.
  */
 typedef struct {
-    int ip;                        /**< Instruction pointer (index) */
+    uint8_t ip;                        /**< Instruction pointer (index) */
     dope_instruction_t* instructions; /**< Owned array of instructions */
-    size_t size;                   /**< Number of valid instructions */
-    size_t capacity;               /**< Allocated instruction count */
-} dope_program_tape_t;
+    uint8_t size;                   /**< Number of valid instructions */
+    uint8_t capacity;               /**< Allocated instruction count */
+} dope_program_t;
 
 /**
  * @brief Create a new program buffer.
@@ -84,13 +84,13 @@ typedef struct {
  * @return Pointer to new program, or NULL on allocation failure
  * @note Caller must free with dope_free_program()
  */
-dope_program_tape_t* dope_new_program_tape(size_t line_count);
+dope_program_t* dope_new_program(uint8_t line_count);
 
 /**
  * @brief Free program and its instruction array.
  * @param program Pointer to program (may be NULL)
  */
-void dope_free_program_tape(dope_program_tape_t* program);
+void dope_free_program(dope_program_t* program);
 
 /**
  * @brief Check if a line was truncated during input.
@@ -121,7 +121,7 @@ void dope_consume_remaining(FILE* istream);
  * before any further processing. May return full buffer length
  * without \n if line was truncated.
  */
-size_t dope_read_line(dope_line_t* line, FILE* istream);
+uint8_t dope_read_line(dope_line_t* line, FILE* istream);
 
 /**
  * @brief Tokenize a line into fixed-size fields.
@@ -132,7 +132,7 @@ size_t dope_read_line(dope_line_t* line, FILE* istream);
  * Uses strtok to split on whitespace. Each token is copied
  * safely into tokens[i] with null termination.
  */
-size_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]);
+uint8_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]);
 
 /**
  * @brief Look up opcode by mnemonic string.
@@ -173,7 +173,7 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream);
  * Validates each instruction and reports errors via printf.
  * Stops immediately after storing 'S'.
  */
-void dope_input_program(dope_program_tape_t* program, FILE* stream);
+void dope_input_program(dope_program_t* program, FILE* stream);
 
 /**
  * @brief Print a single instruction in human-readable form.
@@ -185,6 +185,6 @@ void dope_print_instruction(dope_instruction_t* instruction);
  * @brief Print all instructions in a program.
  * @param program Pointer to program
  */
-void dope_print_program(dope_program_tape_t* program);
+void dope_print_program(dope_program_t* program);
 
 #endif /* DOPE_PROGRAM_H */

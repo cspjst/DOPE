@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "dope_errors.h"
-#include "dope_program_tape.h"
+#include "dope_program.h"
 
 // Nullius in verba testa omnia
 
@@ -365,13 +365,13 @@ void test_dope_input_program() {
     FILE* f = fopen("test_input.txt", "r");
     assert(f != NULL);
 
-    dope_program_tape_t* prog = dope_new_program_tape(11);
+    dope_program_t* prog = dope_new_program(11);
 
     dope_input_program(prog, f);
     dope_print_program(prog);
 
     fclose(f);
-    dope_free_program_tape(prog);
+    dope_free_program(prog);
 
     printf("test_dope_input_program: all tests passed\n");
 }
