@@ -1,5 +1,6 @@
 #include "dope_utility.h"
 #include <string.h>
+#include <ctype.h>
 
 bool dope_is_truncated(dope_line_t* line) {
    if (!line) {
@@ -27,4 +28,24 @@ dope_size_t dope_read_line(dope_line_t* line, FILE* istream) {
         return 0;
     }
     return strlen(*line);
+}
+
+void dope_trim_string_in_place(char* string) {
+    // 0. null check
+    if(!string) {
+        return;
+    }
+    // 2. skip leading whitespace
+    char* start = string;
+    while (isspace((unsigned char)*start)) {
+        start++;
+    }
+    // 3. skip trailing whitespace and zero terminate
+    char* end = start + strlen(start) - 1;
+    while (end > start && isspace((unsigned char)*end)) {
+        end--;
+    }
+    *(end + 1) = '\0';
+    // 4. copy valid chunk to front
+    memmove(string, start, end - start + 2);
 }

@@ -6,11 +6,24 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-typedef char dope_data_field_t[DOPE_DATA_FIELD_SIZE];
+typedef enum {
+    DOPE_DATA_NUMBER,
+    DOPE_DATA_LABEL
+} dope_data_type_t;
+
+typedef union {
+    float number;                       // magnitude × 10^exponent
+    char string[DOPE_DATA_STRING_SIZE]; // string label
+} dope_data_value_t;
 
 typedef struct {
-    uint8_t si;                     // source index
-    dope_data_field_t* fields;
+    dope_data_type_t type;
+    dope_data_value_t value;
+} dope_data_argument_t;
+
+typedef struct {
+    uint8_t si;  // source index (for runtime consumption)
+    dope_data_argument_t* args;
     uint8_t size;
     uint8_t capacity;
 } dope_data_block_t;
@@ -19,17 +32,11 @@ dope_data_block_t* dope_new_data_block(uint8_t line_count);
 
 void dope_free_data_block(dope_data_block_t* data_block);
 
-bool dope_next_is_number(dope_data_block_t* data_block);
-
-bool dope_next_is_label(dope_data_block_t* data_block);
-
-bool dope_next_is_finish(dope_data_block_t* data_block);
-
 float dope_read_next_number(dope_data_block_t* data_block);
 
 char* dope_read_next_label(dope_data_block_t* data_block);
 
-uint8_t dope_input_data_field(dope_data_field_t* data_field, FILE* istream);
+uint8_t dope_input_data_value(dope_data_value_t* data_value, FILE* istream);
 
 void dope_input_data_block(dope_data_block_t* data_block, FILE* istream);
 
