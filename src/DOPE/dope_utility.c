@@ -27,5 +27,19 @@ dope_size_t dope_read_line(dope_line_t* line, FILE* istream) {
         (*line)[0] = '\0';  // read fail or EOF
         return 0;
     }
+    return;
+}
     return strlen(*line);
+}
+
+bool dope_has_space(const char* str) {
+    if (!str) {
+       return false;
+    }
+    for (size_t i = 0; s[i]; i++) {
+        if (isspace((unsigned char)str[i])) {  
+            return true;
+        }
+    }
+    return false;
 }
