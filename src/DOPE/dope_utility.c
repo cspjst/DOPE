@@ -19,7 +19,7 @@ void dope_consume_remaining(FILE* istream) {
 
 void dope_string_toupper(char* str) {
    while (*str) {
-      *str = toupper(*str);
+      (char)toupper((unsigned char)*str);
       str++;
    }
 }
