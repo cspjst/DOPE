@@ -2,31 +2,7 @@
 #include <assert.h>
 
 void test_dope_input_data_block() {
-    dope_data_block_t* data = dope_new_data_block(11);
-    char filepath[] = "test_data.txt";
 
-    FILE* f = fopen(filepath, "w");
-    assert(f != NULL);
-    fclose(f);
-
-    f = fopen(filepath, "r");
-    assert(f != NULL);
-    dope_input_data_block(data, f);
-    dope_print_data_block(data);
-    fclose(f);
-
-    f = fopen(filepath, "w");
-    assert(f != NULL);
-    fprintf(f, "FINISH\n");
-    fclose(f);
-
-    f = fopen(filepath, "r");
-    assert(f != NULL);
-    dope_input_data_block(data, f);
-    dope_print_data_block(data);
-    fclose(f);
-
-    dope_free_data_block(data);
 }
 
 

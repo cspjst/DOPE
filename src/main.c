@@ -3,6 +3,8 @@
 
 int main() {
 
+    //test_dope_lookup_opcode();
+    test_dope_input_instruction();
     test_dope_input_program();
 
     //test_dope_input_data_block();

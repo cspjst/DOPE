@@ -9,7 +9,8 @@ const char* const DOPE_ERROR_MESSAGES[] = {
     "Not enough operands!",     // DOPE_ERR_TOO_FEW_ARGS,    // not enough operands
     "Too many operands!",       // DOPE_ERR_TOO_MANY_ARGS,   // too many operands
     "Input too long!",          // DOPE_ERR_LINE_TOO_LONG    // input line too long
-    "Absent/malformed FINISH"   // DOPE_ERR_FINISH
+    "Found a space at input!",   // DOPE_ERR_INVALID_CHAR
+    "Absent/malformed FINISH!"  // DOPE_ERR_FINISH
 };
 
 const char* dope_error_message(uint8_t error_code) {

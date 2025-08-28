@@ -1,3 +1,0 @@
-/Users/jeremythornton/dosbox/cspjst/DOPE/src/DOPE/dope_test_program.h(14): Warning! W131: No prototype found for function 'dope_is_truncated'
-/Users/jeremythornton/dosbox/cspjst/DOPE/src/DOPE/dope_test_program.h(57): Warning! W131: No prototype found for function 'dope_consume_remaining'
-/Users/jeremythornton/dosbox/cspjst/DOPE/src/DOPE/dope_test_program.h(93): Warning! W131: No prototype found for function 'dope_read_line'

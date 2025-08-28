@@ -8,7 +8,7 @@ bool dope_is_truncated(dope_line_t* line) {
    }
    uint8_t len = strlen(*line);
    // truncated if...
-   return (*line)[len - 1] != '\n') &&     // true no newline
+   return (*line)[len - 1] != '\n' &&     // true no newline
           (len == DOPE_LINE_SIZE - 1);      // true buffer full
 }
 
@@ -19,7 +19,7 @@ void dope_consume_remaining(FILE* istream) {
 
 void dope_string_toupper(char* str) {
    while (*str) {
-      (char)toupper((unsigned char)*str);
+      *str = (char)toupper((unsigned char)*str);
       str++;
    }
 }
@@ -34,8 +34,6 @@ dope_size_t dope_read_line(dope_line_t* line, FILE* istream) {
         (*line)[0] = '\0';  // read fail or EOF
         return 0;
     }
-    return;
-}
     return strlen(*line);
 }
 
@@ -43,8 +41,8 @@ bool dope_has_space(const char* str) {
     if (!str) {
        return false;
     }
-    for (size_t i = 0; s[i]; i++) {
-        if (isspace((unsigned char)str[i])) {  
+    for (int i = 0; str[i]; i++) {
+        if (str[i] == ' ') {
             return true;
         }
     }

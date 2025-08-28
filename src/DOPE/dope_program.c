@@ -84,23 +84,32 @@ void dope_clear_instruction(dope_instruction_t* instruction) {
 }
 
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
-    // 1. read the line and catch truncated and invalid character errors 
+    dope_clear_instruction(instruction);
+    // 1. read the line and catch truncated and invalid character errors
     dope_line_t line;
     uint8_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
         instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_LINE_TOO_LONG;
+        strncpy((char*)&instruction->fields[0], (char*)&line, DOPE_LINE_SIZE);
         dope_consume_remaining(istream);
         return;
     }
-    if (dope_has_space(&line)) {
-        instruction->opcode =DOPE_OP_INVALID;
-        instruction->error_code = DOPE_ERR_INVALID_CHAR;
+    // 2.0 trim line
+    line[strcspn(line, "\n")] = '\0';
+    if(strlen((const char*)&line) == 0) {
+        instruction->opcode = DOPE_OP_INVALID;
+        instruction->error_code = DOPE_ERR_NO_INPUT;
         return;
     }
-    // 2. sanitize line - trim and uppercase
-    line[strcspn(line, "\n")] = '\0';
-    dope_string_to_upper(&line);
+    if (dope_has_space((char*)&line)) {
+        instruction->opcode = DOPE_OP_INVALID;
+        instruction->error_code = DOPE_ERR_INVALID_CHAR;
+        strncpy((char*)&instruction->fields[0], (char*)&line, DOPE_LINE_SIZE);
+        return;
+    }
+    // 2.1 sanitize line - uppercase
+    dope_string_toupper((char*)&line);
     // 3. tokenize the line
     uint8_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
@@ -133,34 +142,34 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
         return;
     }
     program->size = 0;
-    dope_instruction_t instruction;
 
     while (program->size < program->capacity) {
         // 1. Parse next instruction
-        dope_input_instruction(&instruction, stream);
-        // 2. Store instruction (valid or invalid)
-        program->instructions[program->size++] = instruction;
-        // 3. EOF: stop cleanly
-        if (instruction.opcode == DOPE_OP_INVALID && instruction.error_code == DOPE_ERR_NO_INPUT) {
-            dope_panic(program->size, instruction.error_code, "");
-            break;
+        dope_input_instruction(&program->instructions[program->size], stream);
+        // 2. EOF: stop cleanly
+        if (program->instructions[program->size].opcode == DOPE_OP_INVALID
+            && program->instructions[program->size].error_code == DOPE_ERR_NO_INPUT) {
+                dope_panic(
+                    program->size,
+                    program->instructions[program->size].error_code,
+                    ""
+                );
+                break;
         }
         // 4. Print error if invalid
-        if (instruction.opcode == DOPE_OP_INVALID) {
-            // 4.1 For certain errors, include context
-            if (instruction.error_code == DOPE_ERR_UNKNOWN_INSTR ||
-                instruction.error_code == DOPE_ERR_TOO_FEW_ARGS ||
-                instruction.error_code == DOPE_ERR_TOO_MANY_ARGS) {
-                dope_panic(program->size, instruction.error_code, instruction.fields[0]);
-            }
-            else {
-                dope_panic(program->size, instruction.error_code, "");
-            }
+        if (program->instructions[program->size].opcode == DOPE_OP_INVALID) {
+            dope_panic(
+                program->size,
+                program->instructions[program->size].error_code,
+                program->instructions[program->size].fields[0]
+            );
         }
         // 5. Stop on 'S' instruction (opcode 19)
-        if (instruction.opcode == DOPE_OP_S) {  // 'S' = Stop
+        if (program->instructions[program->size].opcode == DOPE_OP_S) {  // 'S' = Stop
+            program->size++;
             break;
         }
+        program->size++;
     }
 }
 
@@ -181,5 +190,6 @@ void dope_print_program(dope_program_t* program) {
    for(int i = 0; i < program->size; i++) {
        printf("%i ", i + 1); // line number
        dope_print_instruction(&program->instructions[i]);
-    }
+   }
+   printf("size=%i capacity=%i\n",program->size, program->capacity);
 }

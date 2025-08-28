@@ -2,6 +2,7 @@
 #define DOPE_DATA_TAPE_H
 
 #include "dope_constants.h"
+#include "dope_types.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -18,7 +19,7 @@ typedef union {
 
 typedef struct {
     dope_data_type_t type;
-    dope_data_value_t value;
+    dope_value_t value;
     uint8_t error_code;
 } dope_argument_t;
 

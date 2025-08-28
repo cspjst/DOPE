@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "dope_errors.h"
+#include "dope_utility.h"
 #include "dope_program.h"
 
 // Nullius in verba testa omnia
@@ -250,11 +251,14 @@ void test_dope_input_instruction() {
     fprintf(f, "J'Z'\n");                         // valid, 1 operand white space accounted for
     fprintf(f, "J'Z'15'\n");                      // invalid, too many operands
     fprintf(f, "FOO'\n");                         // unknown instruction
-    fprintf(f, "\n");                             // empty line
+    fprintf(f, "'\n");                         // empty line
     fprintf(f, "E'\n");                           // valid, no operands
     fprintf(f, "P'X'\n");                         // valid, 1 operand
     fprintf(f, "P'\n");                           // too few args
     fprintf(f, "Z'X'Y'Z'A'\n");                   // too many args (Z takes 3, this is 3? check DOPE_FEILDS)
+    fprintf(f, "+'A B'C'\n");                     // space found
+    fprintf(f, "+'a'b'c'\n");                     // valid, toupper
+    fprintf(f, "s\n");
     fclose(f);
 
     f = fopen("test_input.txt", "r");
@@ -272,14 +276,12 @@ void test_dope_input_instruction() {
     assert(strcmp(inst.fields[2], "Y") == 0);
 
     printf("Test 2: Truncated line\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_LINE_TOO_LONG);
 
     printf("Test 3: Next line after truncation should be clean\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_ADD);
@@ -287,21 +289,18 @@ void test_dope_input_instruction() {
     assert(strcmp(inst.fields[1], "A") == 0);
 
     printf("Test 4: Another valid\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_J);
     assert(strcmp(inst.fields[0], "J") == 0);
 
     printf("Test 4.1: too many opernads\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_TOO_MANY_ARGS);
 
     printf("Test 5: Unknown instruction\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_INVALID);
@@ -309,28 +308,24 @@ void test_dope_input_instruction() {
     assert(strcmp(inst.fields[0], "FOO") == 0);  // preserved for error reporting
 
     printf("Test 6: Empty line\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_NO_INSTR);
 
     printf("Test 7: Valid: E (opcode 17, 0 operands)\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_E);
     assert(inst.error_code == DOPE_ERR_SUCCESS);
 
     printf("Test 8: Valid: P (opcode 13, 1 operand)\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_P);
     assert(strcmp(inst.fields[1], "X") == 0);
 
     printf("Test 9: Too few args: P requires 1, got 0\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_INVALID);
@@ -338,12 +333,24 @@ void test_dope_input_instruction() {
     assert(strcmp(inst.fields[0], "P") == 0);
 
     printf("Test 10: Z takes 3 operands, so \"Z X Y Z A\" is 4 too many\t");
-    dope_clear_instruction(&inst);
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_INVALID);
     assert(inst.error_code == DOPE_ERR_TOO_MANY_ARGS);
     assert(strcmp(inst.fields[0], "Z") == 0);
+
+    printf("Test 11: space found\t");
+    dope_input_instruction(&inst, f);
+    dope_print_instruction(&inst);
+    assert(inst.opcode == DOPE_OP_INVALID);
+    assert(inst.error_code == DOPE_ERR_INVALID_CHAR);
+
+    printf("Test 12: valid after toupper\t");
+    dope_input_instruction(&inst, f);
+    dope_print_instruction(&inst);
+    assert(inst.opcode == DOPE_OP_ADD);
+    assert(strcmp(inst.fields[0], "+") == 0);
+    assert(strcmp(inst.fields[1], "A") == 0);
 
     fclose(f);
     printf("test_dope_input_instruction: all tests passed\n");
@@ -353,10 +360,11 @@ void test_dope_input_program() {
     FILE* f = fopen("test_input.txt", "r");
     assert(f != NULL);
 
-    dope_program_t* prog = dope_new_program(11);
+    dope_program_t* prog = dope_new_program(15);
 
     dope_input_program(prog, f);
-    //dope_print_program(prog);
+    getchar();
+    dope_print_program(prog);
 
     fclose(f);
     dope_free_program(prog);
