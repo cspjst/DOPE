@@ -17,6 +17,13 @@ void dope_consume_remaining(FILE* istream) {
     while ((ch = fgetc(istream)) != '\n' && ch != EOF);
 }
 
+void dope_string_toupper(char* str) {
+   while (*str) {
+      *str = toupper(*str);
+      str++;
+   }
+}
+
 // line is ...\n\0 on success or ...\0 on truncation or \0 on fail
 dope_size_t dope_read_line(dope_line_t* line, FILE* istream) {
     if (!line || !istream) {
