@@ -49,7 +49,7 @@ dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record
     uint8_t count = 0;
     // 1. Begin tokenization: extract first token using strtok
     //    strtok modifies *line, replacing delimiters with '\0'
-    char* tok = strtok(*line, " \t\r");
+    char* tok = strtok(*line, DOPE_DELIM_STR);
     // 2. Loop: while tokens exist and space remains
     while (tok != NULL && count < DOPE_INSTRUCTION_PARTS) {
         // 3. Measure token length and clamp to field size
@@ -62,7 +62,7 @@ dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record
         tokens[count][len] = '\0';  // Ensure null termination
         // 5. Advance to next token and field
         count++;
-        tok = strtok(NULL, " \t\r");  // Continue from where previous left off
+        tok = strtok(NULL, DOPE_DELIM_STR);  // Continue from where previous left off
     }
     return count;
 }
@@ -87,13 +87,18 @@ void dope_clear_instruction(dope_instruction_t* instruction) {
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     // 0. clear the instruction fields
     memset(instruction->fields, 0, sizeof(dope_instruction_record_t));
-    // 1. read the line
+    // 1. read the line and cathc truncated and invalid character errors 
     dope_line_t line;
     uint8_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
         instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_LINE_TOO_LONG;
         dope_consume_remaining(istream);
+        return;
+    }
+    if (dope_has_space(&line)) {
+        instruction->opcode =DOPE_OP_INVALID;
+        instruction->error_code = DOPE_ERR_INVALID_CHAR;
         return;
     }
     // 2. trim the line
@@ -130,47 +135,39 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
         return;
     }
     program->size = 0;
-    uint8_t line_number = 1;
     dope_instruction_t instruction;
 
     while (program->size < program->capacity) {
-        // 1. Set line number before parse
-        instruction.line_number = line_number;
-        // 2. Parse next instruction
+        // 1. Parse next instruction
         dope_input_instruction(&instruction, stream);
-        // 2.1 EOF: stop cleanly
+        // 2. Store instruction (valid or invalid)
+        program->instructions[program->size++] = instruction;
+        // 3. EOF: stop cleanly
         if (instruction.opcode == DOPE_OP_INVALID && instruction.error_code == DOPE_ERR_NO_INPUT) {
-            //printf("Line %d: %s", line_number, dope_error_message(instruction.error_code));
-            dope_panic(line_number, instruction.error_code, "");
+            dope_panic(program->size, instruction.error_code, "");
             break;
         }
-        // 3. Store instruction (valid or invalid)
-        program->instructions[program->size] = instruction;
-        program->size++;
         // 4. Print error if invalid
         if (instruction.opcode == DOPE_OP_INVALID) {
             // 4.1 For certain errors, include context
             if (instruction.error_code == DOPE_ERR_UNKNOWN_INSTR ||
                 instruction.error_code == DOPE_ERR_TOO_FEW_ARGS ||
                 instruction.error_code == DOPE_ERR_TOO_MANY_ARGS) {
-                dope_panic(line_number, instruction.error_code, instruction.fields[0]);
+                dope_panic(program->size, instruction.error_code, instruction.fields[0]);
             }
             else {
-                dope_panic(line_number, instruction.error_code, "");
+                dope_panic(program->size, instruction.error_code, "");
             }
         }
         // 5. Stop on 'S' instruction (opcode 19)
         if (instruction.opcode == DOPE_OP_S) {  // 'S' = Stop
             break;
         }
-        // 6. Next line
-        line_number++;
     }
 }
 
 void dope_print_instruction(dope_instruction_t* instruction) {
-    printf("%i %s %s %s %s %s\n",
-        instruction->line_number,
+    printf("%s %s %s %s %s\n",
         instruction->fields[0],
         instruction->fields[1],
         instruction->fields[2],
@@ -184,6 +181,7 @@ void dope_print_instruction(dope_instruction_t* instruction) {
 
 void dope_print_program(dope_program_t* program) {
    for(int i = 0; i < program->size; i++) {
-        dope_print_instruction(&program->instructions[i]);
+       printf("%i ", i + 1); // line number
+       dope_print_instruction(&program->instructions[i]);
     }
 }
