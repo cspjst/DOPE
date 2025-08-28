@@ -83,7 +83,6 @@ void dope_clear_instruction(dope_instruction_t* instruction) {
     memset(instruction, 0, sizeof(dope_instruction_t));
 }
 
-// @note expects instruction->number to be pre-populated
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     // 0. clear the instruction fields
     memset(instruction->fields, 0, sizeof(dope_instruction_record_t));
@@ -101,8 +100,9 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
         instruction->error_code = DOPE_ERR_INVALID_CHAR;
         return;
     }
-    // 2. trim the line
+    // 2. sanitize line - trim and uppercase
     line[strcspn(line, "\n")] = '\0';
+    dope_string_to_upper(&line);
     // 3. tokenize the line
     uint8_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
