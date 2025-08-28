@@ -53,15 +53,13 @@ typedef dope_field_t dope_instruction_record_t[DOPE_INSTRUCTION_PARTS];
  * @brief Single parsed instruction with source and error context.
  * @details
  * Holds the result of parsing one source line. Includes:
- * - line_number: source line (1-based)
  * - error_code: set if opcode == 0
  * - opcode: 1–19 for valid, 0 for error
  * - fields: tokenized strings (fields[0] = opcode string)
  */
 typedef struct {
-    uint8_t line_number;           /**< Source line number (1–99) */
-    uint8_t error_code;            /**< Error code if opcode == 0 */
     uint8_t opcode;                /**< 1–19 = valid opcode, 0 = error */
+    uint8_t error_code;            /**< Error code if opcode == 0 */
     dope_instruction_record_t fields; /**< Tokenized instruction parts */
 } dope_instruction_t;
 
