@@ -13,6 +13,7 @@ typedef enum {
     DOPE_ERR_TOO_FEW_ARGS,    // not enough operands
     DOPE_ERR_TOO_MANY_ARGS,   // too many operands
     DOPE_ERR_LINE_TOO_LONG,   // input line too long
+    DOPE_ERR_INVALID_CHAR,    // found a space at input
     DOPE_ERR_FINISH           // absent or malformed
 } dope_error_t;
 
