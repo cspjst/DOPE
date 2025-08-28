@@ -27,43 +27,22 @@ void dope_free_data_block(dope_data_block_t* data_block) {
     }
 }
 
-uint8_t dope_input_data_value(dope_data_value_t* data_value, FILE* istream) {
-    if (!data_value || !istream) {
-        return 0;
-    }
-    if (!fgets(data_value->string, DOPE_DATA_STRING_SIZE, istream)) {
-        data_value->number = 0.0;
-        data_value->string[0] = '\0';  // read fail or EOF
-        return 0;
-    }
-    return strlen(data_value->string);
-}
-
-void dope_parse_argument(dope_data_argument_t* arg, FILE* istream) {
-    dope_size_t len = dope_input_data_value(&arg->value, istream);
-
-}
-
-void dope_input_data_block(dope_data_block_t* data_block, FILE* istream) {
-    while(
-        data_block->size < data_block->capacity
-        //&& dope_input_data_arguement(data_block->args[data_block->size], istream) != 0
-    ) {
-
-        data_block->size++;
-    }
-    if(data_block->size == 0) {
-        dope_panic(data_block->size, DOPE_ERR_NO_INPUT, "");
+void dope_input_argument(dope_argument_t* arg, FILE* istream) {
+    // 1. read the line and catch truncated and invalid character errors 
+    uint8_t length = dope_read_line(&arg->value.string, istream);
+    if(dope_is_truncated(&arg->value.string)) {
+        arg->error_code = DOPE_ERR_LINE_TOO_LONG;
+        dope_consume_remaining(istream);
         return;
     }
-    if(strcmp("FINISH", (char*)&data_block->fields[data_block->size - 1]) != 0) {
-        dope_panic(data_block->size, DOPE_ERR_FINISH, "");
+    // 2. sanitize line
+    line[strcspn(arg->value.string, "\n")] = '\0';
+    // 3. parse if number 
+    if(dope_is_number(&arg->value.string)) {
+        dope_parse_number(arg);
         return;
     }
-}
-
-void dope_print_data_block(dope_data_block_t* data_block) {
-    for(int i = 0; i < data_block->size; ++i) {
-        printf("%s\n", (char*)&data_block->fields[i]);
-    }
+    // 4. otherwise plain string 
+    arg->type = DOPE_DATA_LABEL;
+    return; 
 }
