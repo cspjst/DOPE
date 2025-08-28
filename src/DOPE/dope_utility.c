@@ -8,7 +8,7 @@ bool dope_is_truncated(dope_line_t* line) {
    }
    uint8_t len = strlen(*line);
    // truncated if...
-   return ((*line)[len - 1] != '\n') &&     // true no newline
+   return (*line)[len - 1] != '\n') &&     // true no newline
           (len == DOPE_LINE_SIZE - 1);      // true buffer full
 }
 
