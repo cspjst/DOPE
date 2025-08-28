@@ -84,9 +84,7 @@ void dope_clear_instruction(dope_instruction_t* instruction) {
 }
 
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
-    // 0. clear the instruction fields
-    memset(instruction->fields, 0, sizeof(dope_instruction_record_t));
-    // 1. read the line and cathc truncated and invalid character errors 
+    // 1. read the line and catch truncated and invalid character errors 
     dope_line_t line;
     uint8_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
