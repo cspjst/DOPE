@@ -1,14 +1,14 @@
-DARTMOUTH
-OVERSIMPLIFIED
-PROGRAMMING
-EXPERIMENT
+# DARTMOUTH
+# OVERSIMPLIFIED
+# PROGRAMMING
+# EXPERIMENT
 
 Dartmouth Computation Center
 may 1962
 
 Page 1.
 
-Preface
+## Preface
 The Dartmouth Oversimplified Programming Experiment (to be referred to by its initials) was designed for a dual purpose. It will first of all be used in an experiment designed to teach a large number of freshmen the rudiments of programming in a course of three one-hour lectures. For this experiment DOPE provides a fast and efficient method of running programs written by the students. It is also hoped that DOPE will prove sufficiently convenient to serve for programming of simple research problems.
 
 The language of DOPE was designed by Professor John G. Kemeny, with the following principles in mind: (1) It is a universal language. That is, any problem that the machine is capable of handling can be written in DOPE. (2) Each instruction in DOPE corresponds to a box in a flow-diagram. Hence it is trivial to translate a flow-diagram into a DOPE program. (3) The language is so designed that it can be quickly translated into machine language, and hence the usual lengthy compiling time is avoided when the program is actually run. To achieve these goals, some flexibility had to be sacrificed. However, the rigidity of the language actually makes it easier to teach to the novice.
@@ -19,10 +19,10 @@ The DOPE compiler was written and tested by Sidney Marshall '65, a freshman rese
 
 Page 2. 
 
-Flow diagrams.
+## Flow diagrams.
 A flow-diagram is a simple device for stating precisely a set of computational rules. Four types of components occur in a flow-diagram: Arithmetical, comparison, loop, and input-output. In addition, there are arrows to show the order of instructions.
 
-Arithmetical boxes.
+### Arithmetical boxes.
 
 Each such box contains the order for one arithmetical operation. For example:
 
@@ -36,13 +36,13 @@ Each such box contains the order for one arithmetical operation. For example:
 
 An arithmetical order is indicated by enclosing it in a rectangular box.
 
-Comparison.
+### Comparison.
 
 A comparison is of the form: Compare X₂ with Y. The comparison results in one of three decisions: X₂ > Y, X₂ = Y, or X₂ < Y. The comparison is placed inside a circle, and it has three arrows coming out of the circle, corresponding to the three possible results. For example, in the following diagram we compute Z = |X - Y|:
 
 Page 3.
 
-Loop.
+### Loop.
 A loop is a very powerful device. It serves to carry out a sequence of orders repeatedly, for varying values of an index or a parameter. The key order of a loop is enclosed in a diamond:
 
 One enters the diamond on top. It then sets I = 3, and proceeds to whatever instructions are to be carried out in the loop. When the diamond is reentered (from the left) the value of I is increased by 1, and the loop-instructions are repeated. When the instructions have been carried out for I=10, then the loop is 'exited' to the instruction on its right.
@@ -53,7 +53,7 @@ Page 4.
 
 As another example, let Z = 5 + 6 + 7 + … + 82 + 83:
 
-Input and output.
+### Input and output.
 
 Most programs have small variable data. That is, some quantities may change from one run of the problem to another. For example, if one writes a program to compute a power of 2, one might as well compute 2^N, where N is to be specified as data. For this we need an input order. We also need a print order to have the flexowriter type an answer. These orders are indicated in dotted boxes, and usually occur at the beginning and the end of the program, respectively.
 
@@ -63,13 +63,13 @@ Page 5.
 
 This program will first get a value of N from the data-tape, then it computes 2^N and prints the answer. Finally, it asks for a new value of N and repeats the procedure, until the data-tape is exhausted.
 
-Illustration.
+### Illustration.
 
 Let us construct one larger example. Suppose that we have a vector (or simply a set of numbers) A_I for I = 1, 2, …, N. We wish to find the component A_I for which sin(A_I) is a maximum. In the following program both the index of such a component and the maximum value are printed:
 
 Page 6.
 
-### DOPE Instructions and Flow Diagram Equivalents
+## DOPE Instructions and Flow Diagram Equivalents
 
 | DOPE Instr. | Fields         | Flow Diagram Equivalent                          |
 | :---------- | :------------- | :----------------------------------------------- |
@@ -95,7 +95,7 @@ Page 6.
 
 Page 7.
 
-Notes on DOPE instructions.
+## Notes on DOPE instructions.
 In place of A, B, and C in any instruction one may use any variable. For the purposes of DOPE a variable is a letter or a letter followed by a single digit. For example: A, X, Z5, Q0, M, T7 are variables. There is an exception: Do not use the letters L or O since these are indistinguishable from the numbers 1 and 0 on a typewriter.
 
 One may also replace A, B, and C by a constant. A constant has 3, 4, or 5 characters. Each character is either a digit, or a decimal point, or a minus sign. For example: 1, 0, 3.56, -12.3, 001, -.001 are constants. Since a constant must have at least 3 characters, one writes 13.0 instead of 13. If the programmer wishes to use a more complicated constant, he should write a variable into his program, and then input its value as data.
@@ -214,7 +214,7 @@ Data sheet:
 
 Page 12.
 
-Corrections:
+## Corrections:
 A subscripted variable must have a variable as its subscript. That is, E[A] is legitimate and E[A5] is legitimate, but E[5] is not.
 
 A subscripted variable must not occur inside a Z instruction. That is
@@ -236,7 +236,7 @@ A>B  A=B  A<B
 
 Page 13.
 
-2. Dope data sheet.
+##  Dope data sheet.
 Do not type number of run or name of variable. For a label,
 type label as written (spaces allowed, but no stop code within label).
 Put one stop code at the end of the label. For data you must type
@@ -274,9 +274,9 @@ must be entered as a number, not a title. So if the first item on
 the sheet is a label, type: 'finish'. If there happen to be n
 labels in a row, type n stop-codes, followed by finish'.
 
-Typing instructions for DOPE:
+## Typing instructions for DOPE:
 
-1. Dope Sheet.
+### Dope Sheet.
 Do not type instruction number. Type only instruction followed by 0 to 5 fields, each followed by '. For example, Example 1 on page 9 would appear as:
 ```
 a'
