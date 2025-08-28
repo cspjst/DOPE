@@ -36,4 +36,22 @@ void dope_consume_remaining(FILE* istream);
  */
 dope_size_t dope_read_line(dope_line_t* line, FILE* istream);
 
+/**
+ * @brief Check if a string contains any whitespace characters.
+ * @param str Null-terminated input string (may be NULL)
+ * @return true if any whitespace is found, false otherwise
+ *
+ * @details
+ * This function is used to enforce DOPE's strict input format, which
+ * requires that instructions be entered without spaces, tabs, or other
+ * whitespace. Each field must be followed by a stop code (') and fields
+ * must be contiguous.
+ *
+ * According to the original "Dartmouth Oversimplified Programming Experiment"
+ * teaching notes (May 1962), page 13:
+ *
+ *   "Do not leave any spaces. Type one instruction per line."
+ */
+bool dope_has_space(const char* str);
+
 #endif
