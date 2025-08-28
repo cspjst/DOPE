@@ -36,6 +36,4 @@ void dope_consume_remaining(FILE* istream);
  */
 dope_size_t dope_read_line(dope_line_t* line, FILE* istream);
 
-void dope_trim_string_in_place(char* string);
-
 #endif
