@@ -24,6 +24,8 @@ bool dope_is_truncated(dope_line_t* line);
  */
 void dope_consume_remaining(FILE* istream);
 
+void dope_string_toupper(char* str);
+
 /**
  * @brief Read a line from stream into buffer.
  * @param line Target buffer
