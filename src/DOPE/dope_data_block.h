@@ -34,6 +34,10 @@ dope_data_block_t* dope_new_data_block(uint8_t line_count);
 
 void dope_free_data_block(dope_data_block_t* data_block);
 
+void dope_clear_data(dope_argument_t* arg);
+
+bool dope_is_number(char* string);
+
 void dope_input_argument(dope_argument_t* arg, FILE* istream);
 
 void dope_input_data_block(dope_data_block_t* data_block, FILE* istream);
