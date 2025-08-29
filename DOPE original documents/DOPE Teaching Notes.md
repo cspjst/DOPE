@@ -75,7 +75,7 @@ This program will first get a value of N from the data-tape, then it computes 2^
 
 ### Illustration.
 
-Let us construct one larger example. Suppose that we have a vector (or simply a set of numbers) Ai for i = 1, 2, …, N. We wish to find the component Ai for which sin(Ai) is a maximum. In the following program both the index of such a component and the maximum value are printed:
+Let us construct one larger example. Suppose that we have a vector (or simply a set of numbers) A[i] for i = 1, 2, …, N. We wish to find the component A[i] for which sin(A[i]) is a maximum. In the following program both the index of such a component and the maximum value are printed:
 
 ![flowchart_sin_max](flowchart_sin_max_pg5.png)
 
