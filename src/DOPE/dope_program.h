@@ -91,6 +91,15 @@ dope_program_t* dope_new_program(uint8_t line_count);
 void dope_free_program(dope_program_t* program);
 
 /**
+ * @brief Clear instruction fields (token storage only).
+ * @param instruction Pointer to instruction
+ * @details
+ * Zeroes the fields array to prevent carryover from previous use.
+ * Does not clear line_number, opcode, or error_code.
+ */
+void dope_clear_instruction(dope_instruction_t* instruction);
+
+/**
  * @brief Tokenize a line into fixed-size fields.
  * @param line Input line (modified in place)
  * @param tokens Output array of string fields
@@ -111,14 +120,7 @@ dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]);
  */
 dope_size_t dope_lookup_opcode(const char* mnemonic);
 
-/**
- * @brief Clear instruction fields (token storage only).
- * @param instruction Pointer to instruction
- * @details
- * Zeroes the fields array to prevent carryover from previous use.
- * Does not clear line_number, opcode, or error_code.
- */
-void dope_clear_instruction(dope_instruction_t* instruction);
+
 
 /**
  * @brief Parse a single instruction from input stream.
