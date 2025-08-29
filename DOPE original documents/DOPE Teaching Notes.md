@@ -47,9 +47,13 @@ Page 3.
 ### Loop.
 A loop is a very powerful device. It serves to carry out a sequence of orders repeatedly, for varying values of an index or a parameter. The key order of a loop is enclosed in a diamond:
 
+![flow_chart_loop](flowchart_loop_pg3.png)
+
 One enters the diamond on top. It then sets I = 3, and proceeds to whatever instructions are to be carried out in the loop. When the diamond is reentered (from the left) the value of I is increased by 1, and the loop-instructions are repeated. When the instructions have been carried out for I=10, then the loop is 'exited' to the instruction on its right.
 
 For example, the diagram below computes Z = 2 · 3⁸ + 5:
+
+![flow_chart_compute](flowchart_compute_pg3.png)
 
 Page 4.
 
