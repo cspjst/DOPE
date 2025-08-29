@@ -40,6 +40,8 @@ An arithmetical order is indicated by enclosing it in a rectangular box.
 
 A comparison is of the form: Compare X₂ with Y. The comparison results in one of three decisions: X₂ > Y, X₂ = Y, or X₂ < Y. The comparison is placed inside a circle, and it has three arrows coming out of the circle, corresponding to the three possible results. For example, in the following diagram we compute Z = |X - Y|:
 
+![flow_chart_comparision](flow_chart_comparison_pg2.png)
+
 Page 3.
 
 ### Loop.
