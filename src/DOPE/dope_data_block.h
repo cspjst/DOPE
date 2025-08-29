@@ -8,6 +8,7 @@
 #include <stdbool.h>
 
 typedef enum {
+    DOPE_DATA_INVALID,
     DOPE_DATA_NUMBER,
     DOPE_DATA_LABEL
 } dope_data_type_t;
@@ -37,6 +38,8 @@ void dope_free_data_block(dope_data_block_t* data_block);
 void dope_clear_data(dope_argument_t* arg);
 
 bool dope_is_number(char* string);
+
+void dope_parse_number(dope_argument_t* arg);
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream);
 
