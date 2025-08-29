@@ -42,6 +42,10 @@ void dope_free_program(dope_program_t* program) {
     }
 }
 
+void dope_clear_instruction(dope_instruction_t* instruction) {
+    memset(instruction, 0, sizeof(dope_instruction_t));
+}
+
 dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record_t tokens) {
     if (!line || !tokens) {
         return 0;
@@ -77,10 +81,6 @@ dope_size_t dope_lookup_opcode(const char* mnemonic) { // just a simple linear s
         }
     }
     return 0;
-}
-
-void dope_clear_instruction(dope_instruction_t* instruction) {
-    memset(instruction, 0, sizeof(dope_instruction_t));
 }
 
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
