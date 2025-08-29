@@ -120,22 +120,22 @@ Page 8.
 
 Inputting of data is necessary either when the value of a variable changes from one run of the program to another, or when one wishes to use a constant that is more complex than is permitted in DOPE for constants inside the body of the program. The data for a run of the problem is read in immediately after the program, and each piece of data must be called for by an I instruction. Each number inputted into the program as data has a magnitude and an exponent. The magnitude has a sign followed either by up to six digits, or up to five digits plus a decimal point. The exponent has a sign followed by 2 digits. The exponent indicates a power of 10, and must lie between -36 and +36. For example:
 
-+12.36 +02 is +12.36 × 10² or 1236
+        +12.36     +02   is     +12.36 × 10²      or  1236
 
--1.29 +20 is -1.29 × 10²⁰
+        -1.29      +20   is     -1.29 × 10²⁰
 
-+123456 -10 is +123456 × 10⁻¹⁰ or 0.0000123456
+        +123456    -10   is     +123456 × 10⁻¹⁰   or   0.0000123456
 
-+297 +00 is 297
+        +297       +00   is      297
 
 Answers are printed by the flexowriter in the same format. Four numbers are printed per line. But the programmer may start a new line at any time by inserting an N instruction.
 
-The programmer may, if he wishes, insert labels in the output. He simply puts an A instruction in a suitable place in the program, and writes a (short) label in the corresponding spot on the data sheet. When the program reaches the A, the label will be printed. If both I and A instructions occur in the program, care must be taken that the data and labels occur in the correct order. For example, if the instructions
+The programmer may, if he wishes, insert labels in the output. He simply puts an A instruction in a suitable place in the program, and writes a (short) label in the corresponding spot on the data sheet. When the program reaches the A, the label will be printed. If both J and A instructions occur in the program, care must be taken that the data and labels occur in the correct order. For example, if the instructions
 
 ```
-I N
-A
-I M
+        J N
+        A
+        J M
 ```
 
 occur in that order, then the data sheet should contain the data for N, followed by the label, and then the data for M. If there is more than one run, these three items must occur on the data sheet for each run. For example, if N = 10 and M = .023 for the first run, while N = 20 and M = -.345 for the second, the data-sheet may look as follows:
