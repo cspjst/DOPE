@@ -37,7 +37,7 @@ bool dope_is_number(char* string) {
 
 void dope_parse_number(dope_argument_t* arg) {
     // 1. tokenize into magnitude and 10x exponent 
-    char* magnitude = strtok(input_copy, DOPE_DELIM_STR);
+    char* magnitude = strtok(arg->value.string, DOPE_DELIM_STR);
     char* exponent = strtok(NULL, DOPE_DELIM_STR);
     // 2. validate format
     int ndigits = 0;    
@@ -86,9 +86,11 @@ void dope_parse_number(dope_argument_t* arg) {
     }
     // 6. Process each exponent character after the sign
     for (int i = 1; i < 3; i++) {
-        arg->type = DOPE_DATA_INVALID;
-        arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
-        return;
+        if (!isdigit((unsigned char)exponent[i])) {
+            arg->type = DOPE_DATA_INVALID;
+            arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+            return;
+        }
     }
     // 7. Check exponent range
     int e = atoi(exponent);
@@ -104,15 +106,15 @@ void dope_parse_number(dope_argument_t* arg) {
         arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
         return;
     }
-    arg->type = DOPE_DATA_INVALID;
+    arg->type = DOPE_DATA_NUMBER;
     arg->value.number = m * powf(10.0f, (float)e);
 }
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     dope_clear_data(arg);
     // 1. read the line and catch truncated and invalid character errors
-    uint8_t length = dope_read_line(&arg->value.string, istream);
-    if(dope_is_truncated(&arg->value.string)) {
+    uint8_t length = dope_read_line(arg->value.string, istream);
+    if(dope_is_truncated(arg->value.string)) {
         arg->error_code = DOPE_ERR_LINE_TOO_LONG;
         dope_consume_remaining(istream);
         return;
