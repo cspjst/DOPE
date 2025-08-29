@@ -120,8 +120,6 @@ dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_field_t tokens[]);
  */
 dope_size_t dope_lookup_opcode(const char* mnemonic);
 
-
-
 /**
  * @brief Parse a single instruction from input stream.
  * @param instruction Output instruction (must be non-null)
