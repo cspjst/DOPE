@@ -27,7 +27,16 @@ void dope_free_data_block(dope_data_block_t* data_block) {
     }
 }
 
+void dope_clear_data(dope_argument_t* arg) {
+    memset(arg, 0, sizeof(dope_argument_t));
+}
+
+bool dope_is_number(char* string) {
+    return (*string == '+' || *string == '-');
+}
+
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
+    dope_clear_data(arg);
     // 1. read the line and catch truncated and invalid character errors
     uint8_t length = dope_read_line(&arg->value.string, istream);
     if(dope_is_truncated(&arg->value.string)) {
@@ -38,11 +47,11 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     // 2. sanitize line
     arg->value.string[strcspn(arg->value.string, "\n")] = '\0';
     // 3. parse if number
-    /*
+    
     if(dope_is_number(&arg->value.string)) {
         dope_parse_number(arg);
         return;
-        }*/
+    }
     // 4. otherwise plain string
     arg->type = DOPE_DATA_LABEL;
     return;
