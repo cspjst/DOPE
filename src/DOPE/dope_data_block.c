@@ -35,6 +35,79 @@ bool dope_is_number(char* string) {
     return (*string == '+' || *string == '-');
 }
 
+void dope_parse_number(dope_argument_t* arg) {
+    // 1. tokenize into magnitude and 10x exponent 
+    char* magnitude = strtok(input_copy, DOPE_DELIM_STR);
+    char* exponent = strtok(NULL, DOPE_DELIM_STR);
+    // 2. validate format
+    int ndigits = 0;    
+    int npoints = 0;
+    if (!magnitude || !exponent) {
+        arg->type = DOPE_DATA_INVALID;
+        arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+        return;
+    }
+    // 3. Check minimum lengths and signs of magnitude and exponent 
+    if (
+        strlen(magnitude) < 2 
+        || strlen(exponent) != 3 
+        || (magnitude[0] != '+' && magnitude[0] != '-') 
+        || (exponent[0] != '+' && exponent[0] != '-')) 
+    {
+        arg->type = DOPE_DATA_INVALID;
+        arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+        return;
+    }
+    // 4. Process each magnitude character after the sign
+    for (int i = 1; magnitude[i] != '\0'; i++) {
+        if (magnitude[i] == '.') {
+            if (++npoints > 1) {
+                arg->type = DOPE_DATA_INVALID;
+                arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+                return;
+            }
+        } else if (isdigit((unsigned char)magnitude[i])) {
+            if (++ndigits > 6) {
+                arg->type = DOPE_DATA_INVALID;
+                arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+                return;
+            }
+        } else {
+            arg->type = DOPE_DATA_INVALID;
+            arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+            return;
+        }
+    }
+    // 5. // Must have at least one digit
+    if (ndigits == 0) {
+        arg->type = DOPE_DATA_INVALID;
+        arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+        return;
+    }
+    // 6. Process each exponent character after the sign
+    for (int i = 1; i < 3; i++) {
+        arg->type = DOPE_DATA_INVALID;
+        arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+        return;
+    }
+    // 7. Check exponent range
+    int e = atoi(exponent);
+    if (e < -36 || e > 36)  {
+        arg->type = DOPE_DATA_INVALID;
+        arg->error_code = DOPE_ERR_EXPONENT_OUT_OF_RANGE;
+    }
+    // 8. Valid input (at last) parse and calculate
+    char* end;
+    float m = strtof(magnitude, &end);
+    if (*end != '\0') {
+        arg->type = DOPE_DATA_INVALID;
+        arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+        return;
+    }
+    arg->type = DOPE_DATA_INVALID;
+    arg->value.number = m * powf(10.0f, (float)e);
+}
+
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     dope_clear_data(arg);
     // 1. read the line and catch truncated and invalid character errors
@@ -47,8 +120,8 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     // 2. sanitize line
     arg->value.string[strcspn(arg->value.string, "\n")] = '\0';
     // 3. parse if number
-    
     if(dope_is_number(&arg->value.string)) {
+        arg->type = DOPE_DATA_NUMBER;
         dope_parse_number(arg);
         return;
     }
