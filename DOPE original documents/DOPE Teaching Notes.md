@@ -40,7 +40,7 @@ An arithmetical order is indicated by enclosing it in a rectangular box.
 
 A comparison is of the form: Compare X₂ with Y. The comparison results in one of three decisions: X₂ > Y, X₂ = Y, or X₂ < Y. The comparison is placed inside a circle, and it has three arrows coming out of the circle, corresponding to the three possible results. For example, in the following diagram we compute Z = |X - Y|:
 
-![flow_chart_comparision](flow_chart_comparison_pg2.png)
+![flowchart_comparision](flowchart_comparison_pg2.png)
 
 Page 3.
 
@@ -59,11 +59,15 @@ Page 4.
 
 As another example, let Z = 5 + 6 + 7 + … + 82 + 83:
 
+![flowchart_example](flowchart_example_pg4.png)
+
 ### Input and output.
 
 Most programs have small variable data. That is, some quantities may change from one run of the problem to another. For example, if one writes a program to compute a power of 2, one might as well compute 2^N, where N is to be specified as data. For this we need an input order. We also need a print order to have the flexowriter type an answer. These orders are indicated in dotted boxes, and usually occur at the beginning and the end of the program, respectively.
 
 Consider the following example:
+
+![flowchart_input_output](flowchart_io_pg4.png)
 
 Page 5. 
 
@@ -71,7 +75,9 @@ This program will first get a value of N from the data-tape, then it computes 2^
 
 ### Illustration.
 
-Let us construct one larger example. Suppose that we have a vector (or simply a set of numbers) A_I for I = 1, 2, …, N. We wish to find the component A_I for which sin(A_I) is a maximum. In the following program both the index of such a component and the maximum value are printed:
+Let us construct one larger example. Suppose that we have a vector (or simply a set of numbers) Ai for i = 1, 2, …, N. We wish to find the component Ai for which sin(Ai) is a maximum. In the following program both the index of such a component and the maximum value are printed:
+
+![flowchart_sin_max](flowchart_sin_max_pg5.png)
 
 Page 6.
 
