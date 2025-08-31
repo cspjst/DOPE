@@ -45,6 +45,6 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream);
 
 void dope_input_data_block(dope_data_block_t* data_block, FILE* istream);
 
-void dope_print_data_block(dope_data_block_t* data_block);
+void dope_print_arg(dope_argument_t* arg);
 
 #endif

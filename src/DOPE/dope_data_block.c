@@ -3,6 +3,8 @@
 #include "dope_utility.h"
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <math.h>
 
 dope_data_block_t* dope_new_data_block(uint8_t line_count) {
     dope_data_block_t* data = malloc(sizeof(dope_data_block_t));
@@ -36,23 +38,23 @@ bool dope_is_number(char* string) {
 }
 
 void dope_parse_number(dope_argument_t* arg) {
-    // 1. tokenize into magnitude and 10x exponent 
+    // 1. tokenize into magnitude and 10x exponent
     char* magnitude = strtok(arg->value.string, DOPE_DELIM_STR);
     char* exponent = strtok(NULL, DOPE_DELIM_STR);
     // 2. validate format
-    int ndigits = 0;    
+    int ndigits = 0;
     int npoints = 0;
     if (!magnitude || !exponent) {
         arg->type = DOPE_DATA_INVALID;
         arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
         return;
     }
-    // 3. Check minimum lengths and signs of magnitude and exponent 
+    // 3. Check minimum lengths and signs of magnitude and exponent
     if (
-        strlen(magnitude) < 2 
-        || strlen(exponent) != 3 
-        || (magnitude[0] != '+' && magnitude[0] != '-') 
-        || (exponent[0] != '+' && exponent[0] != '-')) 
+        strlen(magnitude) < 2
+        || strlen(exponent) != 3
+        || (magnitude[0] != '+' && magnitude[0] != '-')
+        || (exponent[0] != '+' && exponent[0] != '-'))
     {
         arg->type = DOPE_DATA_INVALID;
         arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
@@ -107,7 +109,7 @@ void dope_parse_number(dope_argument_t* arg) {
         return;
     }
     arg->type = DOPE_DATA_NUMBER;
-    arg->value.number = m * powf(10.0f, (float)e);
+    arg->value.number = m * power_of_10(e);
 }
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
@@ -130,4 +132,13 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     // 4. otherwise plain string
     arg->type = DOPE_DATA_LABEL;
     return;
+}
+
+void dope_print_arg(dope_argument_t* arg) {
+    printf("%i %f %s %i %s\n",
+        arg->type,
+        arg->value.number,
+        arg->value.string,
+        arg->error_code,dope_error_message(arg->error_code)
+    );
 }
