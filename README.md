@@ -19,4 +19,6 @@ DOPE has been largely lost to history, overshadowed by its famous successor, BAS
 
 I am grateful to the Rauner Special Collections Library, for locating the Thomas Kurtz papers and photocopying the "Dartmouth Oversimplified Programming Experiment (DOPE)" teaching notes and providing them to me for this work.
 
+## DOPE 
 
+Recreating DOPE is not an act of nostalgia, rather, it is an act of understanding, of tracing the roots of accessible computing. At that watershed time of transition from the point when only programmers could use computers towards an egalitarian future where anyone and everyone could, and would, be able to use a computer. These ideas of the liberalisation of computing were forming in a number minds and the Dartmouth Oversimplified Programming Experiment (DOPE) was a seminal, but somewhat forgotten, step in that direction. A direction that would lead to one of the most liberating computer programming languages the world would see - the Beginner's All-purpose Symbolic Instruction Code (BASIC).
