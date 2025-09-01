@@ -31,8 +31,119 @@ To understand DOPE, we must understand the computing world of the late 1950s and
 
 One such machine, the LGP-30 (Librascope General Purpose), arrived at the Dartmouth Computation Center. For its time, it was a marvel of miniaturization and affordability—a "desk-sized" computer, though its 800-pound weight belied the name. This relatively compact and simple computer, powered by just 113 vacuum tubes, was the perfect catalyst for Professor Kemeny's ambition. It was on this specific machine, with its magnetic drum memory and typewriter-based input, that he launched his radical experiment to teach computing to non-programmers. The constraints of the LGP-30, its limited memory and processing power, directly shaped the design of the language created for it: a language that had to be oversimplified by necessity, yet powerful enough to be universal. This language was DOPE.
 
-## Programming with DOPE 
-The DOPE experiment was conducted over a single semester and was, in large part, a paper exercise. The students were taught about flowcharts as a visual introduction to reasoning about a computer program. The flow charts were then converted into 2 main parts the computer program itself in the form of the DOPE commands and a source of input data for that program. The program code was ahnd written onto pre-prepared forms that were separated into columns. Namely, line number, instruction and 5 columns for between 0 .. 5 oprands depending upon the instruction. The columns for the operands/arguments for each instruction were  termed 'fields', as was typical for the time. Dope proamming proforma example:
+## Programming with DOPE: A Three-Stage Journey
+The DOPE teaching experiment was conducted over a single semester in 1962 and was, in large part, a meticulous paper exercise. This was not a course in typing or machine operation, but, rather, a course in computational thinking. The process was broken up into three distinct stages, each designed to separate the logic of programming from the mechanics of the machine.
+
+### Stage 1: Visual Thinking with Flowcharts
+Before a single line of code was written, students were taught to reason about a problem visually. They would map out the entire logic of their program using flowcharts. This step forced them to think about the sequence of operations, decisions, and loops in a language-agnostic way, establishing the fundamental algorithm before confronting the syntax of DOPE.
+
+### Stage 2: The Paper Program - Converting Logic to Code
+Once the flowchart was complete, students began the precise work of translating their visual logic into a machine-readable DOPE program — by hand. They used pre-printed, forms, the "DOPE sheet" for the DOPE program itself and the "DOPE DATA sheet" for the data. Both were structured in a way that aided clarity and consistency. 
+
+This paper stage was where the thinking happened. The machine was an abstract concept; the programmer's battle was with their formulation of the problem into a flowchart and then converting each flowchart step into its corresponding DOPE instruction and the data it would work on - all done with pencil and paper.
+
+#### The Program Sheet: 
+This form was used to write the code itself. Each line corresponded to one instruction, meticulously filled into columns.
+
+DOPE SHEET
+
+Programmer: __________   Problem: __________   Date: __________
+
+| Instr. No. | Instr. | Field 1 | Field 2 | Field 3 | Field 4 | Field 5 |
+| ---------- | ------ | ------- | ------- | ------- | ------- | ------- |
+| 1          |        |         |         |         |         |         |
+| 2          |        |         |         |         |         |         |
+| 3          |        |         |         |         |         |         |
+.
+.
+| 18         |        |         |         |         |         |         |
+| 19         |        |         |         |         |         |         |
+| LAST       | S      |         |         |         |         |         |
+
+Rules were strict:
+
+Programs must begin at line 1 and increase consecutively.
+
+Only one instruction per line.
+
+The final line, labeled LAST, must contain the stop instruction S.
+
+Fields 1–5 held the operands: variables, constants, or line numbers (for loop and jump instructions).
+
+#### The Data Sheet: 
+A separate form was used to prepare all the input values and output labels the program would use, to be read sequentially during execution.
+
+DOPE DATA SHEET
+
+Programmer: __________   Problem: __________   Date: __________
+
+| Run No. | Variable | Magnitude (or label) | Exponent |
+| ------- | -------- | -------------------- | -------- |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          |                      |          |
+|         |          | FINISH               |          |
+                            
+
+Each row provided either a numeric value or a text label.
+
+Numeric entries had to be specified with a magnitude (e.g., +12.3) and an exponent (e.g., +02).
+
+"FINISH" marked the absolute end of all data.
 
 
-Similarly there 
+
+### Stage 3: The Machine - Teletypes, Tapes, and Terse Errors
+The final stage was the transition from the abstract to the physical—a process, the man-machine interface itself. The carefully handwritten forms were now transcribed onto a teletype machine to create a paper tape - an interaction likley fraught with error and  frustration. 
+
+#### Program Entry: 
+The rules for typing were exacting. As per the teaching notes:
+
+> "Do not type instruction number. Type only instruction followed by 0 to 5 fields, each followed by ' (a single quote was the stop code). Do not leave any spaces. Type one instruction per line. Remember to type s' at the end of the program."
+
+For example, a program was typed as a continuous stream like:
+        a'
+        z'a'1.0'100'
+        sqr'a'b'
+        p'a'
+        p'b'
+        n'
+        e'
+        f'
+        s'
+
+#### Data Entry: 
+Data had even more complex rules, a fascinating glimpse into the extreme constraints of the era:
+
+> "For data you must type two numbers of up to 5 characters each, followed by stop-codes... The exponent must have three characters consisting of sign and two digits."
+
+A value like 5.297 x 10¹⁰ was painstakingly typed as 5.297'+10'.
+
+#### Compilation and Execution: 
+Finally, the user would load the "DOPE COMPILER" tape via the photoelectric reader, then feed their newly created program/data tape into the typewriter reader. A specific sequence of button presses on the LGP-30's console would set the compilation in motion.
+
+The moment of truth was often harsh. Error reporting was primitive and cryptic. The machine might simply stop and print:
+
++. for a floating-point exponent overflow.
+
+e for too many characters in a data field.
+
+log for an attempt to take a negative logarithm.
+
+This frustration was a direct lesson in the machine's unforgiving literalness. A misplaced stop code or a single typo meant a failed run. It was this very frustration, experienced by Kemeny and Kurtz's students, that would directly lead to a core design principle of its famous successor, BASIC: clear, informative error messages that helped the learner understand what they did wrong, rather than simply telling them they had failed.
