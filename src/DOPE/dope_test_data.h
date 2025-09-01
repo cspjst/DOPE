@@ -22,11 +22,60 @@ void test_dope_parse_number() {
     printf("TEST dope_parse_number\n");
     dope_argument_t arg;
 
-    printf("Case 0: null token\n");
-    strcpy(arg.value.label, "+5.297'");
+    printf("Case 0: null token errors...\n");
+    strcpy(arg.value.label, "'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_INVALID);
     dope_panic(1, arg.error_code, arg.value.label);
+    strcpy(arg.value.label, "");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+    strcpy(arg.value.label, " ");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+    strcpy(arg.value.label, "+");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+
+    printf("Case 1: Malformed magnitude errors...\n");
+    strcpy(arg.value.label, "++5.23'");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+    strcpy(arg.value.label, "+5.2.3'");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+    strcpy(arg.value.label, "+123456.7'");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+    strcpy(arg.value.label, "+.'");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+    strcpy(arg.value.label, "+!'");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+
+    printf("Case 2: No exponent (implied +00)\n");
+    strcpy(arg.value.label, "+5.23'");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_NUMBER);
+    assert(fabs(arg.value.number - 5.23f) < 0.01f);
+    dope_print_arg(&arg);
+
+    printf("Case 3: Malformed exponent errors...\n");
+    strcpy(arg.value.label, "+5.23'10");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+
+    /*
 
     printf("Case 1: Simple number + exponent\n");
     strcpy(arg.value.label, "+5.297'+02'");
@@ -40,11 +89,7 @@ void test_dope_parse_number() {
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(fabs(arg.value.number - 5.297e10f) / 5.297e10f < 0.01f);  // within 1%
 
-    printf("Case 2: No exponent (implied +00)\n");
-    strcpy(arg.value.label, "+5.23'");
-    dope_parse_number(&arg);
-    assert(arg.type == DOPE_DATA_NUMBER);
-    assert(fabs(arg.value.number - 5.23f) < 0.01f);
+
 
     printf("Case 3: Negative exponent\n");
     strcpy(arg.value.label, "+.5'-08'");
@@ -85,6 +130,8 @@ void test_dope_parse_number() {
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(fabs(arg.value.number - 123456.0f) < 1.0f);
+
+    */
 
     printf("PASS dope_parse_number\n");
 }

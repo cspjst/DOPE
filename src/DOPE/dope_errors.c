@@ -20,5 +20,5 @@ const char* dope_error_message(uint8_t error_code) {
 }
 
 void dope_panic(uint8_t line, dope_error_t e, char* info) {
-    printf("Line %d: %s %s\n", line, dope_error_message(e), info);
+    printf("ERROR Line %d: %s %s\n", line, dope_error_message(e), info);
 }

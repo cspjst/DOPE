@@ -40,6 +40,10 @@ void dope_clear_data(dope_argument_t* arg);
 
 bool dope_is_number(char* str);
 
+void dope_parse_mag(dope_argument_t* arg, char* magnitude);
+
+void dope_parse_exp(dope_argument_t* arg, char* exponent);
+
 void dope_parse_number(dope_argument_t* arg);
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream);
