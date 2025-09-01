@@ -13,7 +13,7 @@ The DOPE compiler was written and tested by Sydney Marshall, a freshman research
 
 > “It is a universal language. Any problem that the machine is capable of handling can be written in DOPE.”
 
-— Teaching Notes, May 1962
+— *Teaching Notes - Dartmouth Oversimplified Programming Experiment, May 1962*
 
 Yet, DOPE was largely lost to history, overshadowed by its famous successor - BASIC. For decades, DOPE existed mostly in academic footnotes and a single, unpublished manuscript by Kemeny. Recently, thanks to the work of researchers like Sean Haas for VICE and the Advent of Computing Podcast, crucial documents have been unearthed. These offer a rare glimpse into this radically different approach to programming. A stepping stone that, while not successful on its own, was essential to the creation of BASIC.
 
