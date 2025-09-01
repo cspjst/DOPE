@@ -148,3 +148,49 @@ The moment of truth was often harsh. Error reporting was primitive and cryptic. 
 `log` for an attempt to take a negative logarithm.
 
 This frustration was a direct lesson in the machine's unforgiving literalness. A misplaced stop code or a single typo meant a failed run. It was this very frustration, experienced by Kemeny and Kurtz's students, that would directly lead to a core design principle of its famous successor, BASIC: clear, informative error messages that helped the learner understand what they did wrong, rather than simply telling them they had failed.
+
+### Legacy: The Blueprint for BASIC
+The DOPE experiment concluded after that single semester. The language itself was slow, burdened by the mechanical process of the drum compiler, and never intended for widespread use. In the short term, it was not a success.
+
+But its true value was as a prototype—a "proof of concept" for a radically new approach. The frustrations experienced by those first students—the cryptic errors, the complex data entry—were not in vain. They provided the crucial, real-world feedback that shaped the next iteration.
+
+As Thomas Kurtz, co-inventor of BASIC, later reflected:
+
+> “Though not a success in itself, DOPE presaged BASIC.”
+
+The lessons learned from DOPE were direct and practical. Kemeny and Kurtz saw that true accessibility required clear error messages, interactive editing, and instant feedback. More than that, DOPE provided the foundational ideas that evolved into BASIC:
+
+Simple Variables: Variable names were a single letter or a letter followed by a digit.
+
+Easy Arrays: Arrays (vectors) did not need to be declared and had a default size.
+
+The FOR-Loop: The primary loop construct was a straightforward FOR loop.
+
+Line Numbers: Every line required a numeric label, which also served as the target for jumps and GOTO statements—a major simplification over the labels in Fortran or Algol.
+
+DOPE was the rough draft. It proved that a language could be both simple for beginners and powerful enough to be universal. Within a year, its core ideas would be refined, stripped of their clunky paper-tape mechanics, and reborn on a revolutionary time-sharing system. The result was the Beginner's All-purpose Symbolic Instruction Code (BASIC), a language that would open up computing to millions and change the world.
+
+## Explore DOPE Further
+The story doesn't end here. The DOPE interpreter lives on in this repository. You can move from reading about history to actively participating in it.
+
+### Run DOPE Yourself: 
+The core of this project is a faithful re-creation of the DOPE interpreter written in C. You can clone this repository, compile the code, and run original DOPE programs from the command line, just as you would have in 1962 (minus the paper tape!).
+
+git clone https://github.com/cspjst/DOPE.git
+
+cd DOPE/src
+
+cmake
+
+### Learn the Language: 
+If you're curious about the technical details and instructions that make up the DOPE language, read the full overview:
+
+The DOPE Language: A Technical Overview
+
+### See the Original Source: 
+For the truly adventurous, you can explore the original teaching notes that made this accurate re-creation possible:
+
+Transcription of the Original DOPE Teaching Notes (PDF)
+
+The repository includes several example programs and their corresponding data sheets. Feel free to run them, modify them, or try writing your own simple DOPE program based on the rules in the overview. It's the best way to appreciate both the simplicity and the constraints of this pioneering language.
+
