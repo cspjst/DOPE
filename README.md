@@ -31,3 +31,8 @@ To understand DOPE, we must understand the computing world of the late 1950s and
 
 One such machine, the LGP-30 (Librascope General Purpose), arrived at the Dartmouth Computation Center. For its time, it was a marvel of miniaturization and affordability—a "desk-sized" computer, though its 800-pound weight belied the name. This relatively compact and simple computer, powered by just 113 vacuum tubes, was the perfect catalyst for Professor Kemeny's ambition. It was on this specific machine, with its magnetic drum memory and typewriter-based input, that he launched his radical experiment to teach computing to non-programmers. The constraints of the LGP-30, its limited memory and processing power, directly shaped the design of the language created for it: a language that had to be oversimplified by necessity, yet powerful enough to be universal. This language was DOPE.
 
+## Programming with DOPE 
+The DOPE experiment was conducted over a single semester and was, in large part, a paper exercise. The students were taught about flowcharts as a visual introduction to reasoning about a computer program. The flow charts were then converted into 2 main parts the computer program itself in the form of the DOPE commands and a source of input data for that program. The program code was ahnd written onto pre-prepared forms that were separated into columns. Namely, line number, instruction and 5 columns for between 0 .. 5 oprands depending upon the instruction. The columns for the operands/arguments for each instruction were  termed 'fields', as was typical for the time. Dope proamming proforma example:
+
+
+Similarly there 
