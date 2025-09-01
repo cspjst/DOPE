@@ -22,60 +22,66 @@ void test_dope_parse_number() {
     printf("TEST dope_parse_number\n");
     dope_argument_t arg;
 
+    printf("Case 0: null token\n");
+    strcpy(arg.value.label, "+5.297'");
+    dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    dope_panic(1, arg.error_code, arg.value.label);
+
     printf("Case 1: Simple number + exponent\n");
-    strcpy(arg.value.string, "+5.297'+02'");
+    strcpy(arg.value.label, "+5.297'+02'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(fabs(arg.value.number - 529.7f) < 0.1f);
     // 5.297 × 10^10 = 52,970,000,000
-    strcpy(arg.value.string, "+5.297'+10'");
+    strcpy(arg.value.label, "+5.297'+10'");
     dope_parse_number(&arg);
     //dope_print_arg(&arg);
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(fabs(arg.value.number - 5.297e10f) / 5.297e10f < 0.01f);  // within 1%
 
     printf("Case 2: No exponent (implied +00)\n");
-    strcpy(arg.value.string, "+5.23'");
+    strcpy(arg.value.label, "+5.23'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(fabs(arg.value.number - 5.23f) < 0.01f);
 
     printf("Case 3: Negative exponent\n");
-    strcpy(arg.value.string, "+.5'-08'");
+    strcpy(arg.value.label, "+.5'-08'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(fabs(arg.value.number - 5e-9f) < 1e-10f);
 
     printf("Case 4: Negative magnitude\n");
-    strcpy(arg.value.string, "-1.29'+20'");
+    strcpy(arg.value.label, "-1.29'+20'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(arg.value.number < 0);
     assert(fabs(arg.value.number + 1.29e20f) / 1.29e20f < 0.01f);  // within 1%
 
     printf("Case 5: Exponent out of range\n");
-    strcpy(arg.value.string, "+1.0'+37'");
+    strcpy(arg.value.label, "+1.0'+37'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_INVALID);
     assert(arg.error_code == DOPE_ERR_EXPONENT_OUT_OF_RANGE);
 
     printf("Case 6: Invalid magnitude format\n");
-    strcpy(arg.value.string, "++1.2'");
+    strcpy(arg.value.label, "++1.2'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_INVALID);
 
     printf("Case 7: Invalid exponent format\n");
-    strcpy(arg.value.string, "+1.0'X00'");
+    strcpy(arg.value.label, "+1.0'X00'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_INVALID);
 
     printf("Case 8: Too many digits in magnitude\n");
-    strcpy(arg.value.string, "+1234567'+00'");  // 7 digits
+    strcpy(arg.value.label, "+1234567'+00'");  // 7 digits
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_INVALID);  // if you enforce 6-digit limit
 
     printf("Case 9: Valid 6-digit magnitude\n");
-    strcpy(arg.value.string, "+123456'+00'");
+    strcpy(arg.value.label, "+123456'+00'");
     dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(fabs(arg.value.number - 123456.0f) < 1.0f);
@@ -119,12 +125,12 @@ void test_dope_input_argument() {
     // Test 4: Label
     dope_input_argument(&arg, f);
     assert(arg.type == DOPE_DATA_LABEL);
-    assert(strcmp(arg.value.string, "label with spaces") == 0);
+    assert(strcmp(arg.value.label, "label with spaces") == 0);
 
     // Test 5: finish
     dope_input_argument(&arg, f);
     assert(arg.type == DOPE_DATA_LABEL);  // or special handling
-    assert(strcmp(arg.value.string, "finish") == 0);
+    assert(strcmp(arg.value.label, "finish") == 0);
 
     // Test 6: Invalid number
     dope_input_argument(&arg, f);

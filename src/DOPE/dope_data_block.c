@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <math.h>
 
 dope_data_block_t* dope_new_data_block(uint8_t line_count) {
     dope_data_block_t* data = malloc(sizeof(dope_data_block_t));
@@ -33,13 +32,13 @@ void dope_clear_data(dope_argument_t* arg) {
     memset(arg, 0, sizeof(dope_argument_t));
 }
 
-bool dope_is_number(char* string) {
-    return (*string == '+' || *string == '-');
+bool dope_is_number(char* str) {
+    return (*str == '+' || *str== '-');
 }
 
 void dope_parse_number(dope_argument_t* arg) {
     // 1. tokenize into magnitude and 10x exponent
-    char* magnitude = strtok(arg->value.string, DOPE_DELIM_STR);
+    char* magnitude = strtok(arg->value.label, DOPE_DELIM_STR);
     char* exponent = strtok(NULL, DOPE_DELIM_STR);
     // 2. validate format
     int ndigits = 0;
@@ -47,6 +46,7 @@ void dope_parse_number(dope_argument_t* arg) {
     if (!magnitude || !exponent) {
         arg->type = DOPE_DATA_INVALID;
         arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+        strcpy(arg->value.label, "NULL tokens!");
         return;
     }
     // 3. Check minimum lengths and signs of magnitude and exponent
@@ -115,16 +115,16 @@ void dope_parse_number(dope_argument_t* arg) {
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     dope_clear_data(arg);
     // 1. read the line and catch truncated and invalid character errors
-    uint8_t length = dope_read_line(arg->value.string, istream);
-    if(dope_is_truncated(arg->value.string)) {
+    uint8_t length = dope_read_line(&arg->value.label, istream);
+    if(dope_is_truncated(&arg->value.label)) {
         arg->error_code = DOPE_ERR_LINE_TOO_LONG;
         dope_consume_remaining(istream);
         return;
     }
     // 2. sanitize line
-    arg->value.string[strcspn(arg->value.string, "\n")] = '\0';
+    arg->value.label[strcspn(arg->value.label, "\n")] = '\0';
     // 3. parse if number
-    if(dope_is_number(&arg->value.string)) {
+    if(dope_is_number(arg->value.label)) {
         arg->type = DOPE_DATA_NUMBER;
         dope_parse_number(arg);
         return;
@@ -138,7 +138,8 @@ void dope_print_arg(dope_argument_t* arg) {
     printf("%i %f %s %i %s\n",
         arg->type,
         arg->value.number,
-        arg->value.string,
-        arg->error_code,dope_error_message(arg->error_code)
+        arg->value.label,
+        arg->error_code,
+        dope_error_message(arg->error_code)
     );
 }

@@ -2,6 +2,7 @@
 #define DOPE_DATA_TAPE_H
 
 #include "dope_constants.h"
+#include "dope_errors.h"
 #include "dope_types.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -15,13 +16,13 @@ typedef enum {
 
 typedef union {
     float number;                       // magnitude × 10^exponent
-    dope_line_t string;
+    dope_line_t label;
 } dope_value_t;
 
 typedef struct {
     dope_data_type_t type;
     dope_value_t value;
-    uint8_t error_code;
+    dope_error_t error_code;
 } dope_argument_t;
 
 typedef struct {
@@ -37,7 +38,7 @@ void dope_free_data_block(dope_data_block_t* data_block);
 
 void dope_clear_data(dope_argument_t* arg);
 
-bool dope_is_number(char* string);
+bool dope_is_number(char* str);
 
 void dope_parse_number(dope_argument_t* arg);
 
