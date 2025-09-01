@@ -118,6 +118,7 @@ The rules for typing were exacting. As per the teaching notes:
 > "Do not type instruction number. Type only instruction followed by 0 to 5 fields, each followed by ' (a single quote was the stop code). Do not leave any spaces. Type one instruction per line. Remember to type s' at the end of the program."
 
 For example, a program was typed as a continuous stream like:
+```
         a'
         z'a'1.0'100'
         sqr'a'b'
@@ -127,23 +128,23 @@ For example, a program was typed as a continuous stream like:
         e'
         f'
         s'
-
+```
 #### Data Entry: 
 Data had even more complex rules, a fascinating glimpse into the extreme constraints of the era:
 
 > "For data you must type two numbers of up to 5 characters each, followed by stop-codes... The exponent must have three characters consisting of sign and two digits."
 
-A value like 5.297 x 10¹⁰ was painstakingly typed as 5.297'+10'.
+A value like 5.297 x 10¹⁰ was painstakingly typed as `5.297'+10'`.
 
 #### Compilation and Execution: 
 Finally, the user would load the "DOPE COMPILER" tape via the photoelectric reader, then feed their newly created program/data tape into the typewriter reader. A specific sequence of button presses on the LGP-30's console would set the compilation in motion.
 
 The moment of truth was often harsh. Error reporting was primitive and cryptic. The machine might simply stop and print:
 
-+. for a floating-point exponent overflow.
+`+.` for a floating-point exponent overflow.
 
-e for too many characters in a data field.
+`e` for too many characters in a data field.
 
-log for an attempt to take a negative logarithm.
+`log` for an attempt to take a negative logarithm.
 
 This frustration was a direct lesson in the machine's unforgiving literalness. A misplaced stop code or a single typo meant a failed run. It was this very frustration, experienced by Kemeny and Kurtz's students, that would directly lead to a core design principle of its famous successor, BASIC: clear, informative error messages that helped the learner understand what they did wrong, rather than simply telling them they had failed.
