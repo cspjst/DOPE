@@ -31,6 +31,8 @@ In the early 1960s, computing was undergoing a profound shift. The idea was form
 DOPE was a seminal, if forgotten, step in that direction — a direction that would soon lead to one of the most liberating programming languages ever created: the Beginner's All-purpose Symbolic Instruction Code (BASIC).
 
 ## The Zeitgeist and The Machine: The LGP-30
+![LGP-30](https://github.com/cspjst/DOPE/blob/main/DOPE%20original%20documents/lgp-30manhattancollege-512x200px.jpg)
+
 To understand DOPE, we must understand the computing world of the late 1950s and early 1960s. Massive, room-sized computers were beginning to shrink, moving out of government and military labs and into universities and large businesses. They were now small enough to fit in the back of a truck.
 
 One such machine, the LGP-30 (Librascope General Purpose), arrived at the Dartmouth Computation Center. For its time, it was a marvel of miniaturization and affordability—a "desk-sized" computer, though its 800-pound weight belied the name. This relatively compact and simple computer, powered by just 113 vacuum tubes, was the perfect catalyst for Professor Kemeny's ambition. It was on this specific machine, with its magnetic drum memory and typewriter-based input, that he launched his radical experiment to teach computing to non-programmers. The constraints of the LGP-30, its limited memory and processing power, directly shaped the design of the language created for it: a language that had to be oversimplified by necessity, yet powerful enough to be universal. This language was DOPE.
