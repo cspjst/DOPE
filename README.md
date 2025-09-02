@@ -2,6 +2,10 @@
 ## A Historical Re-creation in C
 Exploring the spirit and implementation of Dartmouth's precursor to BASIC as an interpreter written in C.
 
++ [Transcription of the Original DOPE Teaching Notes (PDF)](https://github.com/cspjst/DOPE/blob/main/DOPE%20Teaching%20Notes.pdf)
+
++ The DOPE Language: A Technical Overview (coming soon)
+
 ## Synopsis
 The Dartmouth Oversimplified Programming Experiment (DOPE) was a pioneering programming language developed at Dartmouth College. Designed by Professor John G. Kemeny, its goal was radical for its time:
 
@@ -190,7 +194,7 @@ The DOPE Language: A Technical Overview
 ### See the Original Source: 
 For the truly adventurous, you can explore the original teaching notes that made this accurate re-creation possible:
 
-Transcription of the Original DOPE Teaching Notes (PDF)
+[Transcription of the Original DOPE Teaching Notes (PDF)](https://github.com/cspjst/DOPE/blob/main/DOPE%20Teaching%20Notes.pdf)
 
 The repository includes several example programs and their corresponding data sheets. Feel free to run them, modify them, or try writing your own simple DOPE program based on the rules in the overview. It's the best way to appreciate both the simplicity and the constraints of this pioneering language.
 
