@@ -65,6 +65,9 @@ void test_dope_parse_number() {
     printf("Case 2: No exponent (implied +00)\n");
     strcpy(arg.value.label, "+5.23'");
     dope_parse_number(&arg);
+    assert(arg.type == DOPE_DATA_INVALID);
+    strcpy(arg.value.label, "+5.23''");
+    dope_parse_number(&arg);
     assert(arg.type == DOPE_DATA_NUMBER);
     assert(fabs(arg.value.number - 5.23f) < 0.01f);
     dope_print_arg(&arg);
