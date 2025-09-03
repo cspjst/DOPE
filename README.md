@@ -114,16 +114,26 @@ Numeric entries had to be specified with a magnitude (e.g., +12.3) and an expone
 "FINISH" marked the absolute end of all data.
 
 
-
 ### Stage 3: The Machine - Teletypes, Tapes, and Terse Errors
-The final stage was the transition from the abstract to the physical—a process, the man-machine interface itself. The carefully handwritten forms were now transcribed onto a teletype machine to create a paper tape - an interaction likley fraught with error and  frustration. 
+The final stage was the transition from the abstract to the physical—a process fraught with potential for frustration. The carefully handwritten forms were now transcribed onto a Flexowriter teletype, a device full of quirks that directly shaped the experience.
+
+A critical insight is that this was not a modern keyboard speaking ASCII. The Flexowriter used 5-bit Baudot code, and the LGP-30's 31-bit word could neatly hold five of these characters. This technical reality led to a brilliant, if peculiar, workaround.
+
+The Flexowriter was wired directly into the LGP-30 and featured a row of special buttons. One of these was the cond-stop (conditional stop) button. Pressing this button did something remarkable: it took the last five characters typed and placed them as a single number directly into the heart of the machine, the computer's accumulator register.
+
+This is the secret of the stop code ('). The examples in the teaching notes use spaces for human readability, but those spaces were never typed. Instead, the programmer typed a sequence of characters for a command or number and then pressed the cond-stop button. This action signaled to the compiler: "The value I just typed is complete; process it now." On the paper tape, this event was represented by a specific Baudot code—which is represented with a single quote character (').
 
 #### Program Entry: 
-The rules for typing were exacting. As per the teaching notes:
+Therefore, the rules for typing were exacting and born from this hardware constraint. As per the teaching notes:
 
-> "Do not type instruction number. Type only instruction followed by 0 to 5 fields, each followed by ' (a single quote was the stop code). Do not leave any spaces. Type one instruction per line. Remember to type s' at the end of the program."
+> "Do not leave any spaces. Type one instruction per line... each [field] followed by '."
 
-For example, a program was typed as a continuous stream like:
+A program wasn't typed with spaces like Z A 1.0, but as a continuous machine-readable stream:
+Z'A'1.0'
+
+The programmer would type Z, then press cond-stop (resulting in a ' on the tape). Then type A, press cond-stop, and so on.
+
+For example, a program was typed as a continuous stream, such as:
 ```
         a'
         z'a'1.0'100'
@@ -135,12 +145,9 @@ For example, a program was typed as a continuous stream like:
         f'
         s'
 ```
+
 #### Data Entry: 
-Data had even more complex rules, a fascinating glimpse into the extreme constraints of the era:
-
-> "For data you must type two numbers of up to 5 characters each, followed by stop-codes... The exponent must have three characters consisting of sign and two digits."
-
-A value like 5.297 x 10¹⁰ was painstakingly typed as `5.297'+10'`.
+Data had even more complex rules, a fascinating glimpse into the extreme constraints of the era. A value like 5.297 x 10¹⁰ was painstakingly built and then committed to the computer's memory with the stop codes every 5 characters: 5.297'+10'.
 
 #### Compilation and Execution: 
 Finally, the user would load the "DOPE COMPILER" tape via the photoelectric reader, then feed their newly created program/data tape into the typewriter reader. A specific sequence of button presses on the LGP-30's console would set the compilation in motion.
