@@ -7,6 +7,8 @@ Exploring the spirit and implementation of Dartmouth's precursor to BASIC as an 
 + The DOPE Language: A Technical Overview (coming soon)
 
 ## Synopsis
+![dope_teaching_notes](https://github.com/cspjst/DOPE/blob/main/DOPE%20original%20documents/DOPE_page16_579x200px.jpg)
+
 The Dartmouth Oversimplified Programming Experiment (DOPE) was a pioneering programming language developed at Dartmouth College. Designed by Professor John G. Kemeny, its goal was radical for its time:
 
 > "...to be used in an experiment to teach a large number of freshmen the rudiments of programming in a course of three one-hour lectures."
