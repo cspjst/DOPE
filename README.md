@@ -45,6 +45,8 @@ The DOPE teaching experiment was conducted over a single semester in 1962 and wa
 ### Stage 1: Visual Thinking with Flowcharts
 Before a single line of code was written, students were taught to reason about a problem visually. They would map out the entire logic of their program using flowcharts. This step forced them to think about the sequence of operations, decisions, and loops in a language-agnostic way, establishing the fundamental algorithm before confronting the syntax of DOPE.
 
+![flowchart](https://github.com/cspjst/DOPE/blob/main/DOPE%20original%20documents/flowchart_io_pg4.png)
+
 ### Stage 2: The Paper Program - Converting Logic to Code
 Once the flowchart was complete, students began the precise work of translating their visual logic into a machine-readable DOPE program — by hand. They used pre-printed, forms, the "DOPE sheet" for the DOPE program itself and the "DOPE DATA sheet" for the data. Both were structured in a way that aided clarity and consistency. 
 
