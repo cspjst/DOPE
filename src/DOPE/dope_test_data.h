@@ -141,8 +141,8 @@ void test_dope_input_argument() {
     FILE* f = fopen("test_data.txt", "w");
     assert(f != NULL);
 
-    fprintf(f, "5.297'+10'\n");
-    fprintf(f, ".5'-08'\n");
+    fprintf(f, "+5.297'+10'\n");
+    fprintf(f, "+.5'-08'\n");
     fprintf(f, "1.0'+00'\n");
     fprintf(f, "label with spaces\n");
     fprintf(f, "finish'\n");
