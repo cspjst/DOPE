@@ -5,8 +5,8 @@
 #include <string.h>
 #include <ctype.h>
 
-dope_data_block_t* dope_new_data_block(uint8_t line_count) {
-    dope_data_block_t* data = malloc(sizeof(dope_data_block_t));
+dope_data_t* dope_new_data_block(uint8_t line_count) {
+    dope_data_t* data = malloc(sizeof(dope_data_t));
     if(!data) {
         return NULL;
     }
@@ -21,7 +21,7 @@ dope_data_block_t* dope_new_data_block(uint8_t line_count) {
     return data;
 }
 
-void dope_free_data_block(dope_data_block_t* data_block) {
+void dope_free_data_block(dope_data_t* data_block) {
     if (data_block) {
         free(data_block->args);
         free(data_block);
