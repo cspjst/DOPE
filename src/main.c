@@ -7,9 +7,9 @@ int main() {
     //test_dope_input_instruction();
     //test_dope_input_program();
 
-    test_dope_is_number();
-    test_dope_parse_number();
-    //test_dope_input_argument();
+    //test_dope_is_number();
+    //test_dope_parse_number();
+    test_dope_input_argument();
 
     return 0;
 }

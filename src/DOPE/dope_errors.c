@@ -3,6 +3,7 @@
 
 const char* const DOPE_ERROR_MESSAGES[] = {
     "Success",                  // DOPE_ERR_SUCCESS
+    "NULL pointer",             // DOPE_ERR_NULL
     "No input!",                // DOPE_ERR_NO_INPUT   EOF or error
     "No instruction!",          // DOPE_ERR_NO_INSTR    empty line
     "Invalid instruction!",     // DOPE_ERR_UNKNOWN_INSTR
