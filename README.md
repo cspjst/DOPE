@@ -26,7 +26,7 @@ Yet, DOPE was largely lost to history, overshadowed by its famous successor - BA
 I am grateful to the Rauner Special Collections Library for locating the Thomas Kurtz papers and providing copies of the original DOPE teaching notes, which made this project possible.
 
 ## Why Recreate DOPE?
-Recreating DOPE is not an act of nostalgia; it is an act of understanding. It's about tracing the roots of accessible computing.
+Recreating DOPE is not an act of nostalgia; it is an act of understanding, by tracing the roots of accessible computing.
 
 In the early 1960s, computing was undergoing a profound shift. The idea was forming in several minds that computers should not be tools for experts alone, but for everyone. This was the watershed moment of transition from an era where only trained programmers could use computers, toward a more egalitarian future.
 
