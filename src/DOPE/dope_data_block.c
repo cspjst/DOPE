@@ -97,24 +97,33 @@ void dope_parse_mag(dope_argument_t* arg, char* magnitude) {
 }
 
 void dope_parse_exp(dope_argument_t* arg, char* exponent) {
-    //0. no exponent is legal - implied +00
-    if(!exponent || arg->type == DOPE_DATA_INVALID) {
+    // 0. null checks
+    if (!exponent) {
+        arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+        strcat(arg->value.label, " NULL exponent token!");
+        return;
+    }
+    // 1. no parse 0 size exponent or if invalid magnitude.
+    if(
+        strlen(exponent) == 0     // okay to default to +00 if empty exponent field 
+        || arg->type == DOPE_DATA_INVALID
+    ) {
         return;
     }
     arg->type = DOPE_DATA_INVALID; // assume invalid
-    // 1. Check is a number
+    // 2. Check is a number
     if(!dope_is_number(exponent)) {
         arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
         strcat(arg->value.label, " SIGN missing!");
         return;
     }
-    // 2. Check correct length
+    // 3. Check correct length
     if(strlen(exponent) != 3) {
         arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
         strcat(arg->value.label, " SIZE exponent != 3!");
         return;
     }
-    // 3. Process each exponent character after the sign
+    // 4. Process each exponent character after the sign
     for (int i = 1; i < 3; i++) {
         if (!isdigit((unsigned char)exponent[i])) {
             arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
@@ -122,13 +131,13 @@ void dope_parse_exp(dope_argument_t* arg, char* exponent) {
             return;
         }
     }
-    // 4. Check exponent range
+    // 5. Check exponent range
     int e = atoi(exponent);
     if (e < -36 || e > 36)  {
         arg->error_code = DOPE_ERR_EXPONENT_OUT_OF_RANGE;
         return;
     }
-    // 5. valid exponent
+    // 6. valid exponent
     arg->type = DOPE_DATA_NUMBER;
     arg->value.number *= power_of_10(e);
 }
