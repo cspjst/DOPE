@@ -179,3 +179,48 @@ void dope_print_arg(dope_argument_t* arg) {
         dope_error_message(arg->error_code)
     );
 }
+/*
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+char s1[] = "5.234'56+11'";
+char s2[] = "-1111'11-11'";
+char s3[] = "12345'6+25'";
+char n[11];
+
+// check before calling if(*p != '+' && *p != '-' && !isdigit(*p))
+double parse(char* p) {
+    int i = 0;
+    char* end = NULL;
+    char n[11];
+    if(*p == '+' || *p == '-') {
+        n[i++] = *p++;
+    }
+    while(isdigit(*p) || *p == '.') {
+        n[i++] = *p++;
+    }
+    if(*p == '\'') {
+        p++;
+    }
+    while(*p != '\'' && i < 11) {
+        if(*p == '+' || *p == '-') {
+            n[i++] = 'E';
+            n[i++] = *p++;
+        }
+        else {
+            n[i++] = *p++;
+        }
+    }
+    n[i] = '\0';
+    return strtod(n, &end);
+}
+
+
+int main() {
+    printf("%f\n", parse(s1));
+    printf("%f\n", parse(s2));
+    printf("%f\n", parse(s3));
+    return 0;
+} 
+*/
