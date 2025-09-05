@@ -68,9 +68,8 @@ void dope_parse_number(dope_argument_t* arg) {
             return;
         }
     }
-    // 5. zero terminate 
+    // 5. zero terminate and convert to float
     num[i] = '\0';
-    // do some error stuf with end it should point to ' 
     arg->value.number = strtod(num, &end); // Watcom C did not implement strtof!
     // 6. strtod consumed nothing or stopped early
     if (end == num || *end != '\0') {
@@ -82,7 +81,22 @@ void dope_parse_number(dope_argument_t* arg) {
 }
 
 void dope_parse_label((dope_argument_t* arg) {
-
+    // 1. locate the stop code '
+    int i = strcspn(arg->value.label, DOPE_STOP_STR)
+    // 2. no stop code
+    if(i == 0) { 
+        arg->error_code = DOPE_ERR_MISSING_STOP_CODE;
+    } 
+    // 3. terminate string at stop code
+    arg->label[i] = '\0'; 
+    // 4. detect data finish 
+    if(strcmp(arg->value.label, DOPE_FINISH_STR) == 0) {
+        arg->type = DOPE_DATA_FINISH;
+    }
+    else {
+        arg->type = DOPE_DATA_LABEL;
+    }
+    arg->error_code = DOPE_ERR_SUCCESS;
 }
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
@@ -106,7 +120,6 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream) {
         return;
     }
     // 4. otherwise plain string
-    arg->type = DOPE_DATA_LABEL;
     dope_parse_label
     return;
 }
