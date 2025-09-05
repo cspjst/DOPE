@@ -11,7 +11,8 @@
 typedef enum {
     DOPE_DATA_INVALID,
     DOPE_DATA_NUMBER,
-    DOPE_DATA_LABEL
+    DOPE_DATA_LABEL,
+    DOPE_DATA_FINISH
 } dope_data_type_t;
 
 typedef union {
