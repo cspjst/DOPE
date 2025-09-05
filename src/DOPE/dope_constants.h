@@ -1,8 +1,8 @@
 #ifndef DOPE_CONSTANTS_H
 #define DOPE_CONSTANTS_H
 
-#define DOPE_DELIM '\''          /**< Program parts and data parts delimiter pg 13 DOPE teaching notes 1962*/
-#define DOPE_DELIM_STR "'"       /**< As string for strtok */
+#define DOPE_STOP '\''           /**< Page 13 DOPE teaching notes 1962 "stop code"*/
+#define DOPE_STOP_STR "'"       /**< As string for strtok */
 
 #define DOPE_PROGRAM_LINES_MAX     99  /**< Max number of source lines in program (1–99) */
 #define DOPE_LINE_SIZE             40  /**< Max length of input line including '\0' */
