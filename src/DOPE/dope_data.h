@@ -42,6 +42,8 @@ bool dope_is_number(char* str);
 
 void dope_parse_number(dope_argument_t* arg);
 
+void dope_parse_label(dope_argument_t* arg);
+
 void dope_input_argument(dope_argument_t* arg, FILE* istream);
 
 void dope_input_data(dope_data_t* data, FILE* istream);
