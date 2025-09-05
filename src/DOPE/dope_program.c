@@ -85,42 +85,43 @@ dope_size_t dope_lookup_opcode(const char* mnemonic) { // just a simple linear s
 
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     dope_clear_instruction(instruction);
+    instruction->opcode = DOPE_OP_INVALID; // default to error
     // 1. read the line and catch truncated and invalid character errors
     dope_line_t line;
-    instruction->opcode = DOPE_OP_INVALID;
     uint8_t length = dope_read_line(&line, istream);
+    if(length == 0) {
+        instruction->error_code = DOPE_ERR_NO_INPUT;
+        return;
+    }
     if(dope_is_truncated(&line)) {
         instruction->error_code = DOPE_ERR_LINE_TOO_LONG;
         strncpy((char*)&instruction->fields[0], (char*)&line, DOPE_LINE_SIZE);
         dope_consume_remaining(istream);
         return;
     }
-    // 2.0 trim line
+    // 2. trim line
     line[strcspn(line, "\n")] = '\0';
-    if(strlen((const char*)&line) == 0) {
-        instruction->error_code = DOPE_ERR_NO_INPUT;
-        return;
-    }
+    // 3. invalid character check
     if (dope_has_space((char*)&line)) {
         instruction->error_code = DOPE_ERR_INVALID_CHAR;
         strncpy((char*)&instruction->fields[0], (char*)&line, DOPE_LINE_SIZE);
         return;
     }
-    // 2.1 sanitize line - uppercase
+    // 4. uppercase
     dope_string_toupper((char*)&line);
-    // 3. tokenize the line
+    // 5. tokenize the line
     uint8_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
         instruction->error_code = DOPE_ERR_NO_INSTR;
         return;
     }
-    // 4. look up the opcode
+    // 6. look up the opcode
     instruction->opcode = dope_lookup_opcode(instruction->fields[0]);
     if(instruction->opcode == 0) {
         instruction->error_code = DOPE_ERR_UNKNOWN_INSTR;
         return;
     }
-    // 5. check number of operands
+    // 7. check number of operands
     if(token_count - 1 < DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
         instruction->error_code = DOPE_ERR_TOO_FEW_ARGS;
         return;
@@ -129,42 +130,39 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
         instruction->error_code = DOPE_ERR_TOO_MANY_ARGS;
         return;
     }
-    // 6. recognized instruction and correct number of operands
+    // 8. recognized instruction and correct number of operands
     instruction->error_code = DOPE_ERR_SUCCESS;
 }
 
 void dope_input_program(dope_program_t* program, FILE* stream) {
     if (!program || !stream) {
+        dope_panic(0, DOPE_ERR_NO_INPUT, "NULL program or file");  
         return;
     }
     program->size = 0;
-
     while (program->size < program->capacity) {
-        // 1. Parse next instruction
+        // 1. parse next instruction
         dope_input_instruction(&program->instructions[program->size], stream);
-        // 2. EOF: stop cleanly
-        if (program->instructions[program->size].opcode == DOPE_OP_INVALID
-            && program->instructions[program->size].error_code == DOPE_ERR_NO_INPUT) {
+        // 2. no input (EOF)
+        if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
+            dope_panic(data->size, data->args[data->size].error_code, "EOF without 'F'");
+            return;
+        }
+        // 3. error exit
+        if (program->instructions[program->size].opcode == DOPE_OP_INVALID) {
                 dope_panic(
                     program->size,
                     program->instructions[program->size].error_code,
-                    ""
+                    program->instructions[program->size].fields[0]
                 );
-                break;
+                return;
         }
-        // 4. Print error if invalid
-        if (program->instructions[program->size].opcode == DOPE_OP_INVALID) {
-            dope_panic(
-                program->size,
-                program->instructions[program->size].error_code,
-                program->instructions[program->size].fields[0]
-            );
-        }
-        // 5. Stop on 'F' instruction (opcode 18)
+        // 4. stop on 'F' instruction (opcode 18)
         if (program->instructions[program->size].opcode == DOPE_OP_STOP) {  // 'F' = Stop
             program->size++;
-            break;
+            return;
         }
+        // 5. valid argument
         program->size++;
     }
 }
