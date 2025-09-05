@@ -37,7 +37,7 @@ bool dope_is_number(char* str) {
 }
 
 // check dope_is_number before calling
-float dope_parse_number(dope_argument_t* arg) {
+void dope_parse_number(dope_argument_t* arg) {
     char* str = arg->value.label
     char num[12];        // temp number string
     int i = 0;           // number string char index 
@@ -51,11 +51,11 @@ float dope_parse_number(dope_argument_t* arg) {
         num[i++] = *str++;
     }
     // 3. skip end stop 
-    if(*str == '\'') {    // DOPE number should have end stop every 5 chars
-        str++;            // but dope_parse_number is permissive
+    if(*str == DOPE_STOP) {    // DOPE number should have stop code every 5 chars
+        str++;                 // but dope_parse_number is permissive
     }
-    // 3. copy any remaining magnitude and optional exponent
-    while(*str != '\'' && i < 12) { // fix these magic numbers
+    // 4. copy any remaining magnitude and optional exponent
+    while(*str != DOPE_STOP && i < 12) { // fix these magic numbers
         if(*str == '+' || *str == '-') { // DOPE exponent must contain sign
             num[i++] = 'E';        // inject exponent char for strtod
             num[i++] = *str++;
@@ -67,9 +67,10 @@ float dope_parse_number(dope_argument_t* arg) {
             // anything other character is an error
         }
     }
-    n[i] = '\0';
+    // 5. zero terminate 
+    num[i] = '\0';
     // do some error stuf with end it should point to ' 
-    return strtod(n, &end); // Watcom C did not implement strtof!
+    arg->value.number = strtod(num, &end); // Watcom C did not implement strtof!
 }
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
