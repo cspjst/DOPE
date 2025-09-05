@@ -32,24 +32,22 @@ typedef struct {
     uint8_t capacity;
 } dope_data_t;
 
-dope_data_t* dope_new_data_block(uint8_t line_count);
+dope_data_t* dope_new_data(uint8_t line_count);
 
-void dope_free_data_block(dope_data_t* data_block);
+void dope_free_data(dope_data_t* data);
 
 void dope_clear_data(dope_argument_t* arg);
 
 bool dope_is_number(char* str);
 
-void dope_parse_mag(dope_argument_t* arg, char* magnitude);
-
-void dope_parse_exp(dope_argument_t* arg, char* exponent);
-
 void dope_parse_number(dope_argument_t* arg);
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream);
 
-void dope_input_data_block(dope_data_t* data_block, FILE* istream);
+void dope_input_data(dope_data_t* data, FILE* istream);
 
 void dope_print_arg(dope_argument_t* arg);
+
+void dope_print_data(dope_data_t* data);
 
 #endif
