@@ -17,6 +17,7 @@ typedef enum {
     DOPE_ERR_INVALID_CHAR,    // found a space at input
     DOPE_ERR_INVALID_NUMBER_FORMAT, // does not meet DOPE format
     DOPE_ERR_EXPONENT_OUT_OF_RANGE, // -36 < e > 36
+    DOPE_ERR_MISSING_STOP_CODE,     // exoected ' not found 
     DOPE_ERR_FINISH           // absent or malformed
 } dope_error_t;
 
