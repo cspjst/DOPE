@@ -160,8 +160,8 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
                 program->instructions[program->size].fields[0]
             );
         }
-        // 5. Stop on 'S' instruction (opcode 19)
-        if (program->instructions[program->size].opcode == DOPE_OP_S) {  // 'S' = Stop
+        // 5. Stop on 'F' instruction (opcode 18)
+        if (program->instructions[program->size].opcode == DOPE_OP_STOP) {  // 'F' = Stop
             program->size++;
             break;
         }
