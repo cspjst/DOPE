@@ -39,9 +39,9 @@ bool dope_is_number(char* str) {
 // check dope_is_number before calling
 void dope_parse_number(dope_argument_t* arg) {
     char* str = arg->value.label
-    char num[12];        // temp number string
-    int i = 0;           // number string char index 
-    char* end = NULL;    // strtod 
+    char num[DOPE_FIELD_SIZE];    // temp number string
+    int i = 0;                    // number string char index 
+    char* end = NULL;             // strtod 
     // 1. copy & skip if leading sign character
     if(*str == '+' || *str == '-') { // DOPE magnitude sign optional
         num[i++] = *str++;
@@ -55,8 +55,7 @@ void dope_parse_number(dope_argument_t* arg) {
         str++;                 // but dope_parse_number is permissive
     }
     // 4. copy any remaining magnitude and optional exponent
-    while(*str != DOPE_STOP && i < 12) { // fix these magic numbers
-        if(*str == '+' || *str == '-') { // DOPE exponent must contain sign
+    while(*str != DOPE_STOP && i < DOPE_FIELD_SIZE) {
             num[i++] = 'E';        // inject exponent char for strtod
             num[i++] = *str++;
         }
