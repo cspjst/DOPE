@@ -36,7 +36,7 @@ dope_data_t* dope_new_data(uint8_t line_count);
 
 void dope_free_data(dope_data_t* data);
 
-void dope_clear_data(dope_argument_t* arg);
+void dope_clear_arg(dope_argument_t* arg);
 
 bool dope_is_number(char* str);
 
