@@ -13,6 +13,7 @@ const char* const DOPE_ERROR_MESSAGES[] = {
     "Found a space at input!",  // DOPE_ERR_INVALID_CHAR
     "Wrong number format!",     // DOPE_ERR_INVALID_NUMBER_FORMAT
     "Exponent out of range!",   // DOPE_ERR_EXPONENT_OUT_OF_RANGE
+    "Missing stop code!",       // DOPE_ERR_MISSING_STOP_CODE
     "Absent/malformed FINISH!"  // DOPE_ERR_FINISH
 };
 
