@@ -87,9 +87,9 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     dope_clear_instruction(instruction);
     // 1. read the line and catch truncated and invalid character errors
     dope_line_t line;
+    instruction->opcode = DOPE_OP_INVALID;
     uint8_t length = dope_read_line(&line, istream);
     if(dope_is_truncated(&line)) {
-        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_LINE_TOO_LONG;
         strncpy((char*)&instruction->fields[0], (char*)&line, DOPE_LINE_SIZE);
         dope_consume_remaining(istream);
@@ -98,12 +98,10 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     // 2.0 trim line
     line[strcspn(line, "\n")] = '\0';
     if(strlen((const char*)&line) == 0) {
-        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_NO_INPUT;
         return;
     }
     if (dope_has_space((char*)&line)) {
-        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_INVALID_CHAR;
         strncpy((char*)&instruction->fields[0], (char*)&line, DOPE_LINE_SIZE);
         return;
@@ -113,7 +111,6 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     // 3. tokenize the line
     uint8_t token_count = dope_instruction_tokenize(&line, instruction->fields);
     if (token_count == 0) {
-        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_NO_INSTR;
         return;
     }
@@ -125,16 +122,15 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     }
     // 5. check number of operands
     if(token_count - 1 < DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
-        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_TOO_FEW_ARGS;
         return;
     }
     if(token_count - 1 > DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
-        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_TOO_MANY_ARGS;
         return;
     }
     // 6. recognized instruction and correct number of operands
+    instruction->error_code = DOPE_ERR_SUCCESS;
 }
 
 void dope_input_program(dope_program_t* program, FILE* stream) {
