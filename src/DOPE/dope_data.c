@@ -28,7 +28,7 @@ void dope_free_data(dope_data_t* data) {
     }
 }
 
-void dope_clear_data(dope_argument_t* arg) {
+void dope_clear_arg(dope_argument_t* arg) {
     memset(arg, 0, sizeof(dope_argument_t));
 }
 
@@ -73,7 +73,7 @@ void dope_parse_number(dope_argument_t* arg) {
 }
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
-    dope_clear_data(arg);
+    dope_clear_arg(arg);
     // 1. read the line and catch truncated and invalid character errors
     uint8_t length = dope_read_line(&arg->value.label, istream);
     if(dope_is_truncated(&arg->value.label)) {
