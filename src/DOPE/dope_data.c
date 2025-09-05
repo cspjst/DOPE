@@ -81,6 +81,7 @@ void dope_parse_number(dope_argument_t* arg) {
 }
 
 void dope_parse_label((dope_argument_t* arg) {
+    arg->type = DOPE_DATA_INVALID;
     // 1. locate the stop code '
     int i = strcspn(arg->value.label, DOPE_STOP_STR)
     // 2. no stop code
@@ -101,6 +102,7 @@ void dope_parse_label((dope_argument_t* arg) {
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     dope_clear_arg(arg);
+    arg->type = DOPE_DATA_INVALID; // default to invalid
     // 1. read the line and catch truncated and invalid character errors
     uint8_t length = dope_read_line(&arg->value.label, istream);
     if(length == 0) {
@@ -112,7 +114,7 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream) {
         dope_consume_remaining(istream);
         return;
     }
-    // 2. sanitize line
+    // 2. trim line
     arg->value.label[strcspn(arg->value.label, "\n")] = '\0';
     // 3. parse if number
     if(dope_is_number(arg->value.label)) {
@@ -124,6 +126,34 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     return;
 }
 
+void dope_input_data(dope_data_t* data, FILE* istream) {
+    if (!data || !stream) {
+        dope_panic(0, DOPE_ERR_NO_INPUT, "NULL data or file");  
+        return;
+    }
+    data->size = 0;
+    while (data->size < data->capacity) {
+        // 1. Parse next datum
+        dope_input_arg(&data-args[data->size], stream);
+        // 2. No input (EOF)
+        if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
+            dope_panic(data->size, data->args[data->size].error_code, "EOF without 'finish'");
+            return;
+        }
+        // 3. error exit
+        if (data->args[data->size].type == DOPE_DATA_INVALID) {
+            dope_panic(data->size, data->args[data->size].error_code, "Invalid data");
+            return;
+        }
+        // 4. stop on 'FINISH' marker
+        if (data->args[data->size].type == DOPE_DATA_FINISH) {
+            return;  
+        }
+        // 5. valid datum
+        data->size++;
+    }
+}
+
 void dope_print_arg(dope_argument_t* arg) {
     printf("%i %lf %s %i %s\n",
         arg->type,
@@ -132,4 +162,12 @@ void dope_print_arg(dope_argument_t* arg) {
         arg->error_code,
         dope_error_message(arg->error_code)
     );
+}
+
+void dope_print_data(dope_data_t* data) {
+    for(int i = 0; i < data->size; i++) {
+       printf("%i ", i + 1); // line number
+       dope_print_arg(&data->args[i]);
+   }
+   printf("size=%i capacity=%i\n",data->size, data->capacity);
 }
