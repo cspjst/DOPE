@@ -39,6 +39,7 @@ bool dope_is_number(char* str) {
 // check dope_is_number before calling
 void dope_parse_number(dope_argument_t* arg) {
     char* str = arg->value.label
+    arg->type = DOPE_DATA_INVALID;
     char num[DOPE_FIELD_SIZE];    // temp number string
     int i = 0;                    // number string char index 
     char* end = NULL;             // strtod 
@@ -63,19 +64,35 @@ void dope_parse_number(dope_argument_t* arg) {
             num[i++] = *str++;    
         }
         else {
-            // anything other character is an error
+            arg->error_code =DOPE_ERR_INVALID_NUMBER_FORMAT;
+            return;
         }
     }
     // 5. zero terminate 
     num[i] = '\0';
     // do some error stuf with end it should point to ' 
     arg->value.number = strtod(num, &end); // Watcom C did not implement strtof!
+    // 6. strtod consumed nothing or stopped early
+    if (end == num || *end != '\0') {
+        arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
+        return;
+    }
+    arg->type = DOPE_DATA_NUMBER;
+    arg->error_code = DOPE_ERR_SUCCESS;
+}
+
+void dope_parse_label((dope_argument_t* arg) {
+
 }
 
 void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     dope_clear_arg(arg);
     // 1. read the line and catch truncated and invalid character errors
     uint8_t length = dope_read_line(&arg->value.label, istream);
+    if(length == 0) {
+        arg->error_code = DOPE_ERR_NO_INPUT;
+        return;
+    }
     if(dope_is_truncated(&arg->value.label)) {
         arg->error_code = DOPE_ERR_LINE_TOO_LONG;
         dope_consume_remaining(istream);
@@ -85,13 +102,12 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream) {
     arg->value.label[strcspn(arg->value.label, "\n")] = '\0';
     // 3. parse if number
     if(dope_is_number(arg->value.label)) {
-        arg->type = DOPE_DATA_NUMBER;
         dope_parse_number(arg);
         return;
     }
     // 4. otherwise plain string
     arg->type = DOPE_DATA_LABEL;
-    // dope_parse_label
+    dope_parse_label
     return;
 }
 
@@ -104,48 +120,3 @@ void dope_print_arg(dope_argument_t* arg) {
         dope_error_message(arg->error_code)
     );
 }
-/*
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-
-char s1[] = "5.234'56+11'";
-char s2[] = "-1111'11-11'";
-char s3[] = "12345'6+25'";
-char n[11];
-
-// check before calling if(*p != '+' && *p != '-' && !isdigit(*p))
-double parse(char* p) {
-    int i = 0;
-    char* end = NULL;
-    char n[11];
-    if(*p == '+' || *p == '-') {
-        n[i++] = *p++;
-    }
-    while(isdigit(*p) || *p == '.') {
-        n[i++] = *p++;
-    }
-    if(*p == '\'') {
-        p++;
-    }
-    while(*p != '\'' && i < 11) {
-        if(*p == '+' || *p == '-') {
-            n[i++] = 'E';
-            n[i++] = *p++;
-        }
-        else {
-            n[i++] = *p++;
-        }
-    }
-    n[i] = '\0';
-    return strtod(n, &end);
-}
-
-
-int main() {
-    printf("%f\n", parse(s1));
-    printf("%f\n", parse(s2));
-    printf("%f\n", parse(s3));
-    return 0;
-} 
-*/
