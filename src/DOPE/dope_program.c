@@ -22,13 +22,11 @@ dope_program_t* dope_new_program(uint8_t line_count) {
     if (!program) {
         return NULL;
     }
-
     program->instructions = calloc(line_count, sizeof(dope_instruction_t));
     if (!program->instructions) {
         free(program);
         return NULL;
     }
-
     program->capacity = line_count;
     program->size = 0;
     return program;
@@ -156,16 +154,23 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
                     program->instructions[program->size].error_code,
                     program->instructions[program->size].fields[0]
                 );
-                return;
+                continue;
         }
-        // 4. stop on 'F' instruction (opcode 18)
-        if (program->instructions[program->size].opcode == DOPE_OP_STOP) {  // 'F' = Stop
-            program->size++;
-            return;
+        // 4. stop on 'S' instruction (opcode 19)
+        if (program->instructions[program->size].opcode == DOPE_OP_START) {
+            if(program->instructions[program->size - 1].opcode == DOPE_OP_STOP) {
+                program->size++;
+                return;
+            }
+            else {
+                dope_panic(++program->size, DOPE_ERR_FINISH, "S but no preceding F!");
+                continue;
+            }
         }
         // 5. valid argument
         program->size++;
     }
+    dope_panic(program->size, DOPE_ERR_FINISH, "Program exceeds capacity");
 }
 
 void dope_print_instruction(dope_instruction_t* instruction) {

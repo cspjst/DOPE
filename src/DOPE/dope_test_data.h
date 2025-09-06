@@ -275,7 +275,6 @@ void test_dope_input_data() {
     fclose(f);
 
     // Should have read 6 valid entries before 'finish'
-    dope_print_data(data);
     assert(data->size == 6);  // +5.297'+10', +.5'-08', +1.0'+00', 1.0'+00', "label with spaces", "FINISH"
     assert(data->args[0].type == DOPE_DATA_NUMBER);
     assert(data->args[1].type == DOPE_DATA_NUMBER);
@@ -287,8 +286,7 @@ void test_dope_input_data() {
     assert(fabs(data->args[1].value.number - 5e-9f) < 1e-10f);
     assert(strcmp(data->args[4].value.label, "label with spaces") == 0);
 
-    // 'finish' should stop input — not stored
-    // So data->size = 5
+    dope_print_data(data);
 
     dope_free_data(data);
     printf("PASS: dope_input_data\n\n");
