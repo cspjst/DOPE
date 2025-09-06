@@ -17,7 +17,6 @@ dope_data_t* dope_new_data(uint8_t line_count) {
     }
     data->capacity = line_count;
     data->size = 0;
-    data->si = 0;
     return data;
 }
 
@@ -33,16 +32,16 @@ void dope_clear_arg(dope_argument_t* arg) {
 }
 
 bool dope_is_number(char* str) {
-    return (*str == '+' || *str== '-' || !isdigit(*str));
+    return (*str == '+' || *str== '-' || isdigit(*str));
 }
 
 // check dope_is_number before calling
 void dope_parse_number(dope_argument_t* arg) {
-    char* str = arg->value.label
+    char* str = arg->value.label;
     arg->type = DOPE_DATA_INVALID;
     char num[DOPE_FIELD_SIZE];    // temp number string
-    int i = 0;                    // number string char index 
-    char* end = NULL;             // strtod 
+    int i = 0;                    // number string char index
+    char* end = NULL;             // strtod
     // 1. copy & skip if leading sign character
     if(*str == '+' || *str == '-') { // DOPE magnitude sign optional
         num[i++] = *str++;
@@ -51,20 +50,21 @@ void dope_parse_number(dope_argument_t* arg) {
     while(isdigit(*str) || *str == '.') {
         num[i++] = *str++;
     }
-    // 3. skip end stop 
+    // 3. skip end stop
     if(*str == DOPE_STOP) {    // DOPE number should have stop code every 5 chars
         str++;                 // but dope_parse_number is permissive
     }
     // 4. copy any remaining magnitude and optional exponent
     while(*str != DOPE_STOP && i < DOPE_FIELD_SIZE) {
+        if(*str == '+' || *str == '-') {
             num[i++] = 'E';        // inject exponent char for strtod
             num[i++] = *str++;
         }
-        else if (isdigit(*str)) {    // copy over any digits
-            num[i++] = *str++;    
+        else if(isdigit(*str)) {    // copy over any digits
+            num[i++] = *str++;
         }
         else {
-            arg->error_code =DOPE_ERR_INVALID_NUMBER_FORMAT;
+            arg->error_code = DOPE_ERR_INVALID_NUMBER_FORMAT;
             return;
         }
     }
@@ -80,17 +80,23 @@ void dope_parse_number(dope_argument_t* arg) {
     arg->error_code = DOPE_ERR_SUCCESS;
 }
 
-void dope_parse_label((dope_argument_t* arg) {
+void dope_parse_label(dope_argument_t* arg) {
     arg->type = DOPE_DATA_INVALID;
     // 1. locate the stop code '
-    int i = strcspn(arg->value.label, DOPE_STOP_STR)
-    // 2. no stop code
-    if(i == 0) { 
+    int i = strcspn(arg->value.label, DOPE_STOP_STR);
+    // 2. no input
+    if(i == 0) {
+        arg->error_code = DOPE_ERR_NO_INPUT;
+        return;
+    }
+    // 3. no stop code
+    if(i == strlen(arg->value.label)) {
         arg->error_code = DOPE_ERR_MISSING_STOP_CODE;
-    } 
-    // 3. terminate string at stop code
-    arg->label[i] = '\0'; 
-    // 4. detect data finish 
+        return;
+    }
+    // 4. terminate string at stop code
+    arg->value.label[i] = '\0';
+    // 5. detect data finish
     if(strcmp(arg->value.label, DOPE_FINISH_STR) == 0) {
         arg->type = DOPE_DATA_FINISH;
     }
@@ -100,8 +106,7 @@ void dope_parse_label((dope_argument_t* arg) {
     arg->error_code = DOPE_ERR_SUCCESS;
 }
 
-void dope_input_argument(dope_argument_t* arg, FILE* istream) {
-    dope_clear_arg(arg);
+void dope_input_arg(dope_argument_t* arg, FILE* istream) {
     arg->type = DOPE_DATA_INVALID; // default to invalid
     // 1. read the line and catch truncated and invalid character errors
     uint8_t length = dope_read_line(&arg->value.label, istream);
@@ -122,22 +127,22 @@ void dope_input_argument(dope_argument_t* arg, FILE* istream) {
         return;
     }
     // 4. otherwise plain string
-    dope_parse_label
+    dope_parse_label(arg);
     return;
 }
 
 void dope_input_data(dope_data_t* data, FILE* istream) {
-    if (!data || !stream) {
-        dope_panic(0, DOPE_ERR_NO_INPUT, "NULL data or file");  
+    if (!data || !istream) {
+        dope_panic(0, DOPE_ERR_NO_INPUT, "NULL data or file");
         return;
     }
     data->size = 0;
     while (data->size < data->capacity) {
         // 1. Parse next datum
-        dope_input_arg(&data-args[data->size], stream);
+        dope_input_arg(&data->args[data->size], istream);
         // 2. No input (EOF)
         if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
-            dope_panic(data->size, data->args[data->size].error_code, "EOF without 'finish'");
+            dope_panic(data->size, data->args[data->size].error_code, "EOF without 'FINISH'");
             return;
         }
         // 3. error exit
@@ -147,15 +152,16 @@ void dope_input_data(dope_data_t* data, FILE* istream) {
         }
         // 4. stop on 'FINISH' marker
         if (data->args[data->size].type == DOPE_DATA_FINISH) {
-            return;  
+            data->size++;
+            return;
         }
         // 5. valid datum
         data->size++;
     }
 }
 
-void dope_print_arg(dope_argument_t* arg) {
-    printf("%i %lf %s %i %s\n",
+void dope_print_raw_arg(dope_argument_t* arg) {
+    printf("%i %G >%s< E%i %s\n",
         arg->type,
         arg->value.number,
         arg->value.label,
@@ -166,8 +172,21 @@ void dope_print_arg(dope_argument_t* arg) {
 
 void dope_print_data(dope_data_t* data) {
     for(int i = 0; i < data->size; i++) {
-       printf("%i ", i + 1); // line number
-       dope_print_arg(&data->args[i]);
+        printf("%i ", i + 1); // line number
+        switch((int)data->args[i].type) {
+        case DOPE_DATA_NUMBER:
+            printf("%G\n",data->args[i].value.number);
+            break;
+        case DOPE_DATA_LABEL:
+             printf("%s\n",data->args[i].value.label);
+             break;
+        case DOPE_DATA_FINISH:
+            printf("FINISH\n");
+            break;
+        case DOPE_DATA_INVALID:
+        default:
+            dope_panic(i + 1, data->args[i].error_code, "");
+       }
    }
    printf("size=%i capacity=%i\n",data->size, data->capacity);
 }

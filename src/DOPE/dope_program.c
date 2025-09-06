@@ -31,7 +31,6 @@ dope_program_t* dope_new_program(uint8_t line_count) {
 
     program->capacity = line_count;
     program->size = 0;
-    program->ip = 0;
     return program;
 }
 
@@ -53,7 +52,7 @@ dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record
     uint8_t count = 0;
     // 1. Begin tokenization: extract first token using strtok
     //    strtok modifies *line, replacing delimiters with '\0'
-    char* tok = strtok(*line, DOPE_DELIM_STR);
+    char* tok = strtok(*line, DOPE_STOP_STR);
     // 2. Loop: while tokens exist and space remains
     while (tok != NULL && count < DOPE_INSTRUCTION_PARTS) {
         // 3. Measure token length and clamp to field size
@@ -66,7 +65,7 @@ dope_size_t dope_instruction_tokenize(dope_line_t* line, dope_instruction_record
         tokens[count][len] = '\0';  // Ensure null termination
         // 5. Advance to next token and field
         count++;
-        tok = strtok(NULL, DOPE_DELIM_STR);  // Continue from where previous left off
+        tok = strtok(NULL, DOPE_STOP_STR);  // Continue from where previous left off
     }
     return count;
 }
@@ -123,10 +122,12 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     }
     // 7. check number of operands
     if(token_count - 1 < DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
+        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_TOO_FEW_ARGS;
         return;
     }
     if(token_count - 1 > DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
+        instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_TOO_MANY_ARGS;
         return;
     }
@@ -136,7 +137,7 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
 
 void dope_input_program(dope_program_t* program, FILE* stream) {
     if (!program || !stream) {
-        dope_panic(0, DOPE_ERR_NO_INPUT, "NULL program or file");  
+        dope_panic(0, DOPE_ERR_NO_INPUT, "NULL program or file");
         return;
     }
     program->size = 0;
@@ -144,8 +145,8 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
         // 1. parse next instruction
         dope_input_instruction(&program->instructions[program->size], stream);
         // 2. no input (EOF)
-        if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
-            dope_panic(data->size, data->args[data->size].error_code, "EOF without 'F'");
+        if (program->instructions[program->size].error_code == DOPE_ERR_NO_INPUT) {
+            dope_panic(program->size, program->instructions[program->size].error_code, "EOF without 'F'");
             return;
         }
         // 3. error exit

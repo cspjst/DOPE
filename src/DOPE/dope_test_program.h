@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "dope_constants.h"
 #include "dope_errors.h"
 #include "dope_utility.h"
 #include "dope_program.h"
@@ -291,10 +292,10 @@ void test_dope_input_instruction() {
     printf("Test 4: Another valid\t");
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == DOPE_OP_J);
+    assert(inst.opcode == DOPE_OP_INPUT);
     assert(strcmp(inst.fields[0], "J") == 0);
 
-    printf("Test 4.1: too many opernads\t");
+    printf("Test 4.1: too many operands\t");
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
     assert(inst.opcode == DOPE_OP_INVALID);
@@ -316,13 +317,13 @@ void test_dope_input_instruction() {
     printf("Test 7: Valid: E (opcode 17, 0 operands)\t");
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == DOPE_OP_E);
+    assert(inst.opcode == DOPE_OP_END);
     assert(inst.error_code == DOPE_ERR_SUCCESS);
 
     printf("Test 8: Valid: P (opcode 13, 1 operand)\t");
     dope_input_instruction(&inst, f);
     dope_print_instruction(&inst);
-    assert(inst.opcode == DOPE_OP_P);
+    assert(inst.opcode == DOPE_OP_PRINT);
     assert(strcmp(inst.fields[1], "X") == 0);
 
     printf("Test 9: Too few args: P requires 1, got 0\t");

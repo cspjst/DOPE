@@ -20,7 +20,6 @@ typedef struct {
 } dope_instruction_t;
 
 typedef struct {
-    uint8_t ip;                        /**< Instruction pointer (index) */
     dope_instruction_t* instructions; /**< Owned array of instructions */
     uint8_t size;                   /**< Number of valid instructions */
     uint8_t capacity;               /**< Allocated instruction count */

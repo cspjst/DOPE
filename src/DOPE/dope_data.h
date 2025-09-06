@@ -27,7 +27,6 @@ typedef struct {
 } dope_argument_t;
 
 typedef struct {
-    uint8_t si;  // source index (for runtime consumption)
     dope_argument_t* args;
     uint8_t size;
     uint8_t capacity;
@@ -45,11 +44,11 @@ void dope_parse_number(dope_argument_t* arg);
 
 void dope_parse_label(dope_argument_t* arg);
 
-void dope_input_argument(dope_argument_t* arg, FILE* istream);
+void dope_input_arg(dope_argument_t* arg, FILE* istream);
 
 void dope_input_data(dope_data_t* data, FILE* istream);
 
-void dope_print_arg(dope_argument_t* arg);
+void dope_print_raw_arg(dope_argument_t* arg);
 
 void dope_print_data(dope_data_t* data);
 

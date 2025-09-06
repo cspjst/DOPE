@@ -1,14 +1,6 @@
-SQR'X'Y'
-this_line_is_way_too_long_exceeding_DOPE_LINE_SIZE'
-+'A'B'C'
-J'Z'
-J'Z'15'
-FOO'
-'
-E'
-P'X'
-P'
-Z'X'Y'Z'A'
-+'A B'C'
-+'a'b'c'
-s
++5.23''
+my label'
+FINISH'
+
+   
+++5.23'

@@ -1,6 +1,12 @@
 +5.297'+10'
 +.5'-08'
++1.0'+00'
 1.0'+00'
-label with spaces
-finish'
+label with spaces'
+FINISH'
++1.0'+37'
+++5.23'
++5.23'X00'
+
+   
 too'long'exponent'
