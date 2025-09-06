@@ -1,7 +1,7 @@
-Open Watcom Linker Version 2.0 beta Nov 23 2024 15:34:21
-Copyright (c) 2002-2024 The Open Watcom Contributors. All Rights Reserved.
+Open Watcom Linker Version 2.0 beta May  3 2025 18:23:37
+Copyright (c) 2002-2025 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       25/09/06 21:03:09
+Created on:       25/09/06 22:55:28
 Executable Image: DOPE.exe
 creating a DOS executable
 
@@ -59,7 +59,7 @@ STACK                  STACK          DGROUP         0fa7:0000       00000800
 Address        Symbol
 =======        ======
 
-Module: CMakeFiles/DOPE.dir/DOPE/dope_data.c.obj(dope_data)
+Module: CMakeFiles/DOPE.dir/DOPE/dope_data.c.obj(/Users/jeremythornton/dosbox/cspjst/DOPE/src/DOPE/dope_data.c)
 0000:0000      dope_new_data_
 0000:00cf      dope_free_data_
 0000:012c+     dope_clear_arg_
@@ -70,11 +70,11 @@ Module: CMakeFiles/DOPE.dir/DOPE/dope_data.c.obj(dope_data)
 0000:0508      dope_input_data_
 0000:06ce+     dope_print_raw_arg_
 0000:073f      dope_print_data_
-Module: CMakeFiles/DOPE.dir/DOPE/dope_errors.c.obj(dope_errors)
+Module: CMakeFiles/DOPE.dir/DOPE/dope_errors.c.obj(/Users/jeremythornton/dosbox/cspjst/DOPE/src/DOPE/dope_errors.c)
 0000:08ae      dope_error_message_
 0000:08ef      dope_panic_
 0d96:1748+     _DOPE_ERROR_MESSAGES
-Module: CMakeFiles/DOPE.dir/DOPE/dope_program.c.obj(dope_program)
+Module: CMakeFiles/DOPE.dir/DOPE/dope_program.c.obj(/Users/jeremythornton/dosbox/cspjst/DOPE/src/DOPE/dope_program.c)
 0000:0940      dope_new_program_
 0000:0a0f      dope_free_program_
 0000:0a6c+     dope_clear_instruction_
@@ -86,14 +86,14 @@ Module: CMakeFiles/DOPE.dir/DOPE/dope_program.c.obj(dope_program)
 0000:1154      dope_print_program_
 0d96:177c+     _DOPE_INSTRUCTIONS
 0d96:17c8+     _DOPE_OPERAND_COUNT
-Module: CMakeFiles/DOPE.dir/DOPE/dope_utility.c.obj(dope_utility)
+Module: CMakeFiles/DOPE.dir/DOPE/dope_utility.c.obj(/Users/jeremythornton/dosbox/cspjst/DOPE/src/DOPE/dope_utility.c)
 0000:11ed+     power_of_10_
 0000:127b      dope_is_truncated_
 0000:12fd      dope_consume_remaining_
 0000:1346      dope_string_toupper_
 0000:1393      dope_read_line_
 0000:144a      dope_has_space_
-Module: CMakeFiles/DOPE.dir/main.c.obj(main)
+Module: CMakeFiles/DOPE.dir/main.c.obj(/Users/jeremythornton/dosbox/cspjst/DOPE/src/main.c)
 0000:14c6+     create_test_data_file_
 0000:166a+     test_dope_is_number_
 0000:18cf+     test_dope_parse_number_
@@ -531,4 +531,4 @@ Module: /opt/watcom/lib286/dos/clibl.lib(bfree)
 Stack size:  0800 (2048.)
 Memory size:  00010270 (66160.)
 Entry point address: 0000:609e
-Link time: 00:00.91
+Link time: 00:00.63

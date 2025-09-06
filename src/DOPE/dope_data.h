@@ -28,8 +28,8 @@ typedef struct {
 
 typedef struct {
     dope_argument_t* args;
-    uint8_t size;
-    uint8_t capacity;
+    dope_size_t size;
+    dope_size_t capacity;
 } dope_data_t;
 
 dope_data_t* dope_new_data(uint8_t line_count);

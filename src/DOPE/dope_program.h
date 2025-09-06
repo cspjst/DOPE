@@ -14,15 +14,15 @@ extern const uint8_t DOPE_OPERAND_COUNT[];
 typedef dope_field_t dope_instruction_record_t[DOPE_INSTRUCTION_PARTS];
 
 typedef struct {
-    uint8_t opcode;                /**< 1–19 = valid opcode, 0 = error */
-    uint8_t error_code;            /**< Error code if opcode == 0 */
-    dope_instruction_record_t fields; /**< Tokenized instruction parts */
+    uint8_t opcode;
+    uint8_t error_code;
+    dope_instruction_record_t fields;
 } dope_instruction_t;
 
 typedef struct {
-    dope_instruction_t* instructions; /**< Owned array of instructions */
-    uint8_t size;                   /**< Number of valid instructions */
-    uint8_t capacity;               /**< Allocated instruction count */
+    dope_instruction_t* instructions;
+    dope_size_t size;
+    dope_size_t capacity;
 } dope_program_t;
 
 dope_program_t* dope_new_program(uint8_t line_count);
