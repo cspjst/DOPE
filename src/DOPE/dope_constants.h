@@ -12,6 +12,7 @@
 #define DOPE_OPERANDS_MAX           5   // Max number of operands an instruction can take
 #define DOPE_INSTRUCTION_COUNT     19   // Total number of valid opcodes in DOPE language
 #define DOPE_VECTOR_SIZE           16   // Page 7 DOPE teaching notes 1962
+#define DOPE_VAR_NAME_SIZE          3   // Page 7 ... 2 + \0
 
 typedef enum {
     DOPE_OP_INVALID = 0,

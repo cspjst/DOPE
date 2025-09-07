@@ -21,18 +21,14 @@ typedef struct {
     dope_size_t capacity;
 } dope_vectab_t;
 
-dope_vectab_t* dope_new_vectab(dope_size_t capacity);
+dope_vectab_t* dope_new_vectab(); // max 4 vectors
 
 void dope_free_vectab(dope_vectab_t* vectab);
 
 dope_vector_t* dope_find_vector(dope_vectab_t* vectab, char name);
 
-dope_vector_t* dope_new_vector(char name);
+void dope_vector_set(dope_vector_t* v, dope_size_t i, float value);
 
-void dope_free_vector(dope_vector_t* v);
-
-void dope_vector_value_set(dope_vector_t* v, dope_size_t i, float value);
-
-float dope_vector_value_get(dope_vector_t* v, dope_size_t i);
+float dope_vector_get(dope_vector_t* v, dope_size_t i);
 
 #endif
