@@ -269,3 +269,14 @@ void test_dope_input_program() {
     dope_free_program(prog);
     printf("PASS: dope_input_program\n\n");
 }
+
+void test_dope_program() {
+    dope_program_t* prog = dope_new_program(15);
+
+    dope_input_program(prog, stdin);
+
+    dope_print_program(prog);
+
+    dope_free_program(prog);
+    printf("PASS: dope_program\n\n");
+}

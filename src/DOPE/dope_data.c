@@ -68,7 +68,7 @@ void dope_parse_number(dope_argument_t* arg) {
             return;
         }
     }
-    // 5. zero terminate and convert to float
+    // 5. zero terminate and convert to dope_float_t
     num[i] = '\0';
     arg->value.number = strtod(num, &end); // Watcom C did not implement strtof!
     // 6. strtod consumed nothing or stopped early
@@ -143,12 +143,12 @@ void dope_input_data(dope_data_t* data, FILE* istream) {
         // 2. No input (EOF)
         if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
             dope_panic(data->size, data->args[data->size].error_code, "EOF without 'FINISH'");
-            return;
+            continue;
         }
-        // 3. error exit
+        // 3. error
         if (data->args[data->size].type == DOPE_DATA_INVALID) {
-            dope_panic(data->size, data->args[data->size].error_code, "Invalid data");
-            return;
+            dope_panic(data->size, data->args[data->size].error_code, data->args[data->size].value.label);
+            continue;
         }
         // 4. stop on 'FINISH' marker
         if (data->args[data->size].type == DOPE_DATA_FINISH) {

@@ -319,3 +319,14 @@ void test_dope_print_data() {
 
     printf("PASS: dope_print_data\n\n");
 }
+
+void test_dope_data() {
+    dope_data_t* data = dope_new_data(15);
+
+    dope_input_data(data, stdin);
+
+    dope_print_data(data);
+
+    dope_free_data(data);
+    printf("PASS: dope_data\n\n");
+}

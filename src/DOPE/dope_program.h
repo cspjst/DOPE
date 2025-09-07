@@ -14,8 +14,8 @@ extern const uint8_t DOPE_OPERAND_COUNT[];
 typedef dope_field_t dope_instruction_record_t[DOPE_INSTRUCTION_PARTS];
 
 typedef struct {
-    uint8_t opcode;
-    uint8_t error_code;
+    dope_opcode_t opcode;
+    dope_error_t error_code;
     dope_instruction_record_t fields;
 } dope_instruction_t;
 

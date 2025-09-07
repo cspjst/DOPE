@@ -16,7 +16,7 @@ typedef enum {
 } dope_data_type_t;
 
 typedef union {
-    float number;                       // magnitude × 10^exponent
+    dope_float_t number;                       // magnitude × 10^exponent
     dope_line_t label;
 } dope_value_t;
 

@@ -6,6 +6,8 @@
 
 typedef uint8_t dope_size_t;
 
+typedef float dope_float_t;
+
 typedef char dope_line_t[DOPE_LINE_SIZE];
 
 typedef char dope_field_t[DOPE_FIELD_SIZE];

@@ -7,12 +7,14 @@
 #define DOPE_VECTORS_H
 
 #include "dope_constants.h"
+#include "dope_errors.h"
 #include "dope_types.h"
 #include <stdint.h>
 
 typedef struct {
     char name; // E, F, G or H
-    float values[DOPE_VECTOR_SIZE];
+    dope_float_t values[DOPE_VECTOR_SIZE];
+    dope_error_t error_code;
 } dope_vector_t;
 
 typedef struct {

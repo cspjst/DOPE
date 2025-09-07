@@ -11,13 +11,15 @@
 #define DOPE_VARIABLES_H
 
 #include "dope_constants.h"
+#include "dope_errors.h"
 #include "dope_types.h"
 
 typedef char dope_var_name_t[DOPE_VAR_NAME_SIZE];
 
 typedef struct {
     dope_var_name_t name;
-    float value;
+    dope_float_t value;
+    dope_error_t error_code;
 } dope_var_t;
 
 typedef struct {

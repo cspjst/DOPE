@@ -96,12 +96,18 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
         dope_consume_remaining(istream);
         return;
     }
-    // 2. trim line
+    // trim line
     line[strcspn(line, "\n")] = '\0';
+    // 2. missing stop code check
+    if(line[length - 2] != '\'') {
+        instruction->error_code = DOPE_ERR_MISSING_STOP_CODE;
+        strncpy((char*)&instruction->fields[0], (char*)&line, length);
+        return;
+    }
     // 3. invalid character check
     if (dope_has_space((char*)&line)) {
         instruction->error_code = DOPE_ERR_INVALID_CHAR;
-        strncpy((char*)&instruction->fields[0], (char*)&line, DOPE_LINE_SIZE);
+        strncpy((char*)&instruction->fields[0], (char*)&line, length);
         return;
     }
     // 4. uppercase
@@ -116,17 +122,20 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     instruction->opcode = dope_lookup_opcode(instruction->fields[0]);
     if(instruction->opcode == 0) {
         instruction->error_code = DOPE_ERR_UNKNOWN_INSTR;
+        strncpy((char*)&instruction->fields[0], (char*)&line, length);
         return;
     }
     // 7. check number of operands
     if(token_count - 1 < DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
         instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_TOO_FEW_ARGS;
+        strncpy((char*)&instruction->fields[0], (char*)&line, length);
         return;
     }
     if(token_count - 1 > DOPE_OPERAND_COUNT[instruction->opcode - 1]) {
         instruction->opcode = DOPE_OP_INVALID;
         instruction->error_code = DOPE_ERR_TOO_MANY_ARGS;
+        strncpy((char*)&instruction->fields[0], (char*)&line, length);
         return;
     }
     // 8. recognized instruction and correct number of operands
@@ -150,7 +159,7 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
         // 3. error exit
         if (program->instructions[program->size].opcode == DOPE_OP_INVALID) {
                 dope_panic(
-                    program->size,
+                    program->size + 1,
                     program->instructions[program->size].error_code,
                     program->instructions[program->size].fields[0]
                 );
@@ -163,7 +172,7 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
                 return;
             }
             else {
-                dope_panic(++program->size, DOPE_ERR_FINISH, "S but no preceding F!");
+                dope_panic(program->size, DOPE_ERR_FINISH, "S but no preceding F!");
                 continue;
             }
         }

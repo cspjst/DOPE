@@ -17,7 +17,7 @@ const char* const DOPE_ERROR_MESSAGES[] = {
     "Absent/malformed ending!"  // DOPE_ERR_FINISH
 };
 
-const char* dope_error_message(uint8_t error_code) {
+const char* dope_error_message(dope_error_t error_code) {
     return DOPE_ERROR_MESSAGES[error_code];
 }
 
