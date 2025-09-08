@@ -32,7 +32,7 @@ dope_vartab_t* dope_new_vartab(dope_size_t capacity);
 
 void dope_free_vartab(dope_vartab_t* vartab);
 
-dope_var_t* dope_find_var(dope_vartab_t* vartab, const dope_var_name_t name);
+dope_var_t* dope_find_var(const dope_vartab_t* vartab, const dope_var_name_t name);
 
 dope_var_t* dope_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name);
 

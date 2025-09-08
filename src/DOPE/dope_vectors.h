@@ -27,9 +27,9 @@ dope_vectab_t* dope_new_vectab(); // max 4 vectors
 
 void dope_free_vectab(dope_vectab_t* vectab);
 
-dope_vec_t* dope_find_vec(dope_vectab_t* vectab, const char name);
+dope_vector_t* dope_find_vec(dope_vectab_t* vectab, const char name);
 
-dope_vec_t* dope_alloc_vec(dope_vectab_t* vectab, const char name);
+dope_vector_t* dope_alloc_vec(dope_vectab_t* vectab, const char name);
 
 //void dope_dealloc_vec(dope_vectab_t* vectab, const char name); //no scope in DOPE so redundant
 

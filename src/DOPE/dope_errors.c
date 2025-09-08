@@ -7,13 +7,16 @@ const char* const DOPE_ERROR_MESSAGES[] = {
     "No input!",                // DOPE_ERR_NO_INPUT   EOF or error
     "No instruction!",          // DOPE_ERR_NO_INSTR    empty line
     "Invalid instruction!",     // DOPE_ERR_UNKNOWN_INSTR
-    "Not enough operands!",     // DOPE_ERR_TOO_FEW_ARGS,    // not enough operands
-    "Too many operands!",       // DOPE_ERR_TOO_MANY_ARGS,   // too many operands
-    "Input too long!",          // DOPE_ERR_LINE_TOO_LONG    // input line too long
+    "Not enough operands!",     // DOPE_ERR_TOO_FEW_ARGS
+    "Too many operands!",       // DOPE_ERR_TOO_MANY_ARGS
+    "Input too long!",          // DOPE_ERR_LINE_TOO_LONG
     "Found a space at input!",  // DOPE_ERR_INVALID_CHAR
     "Wrong number format!",     // DOPE_ERR_INVALID_NUMBER_FORMAT
     "Exponent out of range!",   // DOPE_ERR_EXPONENT_OUT_OF_RANGE
     "Missing stop code!",       // DOPE_ERR_MISSING_STOP_CODE
+    "Variable name not found!", // DOPE_ERR_VAR_NOT_FOUND
+    "Vector name not found!",   // DOPE_ERR_VEC_NOT_FOUND
+    "Variable table full!",     // DOPE_ERR_OUT_OF_VARS
     "Absent/malformed ending!"  // DOPE_ERR_FINISH
 };
 
@@ -21,6 +24,6 @@ const char* dope_error_message(dope_error_t error_code) {
     return DOPE_ERROR_MESSAGES[error_code];
 }
 
-void dope_panic(uint8_t line, dope_error_t e, char* info) {
+void dope_panic(uint8_t line, dope_error_t e, const char* info) {
     printf("ERROR Line %d: %s %s\n", line, dope_error_message(e), info);
 }
