@@ -32,12 +32,14 @@ dope_vartab_t* dope_new_vartab(dope_size_t capacity);
 
 void dope_free_vartab(dope_vartab_t* vartab);
 
-dope_var_t* dope_alloc_var(dope_vartab_t* vartab, const char* name);
+dope_var_t* dope_find_var(dope_vartab_t* vartab, const dope_var_name_t name);
 
-dope_var_t* dope_find_var(dope_vartab_t* vartab, dope_var_name_t name);
+dope_var_t* dope_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name);
 
-void dope_var_set(dope_var_t* v, float value);
+//void dope_dealloc_var(dope_vartab_t* vartab, const dope_var_name_t name); //no scope in DOPE so redundant
 
-float dope_var_get(dope_var_t* v);
+void dope_set_var(dope_vartab_t* vartab, const dope_var_name_t name, float value);
+
+float dope_get_var(const dope_vartab_t* vartab, const dope_var_name_t name);
 
 #endif
