@@ -1,6 +1,7 @@
 #include "dope_vectors.h"
 
-dope_vectab_t* dope_new_vectab() { } // max 4 vectors
+// max 4 16-component vectors available E, F, G, and H
+dope_vectab_t* dope_new_vectab() { } 
 
 void dope_free_vectab(dope_vectab_t* vectab){ }
 
