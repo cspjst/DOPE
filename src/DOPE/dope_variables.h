@@ -23,18 +23,18 @@ typedef struct {
 } dope_var_t;
 
 typedef struct {
-    dope_var_t* variables;
+    dope_var_t* vars;
     dope_size_t size;
     dope_size_t capacity;
 } dope_vartab_t;
 
 dope_vartab_t* dope_new_vartab(dope_size_t capacity);
 
-void dope_free_vartab(dope_vartab_t* vectab);
+void dope_free_vartab(dope_vartab_t* vartab);
 
-dope_var_t* dope_alloc_var(dope_vartab_t* vectab, const char* name);
+dope_var_t* dope_alloc_var(dope_vartab_t* vartab, const char* name);
 
-dope_var_t* dope_find_var(dope_vartab_t* vectab, dope_var_name_t name);
+dope_var_t* dope_find_var(dope_vartab_t* vartab, dope_var_name_t name);
 
 void dope_var_set(dope_var_t* v, float value);
 
