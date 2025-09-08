@@ -13,12 +13,12 @@
 
 typedef struct {
     char name; // E, F, G or H
-    dope_float_t values[DOPE_VECTOR_SIZE];
+    dope_float_t vals[DOPE_VECTOR_SIZE];
     dope_error_t error_code;
 } dope_vector_t;
 
 typedef struct {
-    dope_vector_t* vectors;
+    dope_vector_t* vecs;
     dope_size_t size;
     dope_size_t capacity;
 } dope_vectab_t;
