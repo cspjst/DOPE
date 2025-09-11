@@ -18,11 +18,11 @@ typedef enum {
 typedef union {
     dope_float_t number;                       // magnitude × 10^exponent
     dope_line_t label;
-} dope_value_t;
+} dope_data_value_t;
 
 typedef struct {
     dope_data_type_t type;
-    dope_value_t value;
+    dope_data_value_t value;
     dope_error_t error_code;
 } dope_argument_t;
 

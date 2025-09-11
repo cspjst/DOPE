@@ -1,17 +1,19 @@
-#include "dope_variables.h"
-#include "dope_data.h"
-#include "dope_errors.h"
-#include "dope_utility.h"
-#include <string.h>
-#include <stdlib.h>
+#include "dope_variable.h"
 #include <stdio.h>
+#include <stdlib.h>
 
-dope_vartab_t* dope_new_vartab(dope_size_t capacity) {
+const char* DOPE_TYPE_NAMES[] = {
+    "null",
+    "number",
+    "vector"
+};
+
+dope_vartab_t* dope_new_vartab(dope_size_t capacity)  {
     dope_vartab_t* vartab = malloc(sizeof(dope_vartab_t));
     if (!vartab) {
         return NULL;
     }
-    vartab->vars = calloc(capacity, sizeof(dope_var_t));
+    vartab->vars = calloc(capacity, sizeof(dope_variable_t));
     if (!vartab->vars) {
         free(vartab);
         return NULL;
@@ -21,13 +23,36 @@ dope_vartab_t* dope_new_vartab(dope_size_t capacity) {
     return vartab;
 }
 
-void dope_free_vartab(dope_vartab_t* vartab) {
+void dope_free_vartab(dope_vartab_t* vartab)  {
     if (vartab) {
         free(vartab->vars);
         free(vartab);
     }
 }
 
+//dope_variable_t* dope_find_var(const dope_vartab_t* vartab, const dope_var_name_t name);
+
+//const float* dope_pfloat_read_var(const dope_vartab_t* vartab, const dope_var_name_t name);
+
+//float* dope_pfloat_write_var(const dope_vartab_t* vartab, const dope_var_name_t name);
+
+void dope_print_var(const dope_variable_t* var) {
+    printf("%s\t%s\t%f\n",
+        DOPE_TYPE_NAMES[var->type],
+        var->name,
+        var->value.number
+    );
+}
+
+void dope_print_vartab(const dope_vartab_t* vartab) {
+    printf("type\tname\tvalue\n");
+    for(int i = 0; i < vartab->capacity; ++i) {
+        dope_print_var(&vartab->vars[i]);
+    }
+}
+
+
+/*
 dope_var_t* dope_find_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
     for(int i = 0; i < vartab->size; ++i) {
         if(strcmp(name, vartab->vars[i].name) == 0) {
@@ -59,27 +84,4 @@ dope_var_t* dope_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name) {
     // calloc zeroed the rest
     return &vartab->vars[vartab->size++];
 }
-
-float* dope_var_pfloat(const dope_vartab_t* vartab, const dope_var_name_t name) {
-    dope_var_t* v = dope_find_var(vartab, name);
-    if(v) {
-        return &v->value;
-    }
-    dope_panic(0, DOPE_ERR_VAR_NOT_FOUND, name);
-    exit(EXIT_FAILURE);
-}
-
-void dope_print_var(const dope_var_t* v) {
-    printf(" %s\t%f\t %i\n",
-        v->name,
-        v->value,
-        v->error_code
-    );
-}
-
-void dope_print_vartab(const dope_vartab_t* vartab) {
-    printf("name\tvalue\t\terror\n");
-    for(int i = 0; i < vartab->size; ++i) {
-        dope_print_var(&vartab->vars[i]);
-    }
-}
+*/
