@@ -1,6 +1,10 @@
 #include "dope_variables.h"
+#include "dope_data.h"
+#include "dope_errors.h"
+#include "dope_utility.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 dope_vartab_t* dope_new_vartab(dope_size_t capacity) {
     dope_vartab_t* vartab = malloc(sizeof(dope_vartab_t));
@@ -35,27 +39,47 @@ dope_var_t* dope_find_var(const dope_vartab_t* vartab, const dope_var_name_t nam
 
 dope_var_t* dope_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name) {
     if(vartab->size == vartab->capacity) {
-        dope_panic(0, DOPE_ERR_OUT_OF_VARS, name);
+        dope_panic(vartab->size, DOPE_ERR_OUT_OF_VARS, name);
         exit(EXIT_FAILURE);
     }
-    strcpy(vartab->vars[++vartab->size].name, name);
-    // calloc zeroed the rest
-    return &vartab->vars[vartab->size];
-}
-
-void dope_set_var(dope_vartab_t* vartab, const dope_var_name_t name, float value) {
-    dope_var_t* v = dope_find_var(vartab, name);
-    if(!v) {
-        v = dope_alloc_var(vartab, name);
+    if(dope_find_var(vartab, name)) {
+        dope_panic(vartab->size + 1, DOPE_ERR_LINE_TOO_LONG, name);
+        exit(EXIT_FAILURE);
     }
-    v->value = value;
+    if(strlen(name) == DOPE_VAR_NAME_SIZE) {
+        dope_panic(vartab->size + 1, DOPE_ERR_LINE_TOO_LONG, name);
+        exit(EXIT_FAILURE);
+    }
+    if(dope_is_number((char*)name)) {
+        dope_panic(vartab->size + 1, DOPE_ERR_INVALID_CHAR, name);
+        exit(EXIT_FAILURE);
+    }
+    dope_string_toupper((char*)name);
+    strcpy(vartab->vars[vartab->size].name, name);
+    // calloc zeroed the rest
+    return &vartab->vars[vartab->size++];
 }
 
-float dope_get_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
+float* dope_var_pfloat(const dope_vartab_t* vartab, const dope_var_name_t name) {
     dope_var_t* v = dope_find_var(vartab, name);
     if(v) {
-        return v->value;
+        return &v->value;
     }
     dope_panic(0, DOPE_ERR_VAR_NOT_FOUND, name);
     exit(EXIT_FAILURE);
+}
+
+void dope_print_var(const dope_var_t* v) {
+    printf(" %s\t%f\t %i\n",
+        v->name,
+        v->value,
+        v->error_code
+    );
+}
+
+void dope_print_vartab(const dope_vartab_t* vartab) {
+    printf("name\tvalue\t\terror\n");
+    for(int i = 0; i < vartab->size; ++i) {
+        dope_print_var(&vartab->vars[i]);
+    }
 }

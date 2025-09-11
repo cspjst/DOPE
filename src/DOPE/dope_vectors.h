@@ -33,8 +33,7 @@ dope_vector_t* dope_alloc_vec(dope_vectab_t* vectab, const char name);
 
 //void dope_dealloc_vec(dope_vectab_t* vectab, const char name); //no scope in DOPE so redundant
 
-void dope_set_val(dope_vectab_t* vectab, const char name, float value, dope_size_t i);
-
-float dope_get_val(const dope_vectab_t* vectab, const char name, dope_size_t i);
+// this is functions can just take float* agnostic to var_t or vec_t
+float* dope_vec_pfloat(const dope_vectab_t* vectab, const char name, dope_size_t i);
 
 #endif

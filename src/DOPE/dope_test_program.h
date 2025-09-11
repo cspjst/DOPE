@@ -1,3 +1,6 @@
+#ifndef DOPE_TEST_PROGRAM_H
+#define DOPE_TEST_PROGRAM_H
+
 #include "dope_constants.h"
 #include "dope_program.h"
 #include "dope_errors.h"
@@ -280,3 +283,5 @@ void test_dope_program() {
     dope_free_program(prog);
     printf("PASS: dope_program\n\n");
 }
+
+#endif

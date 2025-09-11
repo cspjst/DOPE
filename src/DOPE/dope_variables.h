@@ -14,8 +14,6 @@
 #include "dope_errors.h"
 #include "dope_types.h"
 
-typedef char dope_var_name_t[DOPE_VAR_NAME_SIZE];
-
 typedef struct {
     dope_var_name_t name;
     dope_float_t value;
@@ -38,8 +36,11 @@ dope_var_t* dope_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name);
 
 //void dope_dealloc_var(dope_vartab_t* vartab, const dope_var_name_t name); //no scope in DOPE so redundant
 
-void dope_set_var(dope_vartab_t* vartab, const dope_var_name_t name, float value);
+// this is functions can just take float* agnostic to var_t or vec_t
+float* dope_var_pfloat(const dope_vartab_t* vartab, const dope_var_name_t name);
 
-float dope_get_var(const dope_vartab_t* vartab, const dope_var_name_t name);
+void dope_print_var(const dope_var_t* v);
+
+void dope_print_vartab(const dope_vartab_t* vartab);
 
 #endif

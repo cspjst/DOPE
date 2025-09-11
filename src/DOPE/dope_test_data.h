@@ -1,3 +1,6 @@
+#ifndef DOPE_TEST_DATA_H
+#define DOPE_TEST_DATA_H
+
 #include "dope_data.h"
 #include "dope_errors.h"
 #include <assert.h>
@@ -330,3 +333,5 @@ void test_dope_data() {
     dope_free_data(data);
     printf("PASS: dope_data\n\n");
 }
+
+#endif
