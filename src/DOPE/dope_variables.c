@@ -1,6 +1,9 @@
-#include "dope_variable.h"
+#include "dope_variables.h"
+#include "dope_errors.h"
+#include "dope_utility.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 const char* DOPE_TYPE_NAMES[] = {
     "null",
@@ -30,7 +33,7 @@ void dope_free_vartab(dope_vartab_t* vartab)  {
     }
 }
 
-dope_var_t* private_find_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
+dope_variable_t* private_find_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
     for(int i = 0; i < vartab->size; ++i) {
         if(strcmp(name, vartab->vars[i].name) == 0) {
             return &vartab->vars[i];
@@ -40,7 +43,7 @@ dope_var_t* private_find_var(const dope_vartab_t* vartab, const dope_var_name_t 
 }
 
 // call find var first
-dope_var_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name) {
+dope_variable_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name) {
     if(vartab->size == vartab->capacity) {
         dope_panic(vartab->size, DOPE_ERR_OUT_OF_VARS, name);
         exit(EXIT_FAILURE);
@@ -59,9 +62,9 @@ dope_var_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name)
     return &vartab->vars[vartab->size++];
 }
 
-// read variable must exist
+// read so variable must exist
 const float* dope_pfloat_read_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
-    dope_var_t* var = private_find_var(vartab, name);
+    dope_variable_t* var = private_find_var(vartab, name);
     if(!var) {
         dope_panic(vartab->size, DOPE_ERR_VAR_NOT_FOUND, name);
         exit(EXIT_FAILURE);
@@ -69,11 +72,11 @@ const float* dope_pfloat_read_var(const dope_vartab_t* vartab, const dope_var_na
     return &(var->value.number);
 }
 
-// write variable may create 
-float* dope_pfloat_write_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
-    dope_var_t* var = private_find_var(vartab, name);
+// write so variable may create
+float* dope_pfloat_write_var(dope_vartab_t* vartab, const dope_var_name_t name) {
+    dope_variable_t* var = private_find_var(vartab, name);
     if(!var) {
-        var = private_alloc_var(vartab, name)
+        var = private_alloc_var(vartab, name);
     }
     return &(var->value.number);
 }
@@ -95,7 +98,7 @@ void dope_print_vartab(const dope_vartab_t* vartab) {
 
 
 /*
-dope_var_t* dope_find_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
+dope_variable_t* dope_find_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
     for(int i = 0; i < vartab->size; ++i) {
         if(strcmp(name, vartab->vars[i].name) == 0) {
             return &vartab->vars[i];
@@ -104,7 +107,7 @@ dope_var_t* dope_find_var(const dope_vartab_t* vartab, const dope_var_name_t nam
     return NULL;
 }
 
-dope_var_t* dope_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name) {
+dope_variable_t* dope_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name) {
     if(vartab->size == vartab->capacity) {
         dope_panic(vartab->size, DOPE_ERR_OUT_OF_VARS, name);
         exit(EXIT_FAILURE);

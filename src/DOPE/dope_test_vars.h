@@ -1,7 +1,7 @@
 #ifndef DOPE_TEST_VARS_H
 #define DOPE_TEST_VARS_H
 
-#include "dope_variable.h"
+#include "dope_variables.h"
 #include "dope_errors.h"
 #include <assert.h>
 #include <stdio.h>

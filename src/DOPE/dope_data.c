@@ -31,10 +31,6 @@ void dope_clear_arg(dope_argument_t* arg) {
     memset(arg, 0, sizeof(dope_argument_t));
 }
 
-bool dope_is_number(char* str) {
-    return (*str == '+' || *str== '-' || isdigit(*str));
-}
-
 // check dope_is_number before calling
 void dope_parse_number(dope_argument_t* arg) {
     char* str = arg->value.label;

@@ -11,8 +11,8 @@
  * by E, F, G, and H, followed by brackets.
  *
  */
-#ifndef DOPE_VARIABLE_H
-#define DOPE_VARIABLE_H
+#ifndef DOPE_VARIABLES_H
+#define DOPE_VARIABLES_H
 
 #include "dope_types.h"
 #include <stdbool.h>
@@ -46,7 +46,7 @@ void dope_free_vartab(dope_vartab_t* vartab);
 
 const float* dope_pfloat_read_var(const dope_vartab_t* vartab, const dope_var_name_t name);
 
-float* dope_pfloat_write_var(const dope_vartab_t* vartab, const dope_var_name_t name);
+float* dope_pfloat_write_var(dope_vartab_t* vartab, const dope_var_name_t name);
 
 void dope_print_var(const dope_variable_t* var);
 
