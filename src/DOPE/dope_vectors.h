@@ -12,7 +12,7 @@
 #include <stdint.h>
 
 typedef struct {
-    dope_float_t values[DOPE_VECTOR_SIZE];
+    dope_vector_t vectors[DOPE_VECTORS_MAX];
     dope_size_t size;
     dope_size_t capacity;
 } dope_vectab_t;
