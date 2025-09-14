@@ -1,6 +1,7 @@
 #ifndef DOPE_TEST_VARS_H
 #define DOPE_TEST_VARS_H
 
+#include "dope_types.h"
 #include "dope_variables.h"
 #include "dope_errors.h"
 #include <assert.h>
@@ -16,7 +17,7 @@ void test_dope_vars() {
     assert(vartab->size == 0);
 
     // Case 1: alloc new var
-    float* a = dope_pvar(vartab, "A");
+    dope_float_t* a = dope_pvar(vartab, "A");
     assert(a != NULL);
     assert(*dope_const_pvar(vartab, "A") == 0.0f);
     *dope_pvar(vartab, "A") = 1.1f;

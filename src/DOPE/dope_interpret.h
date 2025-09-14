@@ -24,30 +24,3 @@ void dope_interpret(dope_program_t* program, dope_data_t* data) {
 }
 
 #endif
-
-vartab
-
-typedef struct {
-    char name[2];        // "A", "X", etc.
-    float value;
-} dope_var_t;
-
-dope_var_t vartab[DOPE_VAR_CAPACITY];  // e.g., 26 variables
-int vartab_count = 0;
-
-float* dope_find_var(const char* name);
-float* dope_alloc_var(const char* name);
-
-arrtab
-
-typedef struct {
-    char name;           // 'E', 'F', 'G', 'H'
-    float data[16];      // 1-based indexing
-} dope_array_t;
-
-dope_array_t arrtab[4];  // E, F, G, H
-
-// E[5] = X
-float* dest = dope_array_ref('E', 5);
-float* src  = dope_find_var("X");
-*dest = *src;

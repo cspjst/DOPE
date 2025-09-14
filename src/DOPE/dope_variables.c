@@ -1,5 +1,6 @@
 #include "dope_variables.h"
 #include "dope_errors.h"
+#include "dope_types.h"
 #include "dope_utility.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,7 +65,7 @@ dope_variable_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t 
 }
 
 // read so variable must exist
-const float* dope_const_pvar(const dope_vartab_t* vartab, const dope_var_name_t name) {
+const dope_float_t* dope_const_pvar(const dope_vartab_t* vartab, const dope_var_name_t name) {
     dope_variable_t* var = private_find_var(vartab, name);
     if(!var) {
         dope_panic(vartab->size, DOPE_ERR_VAR_NOT_FOUND, name);
@@ -73,7 +74,7 @@ const float* dope_const_pvar(const dope_vartab_t* vartab, const dope_var_name_t 
     return &(var->value.number);
 }
 
-float* dope_pvar(dope_vartab_t* vartab, const dope_var_name_t name) {
+dope_float_t* dope_pvar(dope_vartab_t* vartab, const dope_var_name_t name) {
     dope_variable_t* var = private_find_var(vartab, name);
     if(!var) {
         var = private_alloc_var(vartab, name);
@@ -95,38 +96,3 @@ void dope_print_vartab(const dope_vartab_t* vartab) {
         dope_print_var(&vartab->vars[i]);
     }
 }
-
-
-/*
-dope_variable_t* dope_find_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
-    for(int i = 0; i < vartab->size; ++i) {
-        if(strcmp(name, vartab->vars[i].name) == 0) {
-            return &vartab->vars[i];
-        }
-    }
-    return NULL;
-}
-
-dope_variable_t* dope_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name) {
-    if(vartab->size == vartab->capacity) {
-        dope_panic(vartab->size, DOPE_ERR_OUT_OF_VARS, name);
-        exit(EXIT_FAILURE);
-    }
-    if(dope_find_var(vartab, name)) {
-        dope_panic(vartab->size + 1, DOPE_ERR_LINE_TOO_LONG, name);
-        exit(EXIT_FAILURE);
-    }
-    if(strlen(name) == DOPE_VAR_NAME_SIZE) {
-        dope_panic(vartab->size + 1, DOPE_ERR_LINE_TOO_LONG, name);
-        exit(EXIT_FAILURE);
-    }
-    if(dope_is_number((char*)name)) {
-        dope_panic(vartab->size + 1, DOPE_ERR_INVALID_CHAR, name);
-        exit(EXIT_FAILURE);
-    }
-    dope_string_toupper((char*)name);
-    strcpy(vartab->vars[vartab->size].name, name);
-    // calloc zeroed the rest
-    return &vartab->vars[vartab->size++];
-}
-*/
