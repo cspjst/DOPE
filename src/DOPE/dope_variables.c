@@ -58,12 +58,13 @@ dope_variable_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t 
     }
     dope_string_toupper((char*)name);
     strcpy(vartab->vars[vartab->size].name, name);
+    vartab->vars[vartab->size].type = DOPE_NUMBER;
     // calloc zeroed the rest
     return &vartab->vars[vartab->size++];
 }
 
 // read so variable must exist
-const float* dope_pfloat_read_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
+const float* dope_const_pvar(const dope_vartab_t* vartab, const dope_var_name_t name) {
     dope_variable_t* var = private_find_var(vartab, name);
     if(!var) {
         dope_panic(vartab->size, DOPE_ERR_VAR_NOT_FOUND, name);
@@ -72,8 +73,7 @@ const float* dope_pfloat_read_var(const dope_vartab_t* vartab, const dope_var_na
     return &(var->value.number);
 }
 
-// write so variable may create
-float* dope_pfloat_write_var(dope_vartab_t* vartab, const dope_var_name_t name) {
+float* dope_pvar(dope_vartab_t* vartab, const dope_var_name_t name) {
     dope_variable_t* var = private_find_var(vartab, name);
     if(!var) {
         var = private_alloc_var(vartab, name);
