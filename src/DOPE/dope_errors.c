@@ -17,6 +17,7 @@ const char* const DOPE_ERROR_MESSAGES[] = {
     "Variable name not found!", // DOPE_ERR_VAR_NOT_FOUND
     "Vector name not found!",   // DOPE_ERR_VEC_NOT_FOUND
     "Variable table full!",     // DOPE_ERR_OUT_OF_VARS
+    "Type mismatch!",           // DOPE_ERR_TYPE_MISMATCH
     "Absent/malformed ending!"  // DOPE_ERR_FINISH
 };
 

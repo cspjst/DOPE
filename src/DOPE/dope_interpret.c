@@ -1,8 +1,11 @@
 #include "dope_interpret.h"
 #include "dope_constants.h"
+#include "dope_data.h"
+#include "dope_program.h"
 #include "dope_types.h"
 #include "dope_vectors.h"
 #include <assert.h>
+#include <inttypes.h>
 
 dope_fn_t dispatch_table[] = {
     [DOPE_OP_ADD] = NULL,
@@ -15,10 +18,10 @@ dope_fn_t dispatch_table[] = {
     [DOPE_OP_LOG] = NULL,
     [DOPE_OP_SIN] = NULL,
     [DOPE_OP_COMPARE] = NULL,
-    [DOPE_OP_GOTO] = NULL,
-    [DOPE_OP_LABEL] = NULL,
+    [DOPE_OP_GOTO] = dope_goto,
+    [DOPE_OP_LABEL] = dope_print_label,
     [DOPE_OP_PRINT] = NULL,
-    [DOPE_OP_NEWLN] = NULL,
+    [DOPE_OP_NEWLN] = dope_println,
     [DOPE_OP_INPUT] = NULL,
     [DOPE_OP_LOOP] = NULL,
     [DOPE_OP_END] = NULL,
@@ -35,21 +38,43 @@ void dope_interpret(
     dope_vectab_t* vectab = dope_new_vectab();
     assert(vartab);
     assert(vectab);
-    dope_size_t ip = program->size - 1;
-    while(program->instructions[ip].opcode != DOPE_OP_STOP) {
-        dope_instruction_t* p = &program->instructions[ip];
-        dope_fn_t fn =dispatch_table[p->opcode];
-        fn(&ip, vartab, vectab, data);
+    while(program->ip < program->size) {
+        dope_fn_t fn = dispatch_table[dope_opcode(program)];
+        fn(program, vartab, vectab, data);
     }
-
     dope_free_vectab(vectab);
     dope_free_vartab(vartab);
 }
 
-void dope_stop(dope_size_t* ip, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data) {
-
+// 11. T - transfer execution to line number
+void dope_goto(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data) {
+    char* endptr = NULL;
+    // dope_field_to_int(program, 1)
+    // dope_field_to_float(program, 2)
+    // dope_field_to_str(program, 3)
+    program->ip = (dope_size_t)strtoimax(program->instructions[program->ip].fields[1], &endptr, 10) - 1;
 }
 
-void dope_start(dope_size_t* ip, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data) {
-    *ip = 0;
+// 12. A - Print label
+void dope_print_label(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data) {
+    printf("%s", (char*)dope_next_label(data));
+    program->ip++;
+}
+
+// 14. N - Printer: Start new line
+void dope_println(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data) {
+    printf("\n>");
+    program->ip++;
+}
+
+// 18. F - Stop! (To be used as final step for single data set)
+void dope_stop(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data) {
+    printf("\n>STOP\n");
+    program->ip = program->size;
+}
+
+// 19. S - Start computing. Must be on bottom of all programs.
+void dope_start(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data) {
+    printf("\n>START\n>");
+    program->ip = 0;
 }

@@ -28,6 +28,7 @@ typedef struct {
 } dope_argument_t;
 
 typedef struct {
+    dope_size_t si;
     dope_argument_t* args;
     dope_size_t size;
     dope_size_t capacity;
@@ -46,6 +47,10 @@ void dope_parse_label(dope_argument_t* arg);
 void dope_input_arg(dope_argument_t* arg, FILE* istream);
 
 void dope_input_data(dope_data_t* data, FILE* istream);
+
+dope_line_t* dope_next_label(dope_data_t* data);
+
+dope_float_t* dope_next_number(dope_data_t* data);
 
 void dope_print_raw_arg(dope_argument_t* arg);
 

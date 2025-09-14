@@ -27,6 +27,7 @@ dope_program_t* dope_new_program(uint8_t line_count) {
         free(program);
         return NULL;
     }
+    program->ip = 0;
     program->capacity = line_count;
     program->size = 0;
     return program;
@@ -149,6 +150,7 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
     }
     program->size = 0;
     while (program->size < program->capacity) {
+        printf("%i ", program->size + 1);
         // 1. parse next instruction
         dope_input_instruction(&program->instructions[program->size], stream);
         // 2. no input (EOF)
@@ -168,6 +170,7 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
         // 4. stop on 'S' instruction (opcode 19)
         if (program->instructions[program->size].opcode == DOPE_OP_START) {
             if(program->instructions[program->size - 1].opcode == DOPE_OP_STOP) {
+                program->ip = program->size;
                 program->size++;
                 return;
             }
@@ -180,6 +183,10 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
         program->size++;
     }
     dope_panic(program->size, DOPE_ERR_FINISH, "Program exceeds capacity");
+}
+
+dope_opcode_t dope_opcode(dope_program_t* program) {
+    return program->instructions[program->ip].opcode;
 }
 
 void dope_print_instruction(dope_instruction_t* instruction) {

@@ -15,6 +15,7 @@ dope_data_t* dope_new_data(uint8_t line_count) {
         free(data);
         return NULL;
     }
+    data->si = 0;
     data->capacity = line_count;
     data->size = 0;
     return data;
@@ -134,11 +135,12 @@ void dope_input_data(dope_data_t* data, FILE* istream) {
     }
     data->size = 0;
     while (data->size < data->capacity) {
+        printf("%i ", data->size + 1);
         // 1. Parse next datum
         dope_input_arg(&data->args[data->size], istream);
         // 2. No input (EOF)
         if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
-            dope_panic(data->size, data->args[data->size].error_code, "EOF without 'FINISH'");
+            dope_panic(data->size, data->args[data->size].error_code, "EOF without FINISH'");
             continue;
         }
         // 3. error
@@ -154,6 +156,18 @@ void dope_input_data(dope_data_t* data, FILE* istream) {
         // 5. valid datum
         data->size++;
     }
+}
+
+dope_line_t* dope_next_label(dope_data_t* data) {
+    if(data->args[data->si].type != DOPE_DATA_LABEL) {
+        dope_panic(data->si, DOPE_ERR_TYPE_MISMATCH, "(expected label type)");
+        exit(EXIT_FAILURE);
+    }
+    return &data->args[data->si++].value.label;
+}
+
+dope_float_t* dope_next_number(dope_data_t* data) {
+    return NULL;
 }
 
 void dope_print_raw_arg(dope_argument_t* arg) {

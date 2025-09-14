@@ -20,6 +20,7 @@ typedef struct {
 } dope_instruction_t;
 
 typedef struct {
+    dope_size_t ip;
     dope_instruction_t* instructions;
     dope_size_t size;
     dope_size_t capacity;
@@ -38,6 +39,8 @@ dope_size_t dope_lookup_opcode(const char* mnemonic);
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream);
 
 void dope_input_program(dope_program_t* program, FILE* stream);
+
+dope_opcode_t dope_opcode(dope_program_t* program);
 
 void dope_print_instruction(dope_instruction_t* instruction);
 

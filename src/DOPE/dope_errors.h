@@ -21,6 +21,7 @@ typedef enum {
     DOPE_ERR_VAR_NOT_FOUND,     // variable not found in vartab
     DOPE_ERR_VEC_NOT_FOUND,     // vector not found in vectab
     DOPE_ERR_OUT_OF_VARS,       // vartab full
+    DOPE_ERR_TYPE_MISMATCH,     // type mismatch
     DOPE_ERR_FINISH             // absent or malformed
 } dope_error_t;
 
