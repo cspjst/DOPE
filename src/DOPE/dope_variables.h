@@ -44,6 +44,8 @@ dope_vartab_t* dope_new_vartab(dope_size_t capacity);
 
 void dope_free_vartab(dope_vartab_t* vartab);
 
+bool dope_is_valid_var_name(const char* name);
+
 const dope_float_t* dope_const_pvar(const dope_vartab_t* vartab, const dope_var_name_t name);
 
 dope_float_t* dope_pvar(dope_vartab_t* vartab, const dope_var_name_t name);
