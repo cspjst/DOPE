@@ -34,6 +34,29 @@ void dope_free_vartab(dope_vartab_t* vartab)  {
     }
 }
 
+bool dope_is_valid_var_name(const char* name) {
+    if (!name || !*name) return false;
+    size_t len = strlen(name);
+    if (len == 1) {    
+        return ( // variable is a capital letter not L or O (ambiguity 1 and 0)...
+            islower(name[0]) ||
+            isdigit(name[0]) || 
+            name[0] == 'L' || 
+            name[0] == 'O'
+        ) ? false : true;  
+    }
+    if (len == 2) { 
+        return( // ...or letter followed by a single digit.
+            islower(name[0]) ||
+            isdigit(name[0]) || 
+            name[0] == 'L' || 
+            name[0] == 'O' || 
+            !isdigit(name[1])
+        ) ? false : true;
+    }
+    return false; // Anything else — invalid
+}
+
 dope_variable_t* private_find_var(const dope_vartab_t* vartab, const dope_var_name_t name) {
     for(int i = 0; i < vartab->size; ++i) {
         if(strcmp(name, vartab->vars[i].name) == 0) {
@@ -49,15 +72,11 @@ dope_variable_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t 
         dope_panic(vartab->size, DOPE_ERR_OUT_OF_VARS, name);
         exit(EXIT_FAILURE);
     }
-    if(strlen(name) == DOPE_VAR_NAME_SIZE) {
-        dope_panic(vartab->size + 1, DOPE_ERR_LINE_TOO_LONG, name);
-        exit(EXIT_FAILURE);
-    }
-    if(dope_is_number((char*)name)) {
-        dope_panic(vartab->size + 1, DOPE_ERR_INVALID_CHAR, name);
-        exit(EXIT_FAILURE);
-    }
     dope_string_toupper((char*)name);
+    if(!dope_is_valid_var_name(name) {
+        dope_panic(0, DOPE_ERR_INVALID_FIELD, name);
+        exit(EXIT_FAILURE);
+    }
     strcpy(vartab->vars[vartab->size].name, name);
     vartab->vars[vartab->size].type = DOPE_NUMBER;
     // calloc zeroed the rest
