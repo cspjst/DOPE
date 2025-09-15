@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 const char* const DOPE_INSTRUCTIONS[] = {
     "+", "-", ".", "/", ";", "SQR", "EXP", "LOG", "SIN",
@@ -189,7 +190,69 @@ dope_opcode_t dope_opcode(dope_program_t* program) {
     return program->instructions[program->ip].opcode;
 }
 
-void dope_print_instruction(dope_instruction_t* instruction) {
+dope_size_t dope_field_to_int(const dope_program_t* program, int i) {
+    char* field = program->instructions[program->ip].fields[i];
+    if (!field || !*field) {
+        dope_panic(program->ip, DOPE_ERR_INVALID_FIELD, "(empty field)");
+        return 0;
+    }
+    char* endptr = NULL;
+    errno = 0;  // reset errno
+    intmax_t val = strtoimax(field, &endptr, DOPE_BASE_10);
+    if (endptr == field) {
+        dope_panic(program->ip, DOPE_ERR_INVALID_NUMBER_FORMAT, "(no digits)");
+        return 0;
+    }
+    if (*endptr != '\0') {
+        dope_panic(program->ip, DOPE_ERR_INVALID_NUMBER_FORMAT, "(trailing garbage)");
+        return 0;
+    }
+    if (errno == ERANGE) {
+        dope_panic(program->ip, DOPE_ERR_NUMBER_OUT_OF_RANGE, "(integer out of range)");
+        return 0;
+    }
+    if (val < 0 || val > DOPE_PROGRAM_LINES_MAX) {
+        dope_panic(program->ip, DOPE_ERR_NUMBER_OUT_OF_RANGE, "(integer out of bounds)");
+        return 0;
+    }
+    return (dope_size_t)val;
+}
+
+dope_float_t dope_field_to_float(const dope_program_t* program, int i) {
+    char* field = program->instructions[program->ip].fields[i];
+    if (!field || !*field) {
+        dope_panic(program->ip, DOPE_ERR_INVALID_FIELD, "empty field");
+        return 0.0f;
+    }
+    char* endptr = NULL;
+    errno = 0;
+    double val = strtod(field, &endptr);
+    if (endptr == field) {
+        dope_panic(program->ip, DOPE_ERR_INVALID_NUMBER_FORMAT, "no digits");
+        return 0.0f;
+    }
+    if (*endptr != '\0') {
+        dope_panic(program->ip, DOPE_ERR_INVALID_NUMBER_FORMAT, "trailing garbage");
+        return 0.0f;
+    }
+    if (errno == ERANGE) {
+        dope_panic(program->ip, DOPE_ERR_NUMBER_OUT_OF_RANGE, "float out of range");
+        return 0.0f;
+    }
+    return (dope_float_t)val;
+}
+
+const char* dope_field_to_str(const dope_program_t* program, int i) {
+    char* dope_field_to_str(dope_program_t* program, int i) {
+    char* field = program->instructions[program->ip].fields[i];
+    if (!field || !*field) {
+        dope_panic(program->ip, DOPE_ERR_INVALID_FIELD, "empty field");
+        return NULL;
+    }
+    return field;
+}
+
+void dope_print_instruction(const dope_instruction_t* instruction) {
     printf("%s %s %s %s %s\n",
         instruction->fields[0],
         instruction->fields[1],
@@ -202,7 +265,7 @@ void dope_print_instruction(dope_instruction_t* instruction) {
     }
 }
 
-void dope_print_program(dope_program_t* program) {
+void dope_print_program(const dope_program_t* program) {
    for(int i = 0; i < program->size; i++) {
        printf("%i ", i + 1); // line number
        dope_print_instruction(&program->instructions[i]);
