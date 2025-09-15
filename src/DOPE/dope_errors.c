@@ -26,6 +26,7 @@ const char* dope_error_message(dope_error_t error_code) {
     return DOPE_ERROR_MESSAGES[error_code];
 }
 
-void dope_panic(uint8_t line, dope_error_t e, const char* info) {
+void* dope_panic(uint8_t line, dope_error_t e, const char* info) {
     printf("ERROR input %d: %s %s\n", line, dope_error_message(e), info);
+    return NULL;
 }

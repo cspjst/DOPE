@@ -18,7 +18,7 @@ dope_size_t dope_read_line(dope_line_t* line, FILE* istream);
 
 bool dope_has_space(const char* str);
 
-inline bool dope_is_number(char* str) {
+inline bool dope_is_number(const char* str) {
     return (*str == '+' || *str== '-' || isdigit(*str));
 }
 

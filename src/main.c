@@ -13,7 +13,7 @@ int main() {
     dope_input_data(data, stdin);
     printf("Press <ENTER> to run\n");
     getchar();
-    dope_interpret(1, program, data);
+    dope_interpret(15, program, data);
 
     dope_free_program(program);
     dope_free_data(data);

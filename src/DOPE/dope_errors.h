@@ -17,7 +17,7 @@ typedef enum {
     DOPE_ERR_INVALID_CHAR,      // eg found a space at input
     DOPE_ERR_INVALID_NUMBER_FORMAT, // does not meet DOPE format
     DOPE_ERR_INVALID_FIELD,     // invalid data in field
-    DOPE_ERR_NUMBER_OUT_OF_RANGE, // 
+    DOPE_ERR_NUMBER_OUT_OF_RANGE, //
     DOPE_ERR_MISSING_STOP_CODE, // expected ' not found
     DOPE_ERR_VAR_NOT_FOUND,     // variable not found in vartab
     DOPE_ERR_VEC_NOT_FOUND,     // vector not found in vectab
@@ -28,6 +28,6 @@ typedef enum {
 
 const char* dope_error_message(dope_error_t error_code);
 
-void dope_panic(dope_size_t line, dope_error_t e, const char* info);
+void* dope_panic(dope_size_t line, dope_error_t e, const char* info);
 
 #endif

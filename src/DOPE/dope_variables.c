@@ -35,22 +35,21 @@ void dope_free_vartab(dope_vartab_t* vartab)  {
 }
 
 bool dope_is_valid_var_name(const char* name) {
-    if (!name || !*name) return false;
     size_t len = strlen(name);
-    if (len == 1) {    
+    if (len == 1) {
         return ( // variable is a capital letter not L or O (ambiguity 1 and 0)...
             islower(name[0]) ||
-            isdigit(name[0]) || 
-            name[0] == 'L' || 
+            isdigit(name[0]) ||
+            name[0] == 'L' ||
             name[0] == 'O'
-        ) ? false : true;  
+        ) ? false : true;
     }
-    if (len == 2) { 
+    if (len == 2) {
         return( // ...or letter followed by a single digit.
             islower(name[0]) ||
-            isdigit(name[0]) || 
-            name[0] == 'L' || 
-            name[0] == 'O' || 
+            isdigit(name[0]) ||
+            name[0] == 'L' ||
+            name[0] == 'O' ||
             !isdigit(name[1])
         ) ? false : true;
     }
@@ -69,13 +68,11 @@ dope_variable_t* private_find_var(const dope_vartab_t* vartab, const dope_var_na
 // call find var first
 dope_variable_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t name) {
     if(vartab->size == vartab->capacity) {
-        dope_panic(vartab->size, DOPE_ERR_OUT_OF_VARS, name);
-        exit(EXIT_FAILURE);
+        return dope_panic(vartab->size, DOPE_ERR_OUT_OF_VARS, name);
     }
-    dope_string_toupper((char*)name); // flexowriter was lower case and converted by LGP30 to upper case 
-    if(!dope_is_valid_var_name(name) {
-        dope_panic(0, DOPE_ERR_INVALID_FIELD, name);
-        exit(EXIT_FAILURE);
+    dope_string_toupper((char*)name); // flexowriter was lower case and converted by LGP30 to upper case
+    if(!dope_is_valid_var_name(name)) {
+        return dope_panic(0, DOPE_ERR_INVALID_FIELD, name);
     }
     strcpy(vartab->vars[vartab->size].name, name);
     vartab->vars[vartab->size].type = DOPE_NUMBER;
@@ -87,8 +84,7 @@ dope_variable_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t 
 const dope_float_t* dope_const_pvar(const dope_vartab_t* vartab, const dope_var_name_t name) {
     dope_variable_t* var = private_find_var(vartab, name);
     if(!var) {
-        dope_panic(vartab->size, DOPE_ERR_VAR_NOT_FOUND, name);
-        exit(EXIT_FAILURE);
+        return dope_panic(vartab->size, DOPE_ERR_VAR_NOT_FOUND, name);
     }
     return &(var->value.number);
 }
