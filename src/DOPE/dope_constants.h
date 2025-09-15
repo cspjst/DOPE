@@ -3,7 +3,7 @@
 
 #define DOPE_STOP '\''           // Page 13 DOPE teaching notes 1962 "stop code"
 #define DOPE_STOP_STR "'"        // As string for strtok
-#define DOPE_FINISH_STR "FINISH"
+#define DOPE_FINISH_STR "finish"
 
 #define DOPE_PROGRAM_LINES_MAX     99   // Max number of source lines in program (1–99)
 #define DOPE_LINE_SIZE             40   // Max length of input line including '\0'
@@ -15,6 +15,8 @@
 #define DOPE_VECTORS_MAX            4   // Page 7 ...
 #define DOPE_VAR_NAME_SIZE          3   // Page 7 ... "PI" + '\0'
 #define DOPE_VEC_NAME_SIZE          6   // Page 7 ... "H[16]" + '\0'
+
+#define DOPE_BASE_10               10   // for strtoimax functions
 
 typedef enum {
     DOPE_OP_INVALID = 0,
