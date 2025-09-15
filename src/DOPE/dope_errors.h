@@ -16,8 +16,9 @@ typedef enum {
     DOPE_ERR_LINE_TOO_LONG,     // input line too long
     DOPE_ERR_INVALID_CHAR,      // eg found a space at input
     DOPE_ERR_INVALID_NUMBER_FORMAT, // does not meet DOPE format
-    DOPE_ERR_EXPONENT_OUT_OF_RANGE, // -36 < e > 36
-    DOPE_ERR_MISSING_STOP_CODE,     // exoected ' not found
+    DOPE_ERR_INVALID_FIELD,     // invalid data in field
+    DOPE_ERR_NUMBER_OUT_OF_RANGE, // 
+    DOPE_ERR_MISSING_STOP_CODE, // expected ' not found
     DOPE_ERR_VAR_NOT_FOUND,     // variable not found in vartab
     DOPE_ERR_VEC_NOT_FOUND,     // vector not found in vectab
     DOPE_ERR_OUT_OF_VARS,       // vartab full
