@@ -12,7 +12,8 @@ const char* const DOPE_ERROR_MESSAGES[] = {
     "Input too long!",          // DOPE_ERR_LINE_TOO_LONG
     "Invalid char!",            // DOPE_ERR_INVALID_CHAR
     "Wrong number format!",     // DOPE_ERR_INVALID_NUMBER_FORMAT
-    "Exponent out of range!",   // DOPE_ERR_EXPONENT_OUT_OF_RANGE
+    "Invalid data in field!",   // DOPE_ERR_INVALID_FIELD
+    "Number out of range!",     // DOPE_ERR_NUMBER_OUT_OF_RANGE
     "Missing stop code!",       // DOPE_ERR_MISSING_STOP_CODE
     "Variable name not found!", // DOPE_ERR_VAR_NOT_FOUND
     "Vector name not found!",   // DOPE_ERR_VEC_NOT_FOUND
