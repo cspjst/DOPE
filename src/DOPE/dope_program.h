@@ -42,14 +42,14 @@ void dope_input_program(dope_program_t* program, FILE* stream);
 
 dope_opcode_t dope_opcode(dope_program_t* program);
 
-dope_size_t dope_field_to_int(dope_program_t* program, int i);
+dope_size_t dope_field_to_int(const dope_program_t* program, int i);
 
-dope_float_t dope_field_to_float(dope_program_t* program, int i);
+dope_float_t dope_field_to_float(const dope_program_t* program, int i);
 
-char* dope_field_to_str(dope_program_t* program, int i);
+const char* dope_field_to_str(const dope_program_t* program, int i);
 
-void dope_print_instruction(dope_instruction_t* instruction);
+void dope_print_instruction(const dope_instruction_t* instruction);
 
-void dope_print_program(dope_program_t* program);
+void dope_print_program(const dope_program_t* program);
 
 #endif
