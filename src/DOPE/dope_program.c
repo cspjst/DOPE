@@ -243,7 +243,6 @@ dope_float_t dope_field_to_float(const dope_program_t* program, int i) {
 }
 
 const char* dope_field_to_str(const dope_program_t* program, int i) {
-    char* dope_field_to_str(dope_program_t* program, int i) {
     char* field = program->instructions[program->ip].fields[i];
     if (!field || !*field) {
         dope_panic(program->ip, DOPE_ERR_INVALID_FIELD, "empty field");
