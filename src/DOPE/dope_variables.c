@@ -72,7 +72,7 @@ dope_variable_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t 
         dope_panic(vartab->size, DOPE_ERR_OUT_OF_VARS, name);
         exit(EXIT_FAILURE);
     }
-    dope_string_toupper((char*)name);
+    dope_string_toupper((char*)name); // flexowriter was lower case and converted by LGP30 to upper case 
     if(!dope_is_valid_var_name(name) {
         dope_panic(0, DOPE_ERR_INVALID_FIELD, name);
         exit(EXIT_FAILURE);
