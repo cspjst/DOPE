@@ -5,7 +5,7 @@
 #include "dope_types.h"
 #include "dope_vectors.h"
 #include <assert.h>
-#include <inttypes.h>
+
 
 dope_fn_t dispatch_table[] = {
     [DOPE_OP_ADD] = NULL,
@@ -48,11 +48,7 @@ void dope_interpret(
 
 // 11. T - transfer execution to line number
 void dope_goto(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data) {
-    char* endptr = NULL;
-    // dope_field_to_int(program, 1)
-    // dope_field_to_float(program, 2)
-    // dope_field_to_str(program, 3)
-    program->ip = (dope_size_t)strtoimax(program->instructions[program->ip].fields[1], &endptr, 10) - 1;
+    program->ip = dope_field_to_int(program, 1) - 1;    // retrieve the line number from current ip instruction's 2nd field and zero adjust 
 }
 
 // 12. A - Print label
