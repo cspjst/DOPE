@@ -80,6 +80,14 @@ dope_variable_t* private_alloc_var(dope_vartab_t* vartab, const dope_var_name_t 
     return &vartab->vars[vartab->size++];
 }
 
+dope_float_t dope_var_read(const dope_vartab_t* vartab, const dope_var_name_t name) {
+
+}
+
+void dope_var_write(dope_vartab_t* vartab, dope_float_t number, const dope_var_name_t name) {
+
+}
+
 // read so variable must exist
 const dope_float_t* dope_const_pvar(const dope_vartab_t* vartab, const dope_var_name_t name) {
     dope_variable_t* var = private_find_var(vartab, name);
