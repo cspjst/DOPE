@@ -7,11 +7,12 @@ void parse_regex_init_dispatch_table() {
     is_init_dispatch_table = true;
 }
 
-bool parse_regex(const char **rgx, const char **str) {
+bool parse_regex(const char* regex, const char* string) {
+    const char* rgx = regex;
+    const char* str = string;
     if(!is_init_dispatch_table) {
         parse_regex_init_dispatch_table
     }
-    parse_regex_init_dispatch_table();
     return parse_regex_dispatch(rgx, str);
 }
 
