@@ -29,9 +29,7 @@ void parse_regex_init_dispatch_table();
 bool parse_regex_dispatch(const char **rgx, const char **str)
 
 // Main entry point: checks if the entire text matches the regex
-bool parse_regex(const char *regex, const char *text) {
-    return parse_regex_dispatch(rgx, str);
-}
+bool parse_regex(const char *regex, const char *text);
 
 bool parse_anchor_start(const char **rgx, const char **str, char expected);
 
