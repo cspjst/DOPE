@@ -1,5 +1,19 @@
 #include "parse_regex.h" 
 
+void parse_regex_init_dispatch_table() {
+    dispatch_table['^' - '$'] = parse_anchor_start;
+    dispatch_table['$' - '$'] = parse_anchor_end;
+    dispatch_table['.' - '$'] = parse_wildcard;    
+}
+
+bool parse_regex(const char **rgx, const char **str) {
+    if(!is_init_dispatch_table) {
+        parse_regex_init_dispatch_table
+    }
+    parse_regex_init_dispatch_table();
+    return parse_regex_dispatch(rgx, str);
+}
+
 bool parse_regex_dispatch(const char **rgx, const char **str) {
     while (**rgx != '\0') {
         char regex_char = **rgx;
@@ -17,13 +31,6 @@ bool parse_regex_dispatch(const char **rgx, const char **str) {
     }
     // regex pattern was consumed successfully
     return true;
-}
-
-bool parse_regex(const char *regex, const char *text) {
-    init_dispatch_table(); // Initialize the jump table
-    const char *rgx = regex;
-    const char *str = text;
-    return match_here(&rgx, &str);
 }
 
 // ^ the current position in the text must be the very first position 
