@@ -140,7 +140,7 @@ void dope_input_data(dope_data_t* data, FILE* istream) {
         dope_input_arg(&data->args[data->size], istream);
         // 2. No input (EOF)
         if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
-            dope_panic(data->size, data->args[data->size].error_code, "EOF without FINISH'");
+            dope_panic(data->size, data->args[data->size].error_code, "EOF without finish'");
             continue;
         }
         // 3. error
@@ -148,7 +148,7 @@ void dope_input_data(dope_data_t* data, FILE* istream) {
             dope_panic(data->size, data->args[data->size].error_code, data->args[data->size].value.label);
             continue;
         }
-        // 4. stop on 'FINISH' marker
+        // 4. stop on finish' marker
         if (data->args[data->size].type == DOPE_DATA_FINISH) {
             data->size++;
             return;
