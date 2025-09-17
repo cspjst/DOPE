@@ -22,14 +22,13 @@ typedef bool (*dope_regex_fn_t)(const char **rgx, const char **str);
 
 // sparse dispatch table - size 59 for chars from '$' - '$' to '^' - '$'
 static parse_regex_fn_t parse_regex_dispatch_table[59] = {0};
-static bool is_table_init = false;
+static bool is_init_dispatch_table = false;
 
 void parse_regex_init_dispatch_table(); 
 
-bool parse_regex_dispatch(const char **rgx, const char **str)
-
-// main entry point: checks if the entire text matches the regex
 bool parse_regex(const char *regex, const char *text);
+
+bool parse_regex_dispatch(const char **rgx, const char **str)
 
 // regex token parse functions:
 bool parse_anchor_start(const char **rgx, const char **str);
