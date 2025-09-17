@@ -26,9 +26,9 @@ static bool is_init_dispatch_table = false;
 
 void parse_regex_init_dispatch_table(); 
 
-bool parse_regex(const char *regex, const char *text);
+bool parse_regex(const char* regex, const char* string);
 
-bool parse_regex_dispatch(const char **rgx, const char **str)
+bool parse_regex_dispatch(const char **rgx, const char **str);
 
 // regex token parse functions:
 bool parse_anchor_start(const char **rgx, const char **str);
