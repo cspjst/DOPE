@@ -1,5 +1,9 @@
 #include "parse_regex.h" 
 
+ {
+    return parse_regex_dispatch(rgx, str);
+}
+
 dope_test_match
 bool match_here(const char **regex_ptr, const char **text_ptr) {
     // Loop until the entire regex pattern is consumed
