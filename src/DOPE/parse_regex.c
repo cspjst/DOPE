@@ -4,6 +4,7 @@ void parse_regex_init_dispatch_table() {
     dispatch_table['^' - '$'] = parse_anchor_start;
     dispatch_table['$' - '$'] = parse_anchor_end;
     dispatch_table['.' - '$'] = parse_wildcard;    
+    is_init_dispatch_table = true;
 }
 
 bool parse_regex(const char **rgx, const char **str) {
