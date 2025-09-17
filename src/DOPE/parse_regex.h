@@ -3,30 +3,32 @@
 * Subset:
 * 
 */
-#ifndef DOPE_REGEX_H
-#define DOPE_REGEX_H
+#ifndef PARSE_REGEX_H
+#define PARSE_REGEX_H
 
 #include <stdbool.h>
 
-typedef bool (*dope_regex_fn_t)(const char **rgx, const char **str);
+typedef bool (*dope_regex_fn_t)(const char **rgx, const char **str, char expected);
 
 // sparse dispatch table - size 59 for chars from '$' - '$' to '^' - '$'
-static dope_regex_handler_t dope_call_table[59] = {0};
+static parse_regex_fn_t parse_regex_fn_call_table[59] = {0};
 
-void dope_init_call_table(); 
+void parse_regex_init_call_table(); 
+
+bool parse_regex_match(const char **regex_ptr, const char **text_ptr)
 
 // Main entry point: checks if the entire text matches the regex
-bool dope_test_regex(const char *regex, const char *text) {
-    return dope_test_match(rgx, str);
+bool parse_regex(const char *regex, const char *text) {
+    return parse_regex_match(rgx, str);
 }
 
-bool dope_test_caret(const char **rgx, const char **str);
+bool match_caret(const char **rgx, const char **str, char expected);
 
-bool dope_test_dollar(const char **rgx, const char **str);
+bool match_dollar(const char **rgx, const char **str, char expected);
 
-bool dope_test_dot(const char **rgx, const char **str);
+bool match_dot(const char **rgx, const char **str, char expected);
 
-bool dope_test_literal(const char **rgx, const char **str, char expected);
+bool match_literal(const char **rgx, const char **str, char expected);
 
 #endif
 
