@@ -50,9 +50,9 @@ void dope_interpret(
 }
 
 const dope_float_t dope_read_number(dope_size_t field, dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs) {
-    const char* name = dope_field_to_str(program, i);
+    const char* name = dope_field_to_str(program, field);
     if(dope_is_number(name)) {
-        return dope_field_to_constant(program, i);
+        return dope_field_to_constant(program, field);
     }
     if(dope_is_valid_var_name(name)) {
         return *dope_const_pvar(vars, name);
@@ -63,7 +63,7 @@ const dope_float_t dope_read_number(dope_size_t field, dope_program_t* program, 
 }
 
 void dope_write_number(dope_float_t number, dope_size_t field, dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs) {
-    const char* name = dope_field_to_str(program, i);
+    const char* name = dope_field_to_str(program, field);
     if(dope_is_valid_var_name(name)) {
         *dope_pvar(vars, name) = number;
         return;

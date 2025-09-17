@@ -18,25 +18,29 @@
 
 #include <stdbool.h>
 
-typedef bool (*dope_regex_fn_t)(const char **rgx, const char **str);
+typedef bool (*parse_regex_fn_t)(const char **rgx, const char **str);
 
 // sparse dispatch table - size 59 for chars from '$' - '$' to '^' - '$'
-static parse_regex_fn_t parse_regex_dispatch_table[59] = {0};
+static parse_regex_fn_t dispatch_table[59] = {0};
 static bool is_init_dispatch_table = false;
 
-void parse_regex_init_dispatch_table(); 
+void parse_regex_init_dispatch_table(void);
 
 bool parse_regex(const char* regex, const char* string);
 
-bool parse_regex_dispatch(const char **rgx, const char **str);
+bool parse_regex_dispatch(const char** rgx, const char** str);
 
 // regex token parse functions:
-bool parse_anchor_start(const char **rgx, const char **str);
+bool parse_anchor_start(const char** rgx, const char** str);
 
-bool parse_anchor_end(const char **rgx, const char **str);
+bool parse_anchor_end(const char** rgx, const char** str);
 
-bool parse_wildcard(const char **rgx, const char **str);
+bool parse_wildcard(const char** rgx, const char** str);
 
-bool parse_literal(const char **rgx, const char **str, char expected);
+bool parse_escape(const char** rgx, const char** str);
+
+bool parse_kleene_star(const char** rgx, const char** str);
+
+bool parse_literal(const char** rgx, const char** str, char exp);
 
 #endif
