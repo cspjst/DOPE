@@ -1,7 +1,17 @@
 /**
 * Cut down regex implentation for input validation
 * Subset:
-* 
+* ASCII    Char    Purpose
+*  36	     $	    Anchor: Matches the end of the input string.
+*  42	     *	    Quantifier: Matches 0 or more of the preceding element.
+*  43	     +	    Quantifier: Matches 1 or more of the preceding element.
+*  45	     -	    Range operator: Defines a range inside a character class (e.g., a-z).
+*  46	     .	    Wildcard: Matches any single character.
+*  63	     ?	    Quantifier: Matches 0 or 1 of the preceding element.
+*  91	     [	    Starts a character class.
+*  92	     \	    Escape character: Forces the next character to be treated as literal.
+*  93	     ]	    Ends a character class.
+*  94	     ^	    Anchor: Matches the start of the input string.
 */
 #ifndef PARSE_REGEX_H
 #define PARSE_REGEX_H
