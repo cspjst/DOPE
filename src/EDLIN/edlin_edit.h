@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-edlin_file_t* edline_new_file(edlin_line_t* path, edlin_size_t capacity);
+edlin_file_t* edline_new_file(const edlin_line_t* path, edlin_size_t capacity);
 
 void edlin_free_file(edlin_file_t* file);
 
