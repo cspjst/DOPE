@@ -9,7 +9,7 @@ typedef uint16_t edlin_size_t;
 typedef char edline_line_t[EDLIN_LINE_SIZE]
 
 typedef struct {
-    edlin_line_t filename;
+    edlin_line_t path;
     edlin_line_t* lines
     edlin_size_t size;
     eclin_size_t capacity;
