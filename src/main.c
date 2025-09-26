@@ -11,6 +11,8 @@ int main() {
     dope_input_program(program, stdin);
     printf("Enter data:\n");
     dope_input_data(data, stdin);
+    dope_print_program(program, stdout);
+    dope_print_data(program, stdout);
     printf("Press <ENTER> to run\n");
     getchar();
     dope_interpret(15, program, data);
