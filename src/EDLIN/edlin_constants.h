@@ -1,6 +1,0 @@
-#ifndef EDLIN_CONSTANTS_H
-#define EDLIN_CONSTANTS_H
-
-#define EDLIN_LINE_SIZE  80
-
-#endif
