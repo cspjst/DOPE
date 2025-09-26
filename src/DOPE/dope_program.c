@@ -205,8 +205,8 @@ const char* dope_field_to_str(const dope_program_t* program, int i) {
     return program->instructions[program->ip].fields[i];
 }
 
-void dope_print_instruction(const dope_instruction_t* instruction) {
-    printf("%s %s %s %s %s\n",
+void dope_print_instruction(const dope_instruction_t* instruction, FILE* ostream) {
+    fprintf(ostream, "%s %s %s %s %s\n",
         instruction->fields[0],
         instruction->fields[1],
         instruction->fields[2],
@@ -218,10 +218,10 @@ void dope_print_instruction(const dope_instruction_t* instruction) {
     }
 }
 
-void dope_print_program(const dope_program_t* program) {
+void dope_print_program(const dope_program_t* program, FILE* ostream) {
    for(int i = 0; i < program->size; i++) {
        printf("%i ", i + 1); // line number
-       dope_print_instruction(&program->instructions[i]);
+       dope_print_instruction(&program->instructions[i], ostream);
    }
    printf("size=%i capacity=%i\n",program->size, program->capacity);
 }
