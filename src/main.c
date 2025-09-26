@@ -11,12 +11,14 @@ int main() {
     dope_input_program(program, stdin);
     printf("Enter data:\n");
     dope_input_data(data, stdin);
+    printf("Press <ENTER> to list\n");
+    getchar();
     dope_print_program(program, stdout);
     dope_print_data(program, stdout);
     printf("Press <ENTER> to run\n");
     getchar();
     dope_interpret(15, program, data);
-
+    
     dope_free_program(program);
     dope_free_data(data);
     return 0;
