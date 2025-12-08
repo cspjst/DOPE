@@ -170,8 +170,8 @@ dope_float_t* dope_next_number(dope_data_t* data) {
     return NULL;
 }
 
-void dope_print_raw_arg(dope_argument_t* arg) {
-    printf("%i %G >%s< E%i %s\n",
+void dope_print_raw_arg(dope_argument_t* arg, FILE* ostream) {
+    fprintf(ostream, "%i %G >%s< E%i %s\n",
         arg->type,
         arg->value.number,
         arg->value.label,
@@ -180,23 +180,23 @@ void dope_print_raw_arg(dope_argument_t* arg) {
     );
 }
 
-void dope_print_data(dope_data_t* data) {
+void dope_print_data(dope_data_t* data, FILE* ostream) {
     for(int i = 0; i < data->size; i++) {
-        printf("%i ", i + 1); // line number
+        fprintf(ostream, "%i ", i + 1); // line number
         switch((int)data->args[i].type) {
         case DOPE_DATA_NUMBER:
-            printf("%G\n",data->args[i].value.number);
+            fprintf(ostream, "%G\n",data->args[i].value.number);
             break;
         case DOPE_DATA_LABEL:
-             printf("%s\n",data->args[i].value.label);
+             fprintf(ostream, "%s\n",data->args[i].value.label);
              break;
         case DOPE_DATA_FINISH:
-            printf("FINISH\n");
+            fprintf(ostream, "FINISH\n");
             break;
         case DOPE_DATA_INVALID:
         default:
             dope_panic(i + 1, data->args[i].error_code, "");
        }
    }
-   printf("size=%i capacity=%i\n",data->size, data->capacity);
+   fprintf(ostream, "size=%i capacity=%i\n",data->size, data->capacity);
 }

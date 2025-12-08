@@ -214,14 +214,14 @@ void dope_print_instruction(const dope_instruction_t* instruction, FILE* ostream
         instruction->fields[4]
     );
     if(instruction->opcode == 0) {
-        printf("ERROR %s\n", dope_error_message(instruction->error_code));
+        fprintf(ostream, "ERROR %s\n", dope_error_message(instruction->error_code));
     }
 }
 
 void dope_print_program(const dope_program_t* program, FILE* ostream) {
    for(int i = 0; i < program->size; i++) {
-       printf("%i ", i + 1); // line number
+       fprintf(ostream, "%i ", i + 1); // line number
        dope_print_instruction(&program->instructions[i], ostream);
    }
-   printf("size=%i capacity=%i\n",program->size, program->capacity);
+   fprintf(ostream, "size=%i capacity=%i\n",program->size, program->capacity);
 }
