@@ -143,8 +143,8 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     instruction->error_code = DOPE_ERR_SUCCESS;
 }
 
-void dope_input_program(dope_program_t* program, FILE* stream) {
-    if (!program || !stream) {
+void dope_input_program(dope_program_t* program, FILE* istream) {
+    if (!program || !istream) {
         dope_panic(0, DOPE_ERR_NO_INPUT, "NULL program or file");
         return;
     }
@@ -152,7 +152,7 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
     while (program->size < program->capacity) {
         printf("%i ", program->size + 1);
         // 1. parse next instruction
-        dope_input_instruction(&program->instructions[program->size], stream);
+        dope_input_instruction(&program->instructions[program->size], istream);
         // 2. no input (EOF)
         if (program->instructions[program->size].error_code == DOPE_ERR_NO_INPUT) {
             dope_panic(program->size, program->instructions[program->size].error_code, "EOF without 'F'");
@@ -165,7 +165,8 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
                     program->instructions[program->size].error_code,
                     program->instructions[program->size].fields[0]
                 );
-                continue;
+                if(istream == stdin) continue;
+                else return;
         }
         // 4. stop on 'S' instruction (opcode 19)
         if (program->instructions[program->size].opcode == DOPE_OP_START) {
@@ -176,7 +177,8 @@ void dope_input_program(dope_program_t* program, FILE* stream) {
             }
             else {
                 dope_panic(program->size, DOPE_ERR_FINISH, "S but no preceding F!");
-                continue;
+                if(istream == stdin) continue;
+                else return;
             }
         }
         // 5. valid argument
@@ -223,5 +225,5 @@ void dope_print_program(const dope_program_t* program, FILE* ostream) {
        fprintf(ostream, "%i ", i + 1); // line number
        dope_print_instruction(&program->instructions[i], ostream);
    }
-   fprintf(ostream, "size=%i capacity=%i\n",program->size, program->capacity);
+   //fprintf(ostream, "size=%i capacity=%i\n",program->size, program->capacity);
 }

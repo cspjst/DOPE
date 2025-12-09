@@ -141,12 +141,14 @@ void dope_input_data(dope_data_t* data, FILE* istream) {
         // 2. No input (EOF)
         if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
             dope_panic(data->size, data->args[data->size].error_code, "EOF without finish'");
-            continue;
+            if(istream == stdin) continue;
+            else break;
         }
         // 3. error
         if (data->args[data->size].type == DOPE_DATA_INVALID) {
             dope_panic(data->size, data->args[data->size].error_code, data->args[data->size].value.label);
-            continue;
+            if(istream == stdin) continue;
+            else break;
         }
         // 4. stop on finish' marker
         if (data->args[data->size].type == DOPE_DATA_FINISH) {
@@ -198,5 +200,5 @@ void dope_print_data(dope_data_t* data, FILE* ostream) {
             dope_panic(i + 1, data->args[i].error_code, "");
        }
    }
-   fprintf(ostream, "size=%i capacity=%i\n",data->size, data->capacity);
+   //fprintf(ostream, "size=%i capacity=%i\n",data->size, data->capacity);
 }

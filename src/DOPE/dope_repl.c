@@ -15,7 +15,7 @@ void dope_load(dope_program_t* program, dope_data_t* data) {
     printf("%s", DOPE_STRING_PROMPT);
     scanf("%s", file_path);
     FILE* f = fopen(file_path, "r");
-    if(!f && printf(strerror(errno)) return;
+    if(!f && printf("%s\n", strerror(errno))) return;
     dope_input_program(program, f);
     dope_input_data(data, f);
     fclose(f);
@@ -26,7 +26,7 @@ void dope_save(dope_program_t* program, dope_data_t* data) {
     printf("%s", DOPE_STRING_PROMPT);
     scanf("%s", file_path);
     FILE* f = fopen(file_path, "w");
-    if(!f && printf(strerror(errno)) return;
+    if(!f && printf("%s\n", strerror(errno))) return;
     dope_print_program(program, f);
     dope_print_data(data, f);
     fclose(f);
@@ -45,7 +45,7 @@ void dope_list(dope_program_t* program, dope_data_t* data) {
 }
 
 void dope_repl(dope_program_t* program, dope_data_t* data) {
-    char key = '\0';
+    char key;
 
     printf("%s%s", DOPE_STRING_INTRO, DOPE_STRING_HELP);
 
@@ -66,8 +66,8 @@ void dope_repl(dope_program_t* program, dope_data_t* data) {
             break;
             case 'Q':
             break;
-            default: printf("invalid: %c", key);
-            break;
+            //default: printf("invalid: %c", key);
+            //break;
         }
     }
 }

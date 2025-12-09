@@ -38,7 +38,7 @@ dope_size_t dope_lookup_opcode(const char* mnemonic);
 
 void dope_input_instruction(dope_instruction_t* instruction, FILE* istream);
 
-void dope_input_program(dope_program_t* program, FILE* stream);
+void dope_input_program(dope_program_t* program, FILE* istream);
 
 dope_opcode_t dope_opcode(dope_program_t* program);
 
