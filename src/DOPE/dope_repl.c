@@ -8,26 +8,25 @@
 
 static const char DOPE_STRING_INTRO[] = "DOPE Interpreter version 0.1\n";
 static const char DOPE_STRING_HELP[] = "usage: (?)help, (L)oad, (S)ave, (E)nter, (P)rint, (R)un, (Q)uit\n";
+static const char DOPE_STRING_PROMPT[] = "Enter file name:\n";
 
 void dope_load(dope_program_t* program, dope_data_t* data) {
-    printf("Enter file name:\n");
-    FILE* f = fopen(,"r");
-    if(!f) {
-        strerror(errno);
-        return;
-    }
+    char file_path[DOPE_LINE_SIZE];
+    printf("%s", DOPE_STRING_PROMPT);
+    scanf("%s", file_path);
+    FILE* f = fopen(file_path, "r");
+    if(!f && printf(strerror(errno)) return;
     dope_input_program(program, f);
     dope_input_data(data, f);
     fclose(f);
 }
 
 void dope_save(dope_program_t* program, dope_data_t* data) {
-    printf("Enter file name:\n");
-    FILE* f = fopen(,"w");
-    if(!f) {
-        strerror(errno);
-        return;
-    }
+    char file_path[DOPE_LINE_SIZE];
+    printf("%s", DOPE_STRING_PROMPT);
+    scanf("%s", file_path);
+    FILE* f = fopen(file_path, "w");
+    if(!f && printf(strerror(errno)) return;
     dope_print_program(program, f);
     dope_print_data(data, f);
     fclose(f);
