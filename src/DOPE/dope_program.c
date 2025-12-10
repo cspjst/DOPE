@@ -208,15 +208,9 @@ const char* dope_field_to_str(const dope_program_t* program, int i) {
 }
 
 void dope_print_instruction(const dope_instruction_t* instruction, FILE* ostream) {
-    fprintf(ostream, "%s %s %s %s %s\n",
-        instruction->fields[0],
-        instruction->fields[1],
-        instruction->fields[2],
-        instruction->fields[3],
-        instruction->fields[4]
-    );
-    if(instruction->opcode == 0) {
-        fprintf(ostream, "ERROR %s\n", dope_error_message(instruction->error_code));
+    fprintf(ostream, "%s%c", instruction->fields[0], DOPE_STOP);
+    for(int i = 0; i <  DOPE_OPERAND_COUNT[instruction->opcode]; ++i) { 
+        fprintf(ostream, "%s%c", instruction->fields[i + 1], DOPE_STOP);
     }
 }
 
@@ -225,5 +219,4 @@ void dope_print_program(const dope_program_t* program, FILE* ostream) {
        fprintf(ostream, "%i ", i + 1); // line number
        dope_print_instruction(&program->instructions[i], ostream);
    }
-   //fprintf(ostream, "size=%i capacity=%i\n",program->size, program->capacity);
 }
