@@ -36,7 +36,7 @@ typedef enum {
     DOPE_OP_LABEL,      // 12 "A"
     DOPE_OP_PRINT,      // 13 "P"
     DOPE_OP_NEWLN,      // 14 "N"
-    DOPE_OP_INPUT,      // 15 "J"
+    DOPE_OP_INPUT,      // 15 "I"
     DOPE_OP_LOOP,       // 16 "Z"
     DOPE_OP_END,        // 17 "E"
     DOPE_OP_STOP,       // 18 "F"
