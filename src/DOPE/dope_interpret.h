@@ -34,42 +34,42 @@ void dope_write_number(
     dope_vectab_t* vecs
 );
 
-void dope_add(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_add(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_sub(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_sub(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_mul(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_mul(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_div(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_div(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_store(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_store(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_sqr(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_sqr(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_exp(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_exp(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_log(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_log(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
 void dope_sin(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_compare(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_compare(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_goto(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_goto(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_print_label(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_print_label(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_print(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_print(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_println(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_println(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_input(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_input(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_loop(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_loop(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_end(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_end(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_stop(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_stop(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
-void dope_start(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
+void dope_op_start(dope_program_t* program, dope_vartab_t* vars, dope_vectab_t* vecs, dope_data_t* data);
 
 #endif
