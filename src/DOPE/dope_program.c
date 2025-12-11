@@ -9,7 +9,7 @@
 
 const char* const DOPE_INSTRUCTIONS[] = {
     "+", "-", ".", "/", ";", "SQR", "EXP", "LOG", "SIN",
-    "C", "T", "A", "P", "N", "I", "Z", "E", "F", "S"
+    "C", "T", "A", "P", "N", "J", "Z", "E", "F", "S"
 };
 
 const uint8_t DOPE_OPERAND_COUNT[] = {
