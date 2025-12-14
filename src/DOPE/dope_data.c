@@ -141,7 +141,9 @@ void dope_input_data(dope_data_t* data, FILE* istream) {
         // 2. No input (EOF)
         if (data->args[data->size].error_code == DOPE_ERR_NO_INPUT) {
             dope_panic(data->size, data->args[data->size].error_code, "EOF without finish'");
-            if(istream == stdin) continue;
+            if(istream == stdin) {
+                continue;
+            }
             else break;
         }
         // 3. error
@@ -182,9 +184,27 @@ void dope_print_raw_arg(dope_argument_t* arg, FILE* ostream) {
     );
 }
 
+void dope_print_data_line(dope_argument_t* arg, FILE* ostream) {
+    switch((int)arg->type) {
+    case DOPE_DATA_NUMBER:
+        fprintf(ostream, "%G\n", arg->value.number);
+        break;
+    case DOPE_DATA_LABEL:
+         fprintf(ostream, "%s\n", arg->value.label);
+         break;
+    case DOPE_DATA_FINISH:
+        fprintf(ostream, "FINISH\n");
+        break;
+    case DOPE_DATA_INVALID:
+    default:
+        dope_panic(i + 1, arg->error_code, "");
+   }
+}
+
 void dope_print_data(dope_data_t* data, FILE* ostream) {
     for(int i = 0; i < data->size; i++) {
-        fprintf(ostream, "%i ", i + 1); // line number
+        fprintf(ostream, "%i ", i + 1);
+        dope_print_data_line(&data->args[i], ostream);
         switch((int)data->args[i].type) {
         case DOPE_DATA_NUMBER:
             fprintf(ostream, "%G\n",data->args[i].value.number);

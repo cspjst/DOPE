@@ -48,7 +48,7 @@ const dope_float_t dope_field_to_constant(const dope_program_t* program, int i);
 
 const char* dope_field_to_str(const dope_program_t* program, int i);
 
-void dope_print_instruction(const dope_instruction_t* instruction, FILE* ostream);
+void dope_print_program_line(const dope_instruction_t* instruction, FILE* ostream);
 
 void dope_print_program(const dope_program_t* program, FILE* ostream);
 

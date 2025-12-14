@@ -143,9 +143,20 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     instruction->error_code = DOPE_ERR_SUCCESS;
 }
 
+void dope_edit_line(dope_program_t* program, FILE* istream, dope_size_t line) {
+    line--;
+    if(line > program->size) {
+        dope_panic(line, DOPE_ERR_FINISH, "Line number too large!");
+        return;
+    }
+    if(line == program->size) program->size++;
+    dope_input_instruction(&program->instructions[line], istream);
+
+}
+
 void dope_input_program(dope_program_t* program, FILE* istream) {
     if (!program || !istream) {
-        dope_panic(0, DOPE_ERR_NO_INPUT, "NULL program or file");
+        dope_panic(0, DOPE_ERR_NO_INPUT, "NULL program or file!");
         return;
     }
     program->size = 0;
@@ -184,7 +195,7 @@ void dope_input_program(dope_program_t* program, FILE* istream) {
         // 5. valid argument
         program->size++;
     }
-    dope_panic(program->size, DOPE_ERR_FINISH, "Program exceeds capacity");
+    dope_panic(program->size, DOPE_ERR_FINISH, "Program exceeds capacity!");
 }
 
 dope_opcode_t dope_opcode(dope_program_t* program) {
@@ -207,16 +218,17 @@ const char* dope_field_to_str(const dope_program_t* program, int i) {
     return program->instructions[program->ip].fields[i];
 }
 
-void dope_print_instruction(const dope_instruction_t* instruction, FILE* ostream) {
+void dope_print_program_line(const dope_instruction_t* instruction, FILE* ostream) {
     fprintf(ostream, "%s%c", instruction->fields[0], DOPE_STOP);
-    for(int i = 0; i <  DOPE_OPERAND_COUNT[instruction->opcode]; ++i) { 
+    for(int i = 0; i <  DOPE_OPERAND_COUNT[instruction->opcode]; ++i) {
         fprintf(ostream, "%s%c", instruction->fields[i + 1], DOPE_STOP);
     }
+    fprintf(ostream,"\n");
 }
 
 void dope_print_program(const dope_program_t* program, FILE* ostream) {
    for(int i = 0; i < program->size; i++) {
        fprintf(ostream, "%i ", i + 1); // line number
-       dope_print_instruction(&program->instructions[i], ostream);
+       dope_print_program_line(&program->instructions[i], ostream);
    }
 }

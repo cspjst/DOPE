@@ -54,6 +54,8 @@ dope_float_t* dope_next_number(dope_data_t* data);
 
 void dope_print_raw_arg(dope_argument_t* arg, FILE* ostream);
 
+void dope_print_data_line(dope_argument_t* arg, FILE* ostream);
+
 void dope_print_data(dope_data_t* data, FILE* ostream);
 
 #endif
