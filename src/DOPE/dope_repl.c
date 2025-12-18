@@ -43,11 +43,12 @@ void dope_input(dope_program_t* program, dope_data_t* data) {
 void dope_edit(dope_program_t* program, dope_data_t* data) {
     dope_size_t line;
     printf("Program line number? (%i..%i)",1, program->size);
-    scanf
+    scanf("%i", &line);
     if(line) {
 
     }
     printf("Data line number? (%i..%i)",1, data->size);
+    scanf("%i", &line);
     scanf
     if(line) {
 
