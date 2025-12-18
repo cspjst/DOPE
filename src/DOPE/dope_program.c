@@ -143,15 +143,53 @@ void dope_input_instruction(dope_instruction_t* instruction, FILE* istream) {
     instruction->error_code = DOPE_ERR_SUCCESS;
 }
 
-void dope_edit_line(dope_program_t* program, FILE* istream, dope_size_t line) {
+void dope_input_program_line(dope_program_t* program, FILE* istream, dope_size_t line) {
+    // 1. parse next instruction
+    dope_input_instruction(&program->instructions[line], istream);
+    // 2. no input (EOF)
+    if (program->instructions[line].error_code == DOPE_ERR_NO_INPUT) {
+        dope_panic(program->size, program->instructions[line].error_code, "EOF without 'F'");
+        return;
+    }
+    // 3. error exit
+    if (program->instructions[line].opcode == DOPE_OP_INVALID) {
+        dope_panic(
+            program->size + 1,
+            program->instructions[line].error_code,
+            program->instructions[line].fields[0]
+        );
+        return;
+    }
+    // 4. stop on 'S' instruction (opcode 19)
+    if (program->instructions[line].opcode == DOPE_OP_START) {
+        if(program->instructions[line - 1].opcode == DOPE_OP_STOP) {
+            program->ip = program->size;
+            program->size++;
+            return;
+        }
+        else {
+            dope_panic(program->size, DOPE_ERR_FINISH, "S but no preceding F!");
+            return;
+        }
+    }
+    // 5. valid argument
+    program->size++;
+}
+
+void dope_edit_program_line(dope_program_t* program, FILE* istream, dope_size_t line) {
     line--;
     if(line > program->size) {
         dope_panic(line, DOPE_ERR_FINISH, "Line number too large!");
         return;
     }
-    if(line == program->size) program->size++;
-    dope_input_instruction(&program->instructions[line], istream);
-
+    if(line == program->size) {
+        program->size++;
+    }
+    else {
+        printf("%i ", line);
+        dope_print_program_line(program->instructions[line], stdout);
+    }
+    dope_input_program_line(istream, line);
 }
 
 void dope_input_program(dope_program_t* program, FILE* istream) {
@@ -162,38 +200,7 @@ void dope_input_program(dope_program_t* program, FILE* istream) {
     program->size = 0;
     while (program->size < program->capacity) {
         printf("%i ", program->size + 1);
-        // 1. parse next instruction
-        dope_input_instruction(&program->instructions[program->size], istream);
-        // 2. no input (EOF)
-        if (program->instructions[program->size].error_code == DOPE_ERR_NO_INPUT) {
-            dope_panic(program->size, program->instructions[program->size].error_code, "EOF without 'F'");
-            return;
-        }
-        // 3. error exit
-        if (program->instructions[program->size].opcode == DOPE_OP_INVALID) {
-                dope_panic(
-                    program->size + 1,
-                    program->instructions[program->size].error_code,
-                    program->instructions[program->size].fields[0]
-                );
-                if(istream == stdin) continue;
-                else return;
-        }
-        // 4. stop on 'S' instruction (opcode 19)
-        if (program->instructions[program->size].opcode == DOPE_OP_START) {
-            if(program->instructions[program->size - 1].opcode == DOPE_OP_STOP) {
-                program->ip = program->size;
-                program->size++;
-                return;
-            }
-            else {
-                dope_panic(program->size, DOPE_ERR_FINISH, "S but no preceding F!");
-                if(istream == stdin) continue;
-                else return;
-            }
-        }
-        // 5. valid argument
-        program->size++;
+        dope_input_program_line(program, FILE* istream, program->size);
     }
     dope_panic(program->size, DOPE_ERR_FINISH, "Program exceeds capacity!");
 }
